@@ -1,4 +1,4 @@
-# [title]
+# Meetup Clone
 
 ## Database Schema Design
 
