@@ -26,8 +26,8 @@ module.exports = {
         about: "Insert text here.",
         type: "in-person",
         private: false,
-        city: "Langley",
-        state: "Virginia",
+        city: "New York",
+        state: "New York",
       },
       {
         organizerId: 3,
