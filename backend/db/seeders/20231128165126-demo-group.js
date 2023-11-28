@@ -14,7 +14,7 @@ module.exports = {
       {
         organizerId: 1,
         name: "Wreckfest",
-        about: "A good old fashioned derby, watch cars slam into other cars and parts go flying!",
+        about: "We love a good old fashioned derby, watching cars slam into other cars and parts go flying!",
         type: "in-person",
         private: false,
         city: "Bonebreaker Valley",
@@ -32,7 +32,7 @@ module.exports = {
       {
         organizerId: 3,
         name: "Fake Event",
-        about: "Free 100000 dollar for visit",
+        about: "Free 100000 dollar for join",
         type: "online",
         private: true,
         city: "Ashburn",

@@ -1,25 +1,57 @@
 'use strict';
 
+const { Event } = require('../models');
+
+let options = {};
+if (process.env.NODE_ENV === 'production') {
+  options.schema = process.env.SCHEMA;  // define your schema in options object
+}
+
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    /**
-     * Add seed commands here.
-     *
-     * Example:
-     * await queryInterface.bulkInsert('People', [{
-     *   name: 'John Doe',
-     *   isBetaMember: false
-     * }], {});
-    */
+    await Event.bulkCreate([
+      {
+        venueId: 1,
+        groupId: 1,
+        name: "Wreckfest at Bonebreaker",
+        description: "A demolition derby being held at Bonebreaker Valley.",
+        type: "in-person",
+        capacity: 64,
+        price: 30,
+        startDate: "11-28-2023",
+        endDate: "11-30-2023",
+      },
+      {
+        venueId: 2,
+        groupId: 2,
+        name: "DefaultEvent",
+        description: "Insert text here",
+        type: "in-person",
+        capacity: 64,
+        price: 80,
+        startDate: "11-28-2023",
+        endDate: "11-30-2023",
+      },
+      {
+        venueId: null,
+        groupId: 3,
+        name: "Free Money Hack",
+        description: "Join for free money 6000230 monies",
+        type: "online",
+        capacity: 0,
+        price: 3000,
+        startDate: "11-28-2080",
+        endDate: "11-30-2080",
+      },
+    ])
   },
 
   async down (queryInterface, Sequelize) {
-    /**
-     * Add commands to revert seed here.
-     *
-     * Example:
-     * await queryInterface.bulkDelete('People', null, {});
-     */
+    options.tableName = 'Events';
+    const Op = Sequelize.Op;
+    return queryInterface.bulkDelete(options, {
+      groupId: { [Op.in]: [1, 2, 3] }
+    }, {});
   }
 };

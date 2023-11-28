@@ -1,6 +1,6 @@
 'use strict';
 
-const { EventImages } = require('../models');=
+const { EventImages } = require('../models');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {

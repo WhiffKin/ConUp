@@ -11,7 +11,6 @@ module.exports = {
       },
       venueId: {
         type: Sequelize.INTEGER,
-        allowNull:false,
       },
       groupId: {
         type: Sequelize.INTEGER,
@@ -39,10 +38,16 @@ module.exports = {
       startDate: {
         type: Sequelize.DATE,
         allowNull: false,
+        validate: {
+          isBefore: this.endDate,
+        }
       },
       endDate: {
         type: Sequelize.DATE,
         allowNull: false,
+        validate: {
+          isAfter: this.startDate,
+        }
       },
       createdAt: {
         allowNull: false,
