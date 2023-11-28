@@ -16,7 +16,9 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "groupId",
         otherKey: "eventId",
       })
-      Group.hasOne(models.User)
+      Group.hasOne(models.User, {
+        foreignKey: "organizerId",
+      })
       Group.hasMany(models.Event, {
         foreignKey: "groupId",
       })
