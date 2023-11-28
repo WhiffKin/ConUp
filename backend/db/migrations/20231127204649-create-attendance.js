@@ -19,7 +19,7 @@ module.exports = {
       },
       status: {
         type: Sequelize.ENUM,
-        values: ["attending", "waitlist", "pending"],
+        values: ["attending", "wait-list", "pending"],
       },
       createdAt: {
         allowNull: false,

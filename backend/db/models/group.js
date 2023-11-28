@@ -16,14 +16,14 @@ module.exports = (sequelize, DataTypes) => {
         foreignKey: "groupId",
         otherKey: "eventId",
       })
-      Group.hasOne(model.User)
-      Group.hasMany(model.Event, {
+      Group.hasOne(models.User)
+      Group.hasMany(models.Event, {
         foreignKey: "groupId",
       })
-      Group.hasMany(model.Venue, {
+      Group.hasMany(models.Venue, {
         foreignKey: "groupId",
       })
-      Group.hasMany(model.GroupImage, {
+      Group.hasMany(models.GroupImage, {
         foreignKey: "groupId",
       })
     }
@@ -35,7 +35,10 @@ module.exports = (sequelize, DataTypes) => {
     },
     name: DataTypes.STRING,
     about: DataTypes.TEXT,
-    type: DataTypes.ENUM,
+    type: {
+      type: DataTypes.ENUM,
+      values: ["In Person", "Online"],
+    },
     private: DataTypes.BOOLEAN,
     city: DataTypes.STRING,
     state: DataTypes.STRING

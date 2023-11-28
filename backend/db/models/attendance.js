@@ -22,7 +22,10 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    status: DataTypes.ENUM
+    status: {
+      type: DataTypes.ENUM,
+      values: ["attending", "wait-list", "pending"],
+    }
   }, {
     sequelize,
     modelName: 'Attendance',

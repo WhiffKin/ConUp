@@ -1,6 +1,6 @@
 'use strict';
 
-const { EventImages } = require('../models');
+const { EventImage } = require('../models');
 
 let options = {};
 if (process.env.NODE_ENV === 'production') {
@@ -10,7 +10,7 @@ if (process.env.NODE_ENV === 'production') {
 /** @type {import('sequelize-cli').Migration} */
 module.exports = {
   async up (queryInterface, Sequelize) {
-    await EventImages.bulkCreate([
+    await EventImage.bulkCreate([
       {
         eventId: 1,
         url: "testUrl.com/Image1",

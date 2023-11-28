@@ -23,7 +23,10 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     status: {
-      type: DataTypes.ENUM,
+      type: {
+        type: DataTypes.ENUM,
+        values: ["co-host", "member", "pending"],
+      },
       allowNull: false,
     }
   }, {
