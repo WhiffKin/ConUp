@@ -61,6 +61,13 @@ module.exports = (sequelize, DataTypes) => {
       attributes: {
         exclude: ["hashedPassword", "updatedAt", "email", "createdAt"]
       }
+    },
+    scopes: {
+      nameAndId: {
+        attributes: {
+          exclude: ["username"]
+        }
+      }
     }
   });
   return User;
