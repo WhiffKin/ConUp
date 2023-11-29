@@ -24,12 +24,12 @@ module.exports = {
       {
         groupId: 2,
         url: "fakeUrl.com/images/TestImage",
-        preview: false
+        preview: true
       },
       {
         groupId: 3,
         url: "fakeUrl.com/images/FreeMoney$$$",
-        preview: false
+        preview: true
       },
     ])
   },
