@@ -27,22 +27,52 @@ module.exports = (sequelize, DataTypes) => {
     address: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isNotEmpty(value) {
+          if (value === "")
+            throw new Error("Street address is required");
+        }
+      }
     },
     city: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isNotEmpty(value) {
+          if (value === "")
+            throw new Error("City is required");
+        }
+      }
     },
     state: {
       type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isNotEmpty(value) {
+          if (value === "")
+            throw new Error("State is required");
+        }
+      }
     },
     lat: {
       type: DataTypes.DECIMAL,
       allowNull: false,
+      validate: {
+        isInRange(value) {
+          if (typeof value != "number" || Math.abs(value) > 90)
+            throw new Error("Latitude is not valid");
+        }
+      }
     },
     lng: {
       type: DataTypes.DECIMAL,
       allowNull: false,
+      validate: {
+        isInRange(value) {
+          if (typeof value != "number" || Math.abs(value) > 180)
+            throw new Error("Longitude is not valid");
+        }
+      }
     }
   }, {
     sequelize,
