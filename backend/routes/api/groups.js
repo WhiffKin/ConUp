@@ -59,6 +59,40 @@ router.get("/current",
     }
 );
 
+router.get("/:groupId/venues", 
+    requireAuth,
+    async (req, res, next) => {
+        const id = req.params.groupId;
+        
+        const group = await Group.findByPk(id);
+
+        if (!group) {
+            const err = new Error(`No group found with id: ${id}`);
+            err.status = 404;
+            return next(err);
+        }
+
+        // Authorization: is current user owner or co-host
+        const coHosts = await group.getUsers({
+            through: {
+                where: {
+                    userId: req.user.id,
+                    status: "co-host",
+                }
+            }
+        });
+        if (req.user.id !== group.organizerId && coHosts.length === 0) {
+            const err = new Error(`Forbidden`);
+            err.status = 403;
+            return next(err);
+        }
+
+        const venues = await group.getVenues();
+
+        res.status(200);
+        res.json(venues);
+    }
+)
 
 router.post("/:groupId/images", 
     requireAuth,
