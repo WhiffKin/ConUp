@@ -3,7 +3,61 @@ const router = express.Router();
 
 const { Group, Membership, GroupImage, User } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
-const { ValidationError } = require('sequelize');
+const { Op, ValidationError } = require('sequelize');
+
+router.get("/current",
+    requireAuth,
+    async (req, res) => {
+        const organizerId = req.user.id;
+        
+        // Get all groups where the current user is a member or organized
+        const groups = await Group.findAll({
+            include: {
+                model: User,
+                attributes: [],
+                through: {
+                    where: {
+                        userId: organizerId,
+                        status: "member",
+                    }
+                }
+            },
+            where: {
+                [Op.or]: {
+                    organizerId,
+                    "$Users.id$": organizerId,
+                }
+            }
+        });
+
+        for (let i = 0; i < groups.length; i++) {
+            let group = groups[i];
+            group = group.toJSON()
+
+            // Count Members
+            const memberList = await Membership.findAll({
+                where: {
+                    groupId: group.id
+                }
+            });
+            group.numMembers = memberList ? memberList.length : 0;
+
+            // Get first previewImage
+            const groupImagePreview = await GroupImage.findOne({
+                where: {
+                    groupId: group.id,
+                    preview: true
+                }
+            })
+            if (groupImagePreview) group.previewImage = groupImagePreview.url; 
+
+            groups[i] = group;
+        }
+
+        res.status(200);
+        res.json(groups);
+    }
+);
 
 // Delete a group by id
 router.delete("/:groupId",
@@ -13,6 +67,7 @@ router.delete("/:groupId",
         
         const group = await Group.findByPk(id);
 
+        // Authorization
         if (req.user.id !== group.organizerId) {
             const err = new Error(`Forbidden`);
             err.status = 403;
@@ -41,6 +96,7 @@ router.put("/:groupId",
 
         const group = await Group.findByPk(id);
         
+        // Authorization
         if (req.user.id !== group.organizerId) {
             const err = new Error(`Forbidden`);
             err.status = 403;
@@ -60,6 +116,7 @@ router.put("/:groupId",
         group.city = city || group.city;
         group.state = state || group.state;
         
+        // Verification
         try {
             await group.validate();
             group.save();
@@ -123,6 +180,8 @@ router.get('/',
         for (let i = 0; i < groups.length; i++) {
             let group = groups[i];
             group = group.toJSON()
+
+            // Count Members
             const memberList = await Membership.findAll({
                 where: {
                     groupId: group.id
@@ -130,6 +189,7 @@ router.get('/',
             });
             group.numMembers = memberList ? memberList.length : 0;
 
+            // Get first previewImage
             const groupImagePreview = await GroupImage.findOne({
                 where: {
                     groupId: group.id,
@@ -156,6 +216,7 @@ router.post("/",
             organizerId: req.user.id,
         });
 
+        // Verification
         try {
             await newGroup.validate();
             newGroup.save();
