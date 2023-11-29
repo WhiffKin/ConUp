@@ -59,6 +59,44 @@ router.get("/current",
     }
 );
 
+
+router.post("/:groupId/images", 
+    requireAuth,
+    async (req, res, next) => {
+        const id = req.params.groupId;
+        
+        const group = await Group.findByPk(id);
+
+        if (!group) {
+            const err = new Error(`No group found with id: ${id}`);
+            err.status = 404;
+            return next(err);
+        }
+
+        // Authorization
+        if (req.user.id !== group.organizerId) {
+            const err = new Error(`Forbidden`);
+            err.status = 403;
+            return next(err);
+        }
+
+        const { url, preview } = req.body;
+
+        try {
+            image = await group.createGroupImage({ url, preview });
+        } catch(e) {
+            const err = new ValidationError("Bad Request");
+            err.status = 400;
+            console.log(e);
+            err.errors = e.errors;
+            return next(err)
+        }
+
+        res.status(200);
+        res.json(image);
+    }
+)
+
 // Delete a group by id
 router.delete("/:groupId",
     requireAuth,
