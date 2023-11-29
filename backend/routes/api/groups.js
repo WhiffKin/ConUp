@@ -2,7 +2,10 @@ const express = require("express");
 const router = express.Router();
 
 const { Group, Membership, GroupImage, User } = require("../../db/models");
+const { requireAuth } = require("../../utils/auth");
+const { ValidationError } = require('sequelize');
 
+// Get group by id with numMembers, GroupImages, and Organizer
 router.get('/:groupId',
     async (req, res, next) => {
         const { groupId } = req.params;
@@ -42,6 +45,7 @@ router.get('/:groupId',
     }
 );
 
+// Get all groups with numMembers and previewImage
 router.get('/', 
     async (_req, res) => {
         const groups = await Group.findAll();
@@ -69,6 +73,31 @@ router.get('/',
 
         res.status(200);
         res.json(groups);
+    }
+);
+
+router.post("/", 
+    requireAuth,
+    async (req, res, next) => {
+        const { name, about, type, private, city, state } = req.body;
+
+        const newGroup = await Group.build({ 
+            name, about, type, private, city, state,
+            organizerId: req.user.id,
+        });
+
+        try {
+            await newGroup.validate();
+            newGroup.save();
+        } catch (e) {
+            const err = new ValidationError("Bad Request");
+            err.status = 400;
+            err.errors = e.errors;
+            return next(err)
+        }
+
+        res.status(201);
+        res.json(newGroup);
     }
 );
 

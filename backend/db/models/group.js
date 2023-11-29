@@ -35,15 +35,60 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    name: DataTypes.STRING,
-    about: DataTypes.TEXT,
-    type: {
-      type: DataTypes.ENUM,
-      values: ["In Person", "Online"],
+    name: {
+      type: DataTypes.STRING,
+      validate: {
+        isLessThan60(value) {
+          if (value.length > 60)
+            throw new Error("Name must be 60 charactes or less");
+        }
+      }
     },
-    private: DataTypes.BOOLEAN,
-    city: DataTypes.STRING,
-    state: DataTypes.STRING
+    about: {
+      type: DataTypes.TEXT,
+      validate: {
+        isMoreThan50(value) {
+          if (value.length < 50) 
+            throw new Error("About must be 50 characters or more");
+        }
+      }
+    },
+    type: {
+      type: DataTypes.STRING,
+      validate: {
+        isExpected(value) {
+          if (value != "In Person" && value != "Online")
+            throw new Error("Type must be 'Online' or 'In Person'");
+        }
+      }
+    },
+    private: {
+      type: DataTypes.BOOLEAN,
+      validate: {
+        isBool(value) {
+          if (typeof value != "boolean") 
+            throw new Error("Private must be a boolean");
+        }
+      }
+    },
+    city: {
+      type: DataTypes.STRING,
+      validate: {
+        isNotEmpty(value) {
+          if (value == "")
+            throw new Error("City is required");
+        }
+      }
+    },
+    state: {
+      type: DataTypes.STRING,
+      validate: {
+        isNotEmpty(value) {
+          if (value == "")
+            throw new Error("State is required");
+        }
+      }
+    }
   }, {
     sequelize,
     modelName: 'Group',
