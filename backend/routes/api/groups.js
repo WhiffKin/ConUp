@@ -5,6 +5,76 @@ const { Group, Membership, GroupImage, User } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
 const { ValidationError } = require('sequelize');
 
+// Delete a group by id
+router.delete("/:groupId",
+    requireAuth,
+    async (req, res, next) => {
+        const id = req.params.groupId;
+        
+        const group = await Group.findByPk(id);
+
+        if (req.user.id !== group.organizerId) {
+            const err = new Error(`Forbidden`);
+            err.status = 403;
+            return next(err);
+        }
+
+        if (!group) {
+            const err = new Error(`No group found with id: ${groupId}`);
+            err.status = 404;
+            return next(err);
+        }
+
+        group.destroy();
+
+        res.status(200);
+        res.json({ message: "Successfully deleted" });
+    }
+) 
+
+// Edit a group by id
+router.put("/:groupId", 
+    requireAuth,
+    async (req, res, next) => {
+        const id = req.params.groupId;
+        const { name, about, type, private, city, state } = req.body;
+
+        const group = await Group.findByPk(id);
+        
+        if (req.user.id !== group.organizerId) {
+            const err = new Error(`Forbidden`);
+            err.status = 403;
+            return next(err);
+        }
+        
+        if (!group) {
+            const err = new Error(`No group found with id: ${groupId}`);
+            err.status = 404;
+            return next(err);
+        }
+                
+        group.name = name || group.name;
+        group.about = about || group.about;
+        group.type = type || group.type;
+        group.private = private || group.private;
+        group.city = city || group.city;
+        group.state = state || group.state;
+        
+        try {
+            await group.validate();
+            group.save();
+        } catch (e) {
+            const err = new ValidationError("Bad Request");
+            err.status = 400;
+            err.errors = e.errors;
+            return next(err)
+        }
+
+        res.status(200);
+        res.json(group)
+    }
+)
+
 // Get group by id with numMembers, GroupImages, and Organizer
 router.get('/:groupId',
     async (req, res, next) => {
