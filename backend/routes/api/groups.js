@@ -61,6 +61,52 @@ router.get("/current",
     }
 );
 
+// Get members of a group by groupId
+router.get("/:groupId/members",
+    async (req, res, next) => {
+        const id = req.params.groupId;
+        
+        const group = await Group.findByPk(id);
+
+        if (!group) {
+            const err = new Error(`No group found with id: ${id}`);
+            err.status = 404;
+            return next(err);
+        }
+
+        const options = {
+            through: {
+                where: {
+                    status: ["member", "co-host"]
+                },
+            },
+            attributes: {
+                exclude: ["username"]
+            }
+        };
+
+        // Authorization: is current user owner or co-host
+        // if so, also show pending members
+        const coHosts = await group.getMembers({
+            through: {
+                where: {
+                    userId: req.user.id,
+                    status: "co-host",
+                },
+            },
+        });
+        if (req.user.id === group.organizerId || coHosts.length !== 0) 
+            options.through.where.status.push("pending");
+        
+        const members = {
+            Members: await group.getMembers(options)
+        };
+
+        res.status(200);
+        res.json(members);
+    }
+)
+
 // Create event for a group by groupId
 router.post("/:groupId/events", 
     requireAuth,
