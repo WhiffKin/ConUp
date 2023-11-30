@@ -33,43 +33,96 @@ module.exports = (sequelize, DataTypes) => {
   Event.init({
     venueId: {
       type: DataTypes.INTEGER,
+      references: {
+        model: "Venues",
+      },
     },
     groupId: {
       type: DataTypes.INTEGER,
       allowNull: false,
     },
-    name: DataTypes.STRING,
-    description: DataTypes.TEXT,
+    name: {
+      type: DataTypes.STRING,
+      validate: {
+        isLen5(value) {
+          if (value.length < 5) 
+            throw new Error("Name must be at least 5 characters")
+        }
+      }
+    },
+    description: {
+      type: DataTypes.TEXT,
+      validate: {
+        isLen5(value) {
+          if (!value.length) 
+            throw new Error("Description is required")
+        }
+      }
+    },
     type: {
-      type: DataTypes.ENUM,
-      values: ["Online", "In Person"],
+      type: DataTypes.STRING,
       allowNull: false,
+      validate: {
+        isExpected(value) {
+          if (value != "In Person" && value != "Online")
+            throw new Error("Type must be 'Online' or 'In Person'");
+        }
+      }
     },
     capacity: {
       type: DataTypes.INTEGER,
       allowNull: false,
       validate: {
-        min: 1
+        isInt: {
+          msg: "Capacity must be an integer"
+        }
       }
     },
     price: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.DECIMAL(10,2),
       allowNull: false,
       validate: {
-        min: 0
+        min: 0,
+        twoDecimal(value) {
+          this.price = (Math.round(value * 100) / 100).toFixed(2);
+        }
       }
     },
     startDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      validate: {
+        isAfter: {
+          args: [sequelize.NOW],
+          msg: "Start date must be in the future"
+        }
+      }
     },
     endDate: {
       type: DataTypes.DATE,
       allowNull: false,
+      validate: {
+        isAfter: {
+          args: [this.startDate],
+          msg: "End date is less than start date"
+        }
+      }
     }
   }, {
     sequelize,
     modelName: 'Event',
+    defaultScope: {
+      attributes: {
+        exclude: ["createdAt", "updatedAt"]
+      }
+    },
+    scopes: {
+      groupSearch: {
+        attributes: {
+          exclude: ["description", "capacity", "price"]
+        }
+      }
+    }
   });
   return Event;
 };

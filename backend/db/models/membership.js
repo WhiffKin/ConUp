@@ -23,9 +23,12 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
     },
     status: {
-      type: {
-        type: DataTypes.ENUM,
-        values: ["co-host", "member", "pending"],
+      type: DataTypes.STRING,
+      validate: {
+        isExpected(value) {
+          if (value != "co-host" && value != "member" && value != "pending")
+            throw new Error("Type must be 'co-host' or 'member' or 'pending'");
+        }
       },
       allowNull: false,
     }

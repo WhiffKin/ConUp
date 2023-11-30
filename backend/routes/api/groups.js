@@ -1,10 +1,12 @@
 const express = require("express");
 const router = express.Router();
 
-const { Group, Membership, GroupImage, User } = require("../../db/models");
+const { Group, Membership, GroupImage, User, Venue } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
 const { Op, ValidationError } = require('sequelize');
+const event = require("../../db/models/event");
 
+// Get all groups current user organized or is a member of
 router.get("/current",
     requireAuth,
     async (req, res) => {
@@ -59,6 +61,116 @@ router.get("/current",
     }
 );
 
+// Create event for a group by groupId
+router.post("/:groupId/events", 
+    requireAuth,
+    async (req, res, next) => {
+        const id = req.params.groupId;
+        
+        const group = await Group.findByPk(id);
+
+        if (!group) {
+            const err = new Error(`No group found with id: ${id}`);
+            err.status = 404;
+            return next(err);
+        }
+
+        // Authorization: is current user owner or co-host
+        const coHosts = await group.getUsers({
+            through: {
+                where: {
+                    userId: req.user.id,
+                    status: "co-host",
+                }
+            }
+        });
+        if (req.user.id !== group.organizerId && coHosts.length === 0) {
+            const err = new Error(`Forbidden`);
+            err.status = 403;
+            return next(err);
+        }
+
+        const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+        let event;
+
+        try {
+            event = await group.createEvent({ venueId, name, type, capacity, price, description, startDate, endDate });
+        } catch(e) {
+            if (e.errors) {
+                const err = new ValidationError("Bad Request");
+                err.status = 400;
+                err.errors = e.errors;
+                return next(err)
+            } else {
+                const err = new Error("Venue does not exist");
+                err.status = 404;
+                return next(err)
+            }
+        }
+
+        res.status(200);
+        res.json(event);
+    }
+)
+
+// Get events for a group by groupId
+router.get("/:groupId/events",
+    requireAuth,
+    async (req, res, next) => {
+        const id = req.params.groupId;
+        
+        const group = await Group.findByPk(id);
+
+        if (!group) {
+            const err = new Error(`No group found with id: ${id}`);
+            err.status = 404;
+            return next(err);
+        }
+
+        const events = await group.getEvents({
+            scope: ["defaultScope", "groupSearch"],
+            include: [
+                {
+                    model: Group,
+                    attributes: ["id", "name", "city", "state"],
+                },
+                {
+                    model: Venue,
+                    attributes: ["id", "city", "state"],
+                },
+            ]
+        });
+
+        for(let i = 0; i < events.length; i++) {
+            let event = events[i].toJSON();
+
+            // Add previewImage if one exists
+            const images = await events[i].getEventImages({
+                where: {
+                    preview: true
+                }
+            });
+            if (images.length) event.previewImage = images[0].url;
+
+            // Count numAttending
+            const attending = await events[i].getUsers({
+                through: {
+                    where: {
+                        status: "attending"
+                    }
+                }
+            })
+            event.numAttending = attending ? attending.length : 0;
+
+            events[i] = event;
+        }
+
+        res.status(200);
+        res.json(events);
+    }
+)
+
+// Create a venue for a group
 router.post("/:groupId/venues",
     requireAuth,
     async (req, res, next) => {
@@ -105,6 +217,7 @@ router.post("/:groupId/venues",
     }
 );
 
+// Get all venues of a group by groupId
 router.get("/:groupId/venues", 
     requireAuth,
     async (req, res, next) => {
@@ -140,6 +253,7 @@ router.get("/:groupId/venues",
     }
 )
 
+// Get all images of a group by groupId 
 router.post("/:groupId/images", 
     requireAuth,
     async (req, res, next) => {
@@ -324,6 +438,7 @@ router.get('/',
     }
 );
 
+// Create Group using current user
 router.post("/", 
     requireAuth,
     async (req, res, next) => {
