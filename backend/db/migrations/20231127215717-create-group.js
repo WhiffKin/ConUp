@@ -18,6 +18,7 @@ module.exports = {
       organizerId: {
         type: Sequelize.INTEGER,
         allowNull:false,
+        onDelete: "CASCADE",
       },
       name: {
         type: Sequelize.STRING

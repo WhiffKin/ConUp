@@ -18,6 +18,7 @@ module.exports = {
       groupId: {
         type: Sequelize.INTEGER,
         allowNull: false,
+        onDelete: "CASCADE",
       },
       url: {
         type: Sequelize.STRING,
