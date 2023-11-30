@@ -61,6 +61,65 @@ router.get("/current",
     }
 );
 
+// Request a membership to a group by groupId
+router.post("/:groupId/membership",
+    requireAuth,
+    async (req, res, next) => {
+        const id = req.params.groupId;
+        
+        const group = await Group.findByPk(id);
+
+        if (!group) {
+            const err = new Error(`No group found with id: ${id}`);
+            err.status = 404;
+            return next(err);
+        }
+
+        // Authorization: is current user owner or co-host
+        const members = await group.getMembers({
+            through: {
+                where: {
+                    userId: req.user.id,
+                },
+            },
+        });
+        members.map(member => member.toJSON());
+        if (req.user.id === group.organizerId || members.length !== 0) {
+            const err = new Error();
+            err.message = members[0]?.Membership.status === "pending" ?
+                        "Membership has already been requested" :
+                        "User is already a member of the group";
+            err.status = 400;
+            return next(err);
+        }
+
+        let member;
+
+        try {
+            member = await group.addMember(req.user, {
+                through: {
+                    status: "pending",
+                },
+             });
+        } catch(e) {
+            const err = new ValidationError("Bad Request");
+            err.status = 400;
+            err.errors = e.errors;
+            return next(err)
+        }
+
+        member = member[0].toJSON();
+
+        member = {
+            memberId: member.id,
+            status: member.status,
+        }
+
+        res.status(200);
+        res.json(member);
+    }
+)
+
 // Get members of a group by groupId
 router.get("/:groupId/members",
     async (req, res, next) => {
@@ -498,14 +557,14 @@ router.post("/",
         // Verification
         try {
             await newGroup.validate();
-            newGroup.save();
+            await newGroup.save();
         } catch (e) {
             const err = new ValidationError("Bad Request");
             err.status = 400;
             err.errors = e.errors;
             return next(err)
         }
-
+        
         res.status(201);
         res.json(newGroup);
     }

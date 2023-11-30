@@ -14,6 +14,12 @@ module.exports = (sequelize, DataTypes) => {
     }
   }
   Membership.init({
+    id: {
+      type: DataTypes.INTEGER,
+      autoIncrement:true,
+      primaryKey: true,
+      allowNull: false,
+    },
     userId: {
       type: DataTypes.INTEGER,
       allowNull: false,
@@ -35,16 +41,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Membership',
-    defaultScope: {
-      attributes: {
-        exclude: ["createdAt", "updatedAt"]
-      }
-    },
-    defaultScope: {
-      attributes: {
-        exclude: ["userId", "groupId", "createdAt", "updatedAt"]
-      }
-    },
+    // defaultScope: {
+    //   attributes: {
+    //     exclude: ["userId", "groupId", "createdAt", "updatedAt"]
+    //   }
+    // },
   });
   return Membership;
 };
