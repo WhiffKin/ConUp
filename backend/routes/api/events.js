@@ -2,8 +2,80 @@ const express = require("express");
 const router = express.Router();
 
 const { Event, Group, Venue, EventImage, Attendance } = require('../../db/models');
-const { ValidationError } = require('sequelize');
+const { ValidationError, where } = require('sequelize');
 const { requireAuth } = require("../../utils/auth");
+const { query } = require('express-validator');
+const { handleValidationErrors } = require('../../utils/validation');
+
+const validateQuery = [
+    query('page')
+        .default(1)
+        .exists({ checkFalsy: true })
+        .isInt()
+        .withMessage('Page must be greater than or equal to 1'),
+    query('size')
+        .default(1)
+        .exists({ checkFalsy: true })
+        .isInt()
+        .withMessage('Size must be greater than or equal to 1'),
+    query('name')
+        .optional({nullable: true, checkFalsy: true})
+        .exists({ checkFalsy: true })
+        .customSanitizer(value => value[0] === '"' ? value.split('"')[1] : value)
+        .isString()
+        .withMessage('Name must be a string'),
+    query('type')
+        .optional({nullable: true, checkFalsy: true})
+        .exists({ checkFalsy: true })
+        .customSanitizer(value => value[0] === '"' ? value.split('"')[1] : value)
+        .isIn(["Online", "In Person"])
+        .withMessage("Type must be 'Online' or 'In Person'"),
+    query('startDate')
+        .optional({nullable: true, checkFalsy: true})
+        .customSanitizer(value => value[0] === '"' ? value.split('"')[1] : value)
+        .isISO8601()
+        .withMessage('Start date must be a valid datetime'),
+    handleValidationErrors
+];
+
+router.delete("/:eventId/attendance",
+    requireAuth,
+    async (req, res, next) => {
+        let event = await Event.findByPk(req.params.eventId)
+        if (!event) {
+            const err = new Error("Event couldn't be found");
+            err.status = 404;
+            return next(err);
+        }
+        
+        const group = await Group.findByPk(event.groupId);
+        const { userId } = req.body;
+
+        if (req.user.id != group.organizerId && req.user.id !== userId) {
+            const err = new Error("Only the User or organizer may delete an Attendance");
+            err.status = 403;
+            return next(err);
+        }
+
+        const user = await Attendance.unscoped().findOne({
+            where: {
+                userId
+            }
+        });
+        if (!user) {
+            const err = new Error("Attendance does not exist for this user");
+            err.status = 404;
+            return next(err);
+        }
+
+        user.destroy();
+
+        res.status(200);
+        res.json({
+            message: "Successfully deleted attendance from event"
+        });
+    }
+)
 
 router.put("/:eventId/attendance", 
     requireAuth,
@@ -366,8 +438,11 @@ router.get("/:eventId",
 )
 
 router.get("/",
-    async (_req, res) => {
-        const events = await Event.findAll({
+    validateQuery,
+    async (req, res, next) => {
+        let { page, size, name, type, startDate } = req.query;
+
+        const options = {
             include: [
                 {
                     model: Group.scope("limited")
@@ -375,8 +450,21 @@ router.get("/",
                 {
                     model: Venue.scope("defaultScope")
                 }
-            ]
-        });
+            ],
+            where: {
+
+            }
+        };
+
+        page = Math.min(Math.max(page ? page : 1, 1), 10);
+        size = Math.min(Math.max(size ? size : 20, 1), 20);
+        options.offset = (page - 1) * size;
+        options.limit = size;
+        if (name) options.where.name = name;
+        if (type) options.where.type = type;
+        if (startDate) options.where.startDate = startDate;
+
+        const events = await Event.findAll(options);
 
         for (let i = 0; i < events.length; i++) {
             let event = events[i];
