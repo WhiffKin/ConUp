@@ -3,7 +3,7 @@ const router = express.Router();
 
 const { Group, Membership, GroupImage, User, Venue } = require("../../db/models");
 const { requireAuth } = require("../../utils/auth");
-const { Op, ValidationError } = require('sequelize');
+const { ValidationError } = require('sequelize');
 const event = require("../../db/models/event");
 
 // Get all groups current user organized or is a member of
@@ -593,7 +593,7 @@ router.put("/:groupId",
         // Verification
         try {
             await group.validate();
-            group.save();
+            await group.save();
         } catch (e) {
             const err = new ValidationError("Bad Request");
             err.status = 400;
