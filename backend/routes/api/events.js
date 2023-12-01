@@ -204,6 +204,7 @@ router.post("/:eventId/attendance",
         member = member[0].toJSON();
 
         member = {
+            eventId,
             userId: member.userId,
             status: member.status,
         }
@@ -235,7 +236,7 @@ router.get("/:eventId/attendees",
         let members = await group.getMembers({
             through: {
                 where: {
-                    status: ["co-host", "member"]
+                    status: ["co-host"]
                 },
             }
         })
@@ -317,7 +318,7 @@ router.delete("/:eventId",
         let members = await group.getMembers({
             through: {
                 where: {
-                    status: ["co-host", "member"]
+                    status: ["co-host"]
                 }
             }
         })
@@ -353,7 +354,7 @@ router.put("/:eventId",
         let members = await group.getMembers({
             through: {
                 where: {
-                    status: ["co-host", "member"]
+                    status: ["co-host"]
                 }
             }
         })
@@ -406,7 +407,7 @@ router.put("/:eventId",
 )
 
 router.get("/:eventId", 
-    async (req, res) => {
+    async (req, res, next) => {
         let event = await Event.findByPk(req.params.eventId, {
             include: [
                 {
@@ -420,6 +421,12 @@ router.get("/:eventId",
                 }
             ]
         });
+
+        if (!event) {
+            const err = new Error("Event couldn't be found");
+            err.status = 404;
+            return next(err);
+        }
 
         // Count numAttending
         const attending = await event.getUsers({
@@ -448,7 +455,7 @@ router.get("/",
                     model: Group.scope("limited")
                 },
                 {
-                    model: Venue.scope("defaultScope")
+                    model: Venue.scope("defaultScope", "limited")
                 }
             ],
             where: {
@@ -464,7 +471,7 @@ router.get("/",
         if (type) options.where.type = type;
         if (startDate) options.where.startDate = startDate;
 
-        const events = await Event.findAll(options);
+        const events = await Event.scope("defaultScope", "groupSearch").findAll(options);
 
         for (let i = 0; i < events.length; i++) {
             let event = events[i];
@@ -479,6 +486,15 @@ router.get("/",
             })
             event = event.toJSON();
             event.numAttending = attending ? attending.length : 0;
+            
+            // Get first previewImage
+            const eventImagePreview = await EventImage.findOne({
+                where: {
+                    eventId: event.id,
+                    preview: true
+                }
+            })
+            event.previewImage = eventImagePreview ? eventImagePreview.url : "No preview image found"; 
 
             events[i] = event;
         }

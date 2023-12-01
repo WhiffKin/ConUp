@@ -19,19 +19,15 @@ router.get("/current",
             }
         });
 
-        const memberId = await Membership.findAll({
+        const memberId = await Membership.scope().findAll({
             where: {
                 userId: organizerId,
                 status: ["member", "co-host"],
             }
         })
-        console.log(groups);
-
         for (let membership of memberId)
-            groups.push(await Group.findByPk(membership.userId));
+            groups.push(await Group.findByPk(membership.groupId));
 
-
-        console.log(groups);
         for (let i = 0; i < groups.length; i++) {
             let group = groups[i];
             group = group.toJSON()
@@ -670,7 +666,7 @@ router.get('/',
                     preview: true
                 }
             })
-            if (groupImagePreview) group.previewImage = groupImagePreview.url; 
+            group.previewImage = groupPreviewImage ? groupImagePreview.url : "No preview image found"; 
 
             groups[i] = group;
         }
