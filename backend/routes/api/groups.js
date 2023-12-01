@@ -14,24 +14,24 @@ router.get("/current",
         
         // Get all groups where the current user is a member or organized
         const groups = await Group.findAll({
-            include: {
-                model: User,
-                attributes: [],
-                through: {
-                    where: {
-                        userId: organizerId,
-                        status: "member",
-                    }
-                }
-            },
             where: {
-                [Op.or]: {
-                    organizerId,
-                    "$Users.id$": organizerId,
-                }
+                organizerId,
             }
         });
 
+        const memberId = await Membership.findAll({
+            where: {
+                userId: organizerId,
+                status: "member",
+            }
+        })
+        console.log(groups);
+
+        for (let membership of memberId)
+            groups.push(await Group.findByPk(membership.userId));
+
+
+        console.log(groups);
         for (let i = 0; i < groups.length; i++) {
             let group = groups[i];
             group = group.toJSON()
