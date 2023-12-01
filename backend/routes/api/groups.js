@@ -61,6 +61,94 @@ router.get("/current",
     }
 );
 
+// Change the status of a membership to a group by groupId
+router.put("/:groupId/membership",
+    requireAuth,
+    async (req, res, next) => {
+        const id = req.params.groupId;
+        const { memberId } = req.body;
+        let newStatus = req.body.status;
+
+        if (newStatus === "pending") {
+            const err = new ValidationError("Cannot change a membership status to pending");
+            err.status = 400;
+            return next(err);
+        }
+        
+        const group = await Group.findByPk(id);
+        if (!group) {
+            const err = new Error(`No group found with id: ${id}`);
+            err.status = 404;
+            return next(err);
+        }
+
+        let user = await User.findByPk(memberId);
+        if (!user) {
+            const err = new Error(`User couldn't be found`);
+            err.status = 404;
+            return next(err);
+        }
+        user = user.toJSON();
+
+        const member = await Membership.unscoped().findOne({
+            where: {
+                userId: memberId,
+                groupId: group.id,
+            }
+        });
+        if (!member) {
+            const err = new Error(`Membership between the user and the group does not exist`);
+            err.status = 404;
+            return next(err);
+        }
+        const status = member.toJSON().status;
+
+        // Authorization: is current user owner or co-host
+        const coHosts = await group.getMembers({
+            through: {
+                where: {
+                    userId: req.user.id,
+                    status: "co-host",
+                }
+            }
+        });
+        
+        if (req.user.id !== group.organizerId && coHosts.length === 0) {
+            const err = new Error(`Invalid permisions`);
+            err.status = 403;
+            return next(err);
+        }
+        if (newStatus === "co-host" && req.user.id !== group.organizerId) {
+            const err = new Error(`Invalid permisions`);
+            err.status = 403;
+            return next(err);
+        }
+
+        try {
+            await member.setDataValue("status", newStatus);
+            await member.validate();
+            await member.save();
+        } catch(e) {
+            const err = new ValidationError("Bad Request");
+            err.status = 400;
+            console.log(e);
+            err.errors = e.errors;
+            return next(err);
+        }
+
+        const payload = member.toJSON();
+
+        payload.memberId = memberId;
+
+        delete payload.userId;
+        delete payload.createdAt;
+        delete payload.updatedAt;
+
+        res.status(200);
+        res.json(payload);
+    }
+)
+
 // Request a membership to a group by groupId
 router.post("/:groupId/membership",
     requireAuth,
@@ -181,7 +269,7 @@ router.post("/:groupId/events",
         }
 
         // Authorization: is current user owner or co-host
-        const coHosts = await group.getUsers({
+        const coHosts = await group.getMembers({
             through: {
                 where: {
                     userId: req.user.id,
@@ -290,7 +378,7 @@ router.post("/:groupId/venues",
         }
 
         // Authorization: is current user owner or co-host
-        const coHosts = await group.getUsers({
+        const coHosts = await group.getMembers({
             through: {
                 where: {
                     userId: req.user.id,
@@ -337,7 +425,7 @@ router.get("/:groupId/venues",
         }
 
         // Authorization: is current user owner or co-host
-        const coHosts = await group.getUsers({
+        const coHosts = await group.getMembers({
             through: {
                 where: {
                     userId: req.user.id,
