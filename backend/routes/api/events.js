@@ -1,9 +1,76 @@
 const express = require("express");
 const router = express.Router();
 
-const { Event, Group, Venue, EventImage } = require('../../db/models');
+const { Event, Group, Venue, EventImage, Attendance } = require('../../db/models');
 const { ValidationError } = require('sequelize');
 const { requireAuth } = require("../../utils/auth");
+
+router.put("/:eventId/attendance", 
+    requireAuth,
+    async (req, res, next) => {
+        let event = await Event.findByPk(req.params.eventId)
+        if (!event) {
+            const err = new Error("Event couldn't be found");
+            err.status = 404;
+            return next(err);
+        }
+        const eventObj = event.toJSON();
+        
+        const group = await Group.findByPk(eventObj.groupId);
+        let members = await group.getMembers({
+            through: {
+                where: {
+                    status: ["co-host"]
+                },
+            }
+        })
+        members = members.map(member => member.toJSON().id);
+
+        if (req.user.id != group.organizerId && !members.includes(req.user.id)) {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
+
+        const { userId, status } = req.body;
+
+        if (status === "pending") {
+            const err = new Error("Cannot change an attendance status to pending");
+            err.status = 400;
+            return next(err);
+        }
+
+        const user = await Attendance.unscoped().findOne({
+            where: {
+                userId
+            }
+        });
+        if (!user) {
+            const err = new Error("Attendance between the user and the event does not exist");
+            err.status = 404;
+            return next(err);
+        }
+
+        user.status = status || user.status;
+
+        try {
+            await user.save();
+        } catch (e) {
+            const err = new ValidationError("Bad Request");
+            err.status = 400;
+            err.errors = e.errors;
+            return next(err)
+        }
+
+        const payload = user.toJSON();
+
+        delete payload.createdAt;
+        delete payload.updatedAt;
+
+        res.status(200);
+        res.json(payload);
+    }
+)
 
 router.post("/:eventId/attendance",
     requireAuth,
@@ -59,7 +126,6 @@ router.post("/:eventId/attendance",
             const err = new ValidationError("Bad Request");
             err.status = 400;
             err.errors = e.errors;
-            console.log(e)
             return next(err)
         }
 
