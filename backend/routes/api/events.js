@@ -19,9 +19,7 @@ router.post("/:eventId/images",
                 }
             }
         })
-        console.log(members)
         members = members.map(member => member.toJSON().id)
-        
         
         if (req.user.id != group.organizerId && !members.includes(req.user.id)) {
             const err = new Error("Forbidden");
@@ -37,7 +35,6 @@ router.post("/:eventId/images",
         } catch (e) {
             const err = new ValidationError("Bad Request");
             err.status = 400;
-            console.log(e)
             err.errors = e.errors;
             return next(err)
         }
@@ -50,6 +47,61 @@ router.post("/:eventId/images",
 
         res.status(200);
         res.json(image);
+    }
+)
+
+router.put("/:eventId",
+    requireAuth,
+    async (req, res, next) => {
+        const event = await Event.findByPk(req.params.eventId);
+        const eventObj = event.toJSON();
+        
+        const group = await Group.findByPk(eventObj.groupId);
+        let members = await group.getMembers({
+            through: {
+                where: {
+                    status: ["co-host", "member"]
+                }
+            }
+        })
+        members = members.map(member => member.toJSON().id);
+        
+        if (req.user.id != group.organizerId && !members.includes(req.user.id)) {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
+
+        const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+                
+        event.venueId = venueId || event.venueId;
+        event.name = name || event.name;
+        event.type = type || event.type;
+        event.capacity = capacity || event.capacity;
+        event.price = price || event.price;
+        event.description = description || event.description;
+        event.startDate = startDate || event.startDate;
+        event.endDate = endDate || event.endDate;
+        
+        // Verification
+        try {
+            await event.validate();
+            await event.save();
+        } catch (e) {
+            if (e.errors) {
+                const err = new ValidationError("Bad Request");
+                err.status = 400;
+                err.errors = e.errors;
+                return next(err)
+            } else {
+                const err = new Error("Venue does not exist");
+                err.status = 404;
+                return next(err)
+            }
+        }
+
+        res.status(200);
+        res.json(event)
     }
 )
 
