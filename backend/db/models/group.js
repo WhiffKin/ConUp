@@ -104,7 +104,12 @@ module.exports = (sequelize, DataTypes) => {
         attributes: {
           exclude: ["organizerId", "about", "type", "private", "createdAt", "updatedAt"]
         }
-      }
+      },
+      limitedPrivate: {
+        attributes: {
+          exclude: ["organizerId", "about", "type", "createdAt", "updatedAt"]
+        }
+      },
     },
   });
   return Group;
