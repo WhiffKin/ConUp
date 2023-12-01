@@ -61,6 +61,55 @@ router.get("/current",
     }
 );
 
+router.delete("/:groupId/membership", 
+    requireAuth,
+    async (req, res, next) => {
+        const id = req.params.groupId;
+        const { memberId } = req.body;
+        
+        const group = await Group.findByPk(id);
+        if (!group) {
+            const err = new Error(`No group found with id: ${id}`);
+            err.status = 404;
+            return next(err);
+        }
+        const groupObj = group.toJSON();
+
+        let user = await User.findByPk(memberId);
+        if (!user) {
+            const err = new Error(`User couldn't be found`);
+            err.status = 404;
+            return next(err);
+        }
+        user = user.toJSON();
+
+        if (req.user.id !== groupObj.organizerId && req.user.id !== memberId ) {
+            const err = new Error(`Invalid permisions`);
+            err.status = 403;
+            return next(err);
+        }
+
+        const member = await Membership.unscoped().findOne({
+            where: {
+                userId: memberId,
+                groupId: group.id,
+            }
+        });
+        if (!member) {
+            const err = new Error(`Membership between the user and the group does not exist`);
+            err.status = 404;
+            return next(err);
+        }
+
+        member.destroy();
+
+        res.status(200);
+        res.json({
+            message: "Successfully deleted membership from group"
+        });
+    }
+)
+
 // Change the status of a membership to a group by groupId
 router.put("/:groupId/membership",
     requireAuth,
