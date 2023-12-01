@@ -22,7 +22,7 @@ router.get("/current",
         const memberId = await Membership.findAll({
             where: {
                 userId: organizerId,
-                status: "member",
+                status: ["member", "co-host"],
             }
         })
         console.log(groups);
