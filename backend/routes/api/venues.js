@@ -22,7 +22,7 @@ router.put("/:venueId",
         const coHosts = await Membership.findAll({
             where: {
                 userId: req.user.id,
-                groupid: group.id,
+                groupId: group.id,
                 status: "co-host"
             }
         })

@@ -81,6 +81,13 @@ module.exports = (sequelize, DataTypes) => {
       attributes: {
         exclude: ["createdAt", "updatedAt"]
       }
+    },
+    scopes: {
+      limited: {
+        attributes: {
+          exclude: ["groupId", "address", "lat", "lng"]
+        }
+      },
     }
   });
   return Venue;
