@@ -34,6 +34,11 @@ module.exports = (sequelize, DataTypes) => {
   }, {
     sequelize,
     modelName: 'Attendance',
+    defaultScope: {
+      attributes: {
+        exclude: ["id", "eventId", "userId", "createdAt", "updatedAt"]
+      }
+    }
   });
   return Attendance;
 };

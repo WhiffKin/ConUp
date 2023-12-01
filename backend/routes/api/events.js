@@ -1,14 +1,128 @@
 const express = require("express");
 const router = express.Router();
 
-const { Event, Group, Venue, EventImage, User, Membership } = require('../../db/models');
+const { Event, Group, Venue, EventImage } = require('../../db/models');
 const { ValidationError } = require('sequelize');
 const { requireAuth } = require("../../utils/auth");
+
+router.post("/:eventId/attendance",
+    requireAuth,
+    async (req, res, next) => {
+        let event = await Event.findByPk(req.params.eventId)
+        if (!event) {
+            const err = new Error("Event couldn't be found");
+            err.status = 404;
+            return next(err);
+        }
+        const eventObj = event.toJSON();
+        
+        const group = await Group.findByPk(eventObj.groupId);
+        let members = await group.getMembers({
+            through: {
+                where: {
+                    status: ["co-host", "member"]
+                },
+            }
+        })
+        members = members.map(member => member.toJSON().id);
+
+        if (req.user.id != group.organizerId && !members.includes(req.user.id)) {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
+
+        const attendance = await event.getUsers({
+            through: {
+                where: {
+                    userId: req.user.id
+                }
+            }
+        })
+        if (attendance.length) {
+            const err = new Error(attendance[0].toJSON().status === "pending" ? 
+                                "Attendance has already been requested" : 
+                                "User is already an attendee of the event");
+            err.status = 400;
+            return next(err);
+        }
+
+        let member;
+        
+        try {
+            member = await event.addUser(req.user, {
+                through: {
+                    status: "pending",
+                },
+             });
+        } catch (e) {
+            const err = new ValidationError("Bad Request");
+            err.status = 400;
+            err.errors = e.errors;
+            console.log(e)
+            return next(err)
+        }
+
+        member = member[0].toJSON();
+
+        member = {
+            userId: member.userId,
+            status: member.status,
+        }
+
+        res.status(200);
+        res.json(member);
+    }
+)
+
+router.get("/:eventId/attendees",
+    async (req, res, next) => {
+        let event = await Event.findByPk(req.params.eventId)
+        if (!event) {
+            const err = new Error("Event couldn't be found");
+            err.status = 404;
+            return next(err);
+        }
+        const eventObj = event.toJSON();
+        
+        const options = {
+            through: {
+                where: {
+                    status: ["attending", "wait-list"]
+                },
+            }
+        }
+        
+        const group = await Group.findByPk(eventObj.groupId);
+        let members = await group.getMembers({
+            through: {
+                where: {
+                    status: ["co-host", "member"]
+                },
+            }
+        })
+        members = members.map(member => member.toJSON().id);
+
+        if (req.user.id === group.organizerId || members.includes(req.user.id)) {
+            options.through.where.status.push("pending");
+        }
+
+        const attendance = await event.getUsers(options)
+
+        res.status(200);
+        res.json(attendance);
+    }
+)
 
 router.post("/:eventId/images",
     requireAuth,
     async (req, res, next) => {
-        const event = await Event.findByPk(req.params.eventId);
+        const event = await Event.findByPk(req.params.eventId)
+        if (!event) {
+            const err = new Error("Event couldn't be found");
+            err.status = 404;
+            return next(err);
+        }
         const eventObj = event.toJSON();
         
         const group = await Group.findByPk(eventObj.groupId);
@@ -50,10 +164,51 @@ router.post("/:eventId/images",
     }
 )
 
+router.delete("/:eventId",
+    requireAuth,
+    async (req, res, next) => {
+        let event = await Event.findByPk(req.params.eventId)
+        if (!event) {
+            const err = new Error("Event couldn't be found");
+            err.status = 404;
+            return next(err);
+        }
+        const eventObj = event.toJSON();
+
+        const group = await Group.findByPk(eventObj.groupId);
+        let members = await group.getMembers({
+            through: {
+                where: {
+                    status: ["co-host", "member"]
+                }
+            }
+        })
+        members = members.map(member => member.toJSON().id);
+        
+        if (req.user.id != group.organizerId && !members.includes(req.user.id)) {
+            const err = new Error("Forbidden");
+            err.status = 403;
+            return next(err);
+        }
+
+        event.destroy();
+
+        res.status(200);
+        res.json({
+            message: "Successfully deleted"
+        })
+    }
+)
+
 router.put("/:eventId",
     requireAuth,
     async (req, res, next) => {
         const event = await Event.findByPk(req.params.eventId);
+        if (!event) {
+            const err = new Error("Event couldn't be found");
+            err.status = 404;
+            return next(err);
+        }
         const eventObj = event.toJSON();
         
         const group = await Group.findByPk(eventObj.groupId);
@@ -73,6 +228,13 @@ router.put("/:eventId",
         }
 
         const { venueId, name, type, capacity, price, description, startDate, endDate } = req.body;
+
+        const venue = await Venue.findByPk(venueId);
+        if (!venue) {
+            const err = new Error("Venue couldn't be found");
+            err.status = 404;
+            return next(err);
+        }
                 
         event.venueId = venueId || event.venueId;
         event.name = name || event.name;
