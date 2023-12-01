@@ -26,12 +26,21 @@ module.exports = (sequelize, DataTypes) => {
     url: {
       type: DataTypes.STRING,
       validate: {
-        isUrl: true
+        isUrl: {
+          arg: [true],
+          msg: "URL needs to be a valid URL"
+        }
       }
     },
     preview: {
       type: DataTypes.BOOLEAN,
       allowNull: false,
+      validate: {
+        isBool(value) {
+          if (typeof value != "boolean")
+            throw new Error("Preview must be a boolean")
+        },
+      }
     }
   }, {
     sequelize,
