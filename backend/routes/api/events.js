@@ -87,13 +87,6 @@ router.put("/:eventId/attendance",
             return next(err);
         }
         const eventObj = event.toJSON();
-
-        const userExists = await User.findByPk(req.user.id);
-        if (!userExists) {
-            const err = new Error("User couldn't be found");
-            err.status = 404;
-            return next(err);
-        }
         
         const group = await Group.findByPk(eventObj.groupId);
         let members = await group.getMembers({
@@ -116,6 +109,13 @@ router.put("/:eventId/attendance",
         if (status === "pending") {
             const err = new Error("Cannot change an attendance status to pending");
             err.status = 400;
+            return next(err);
+        }
+
+        const userExists = await User.findByPk(userId);
+        if (!userExists) {
+            const err = new Error("User couldn't be found");
+            err.status = 404;
             return next(err);
         }
 
