@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { Event, Group, Venue, EventImage, Attendance } = require('../../db/models');
+const { Event, Group, Venue, EventImage, Attendance, User } = require('../../db/models');
 const { ValidationError, where } = require('sequelize');
 const { requireAuth } = require("../../utils/auth");
 const { query } = require('express-validator');
@@ -415,8 +415,12 @@ router.put("/:eventId",
             }
         }
 
+        const payload = event.toJSON();
+
+        delete payload.updatedAt;
+
         res.status(200);
-        res.json(event)
+        res.json(payload);
     }
 )
 

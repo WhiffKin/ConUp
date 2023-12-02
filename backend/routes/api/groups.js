@@ -346,8 +346,13 @@ router.post("/:groupId/events",
             }
         }
 
+        const payload = event.toJSON();
+
+        delete payload.updatedAt;
+        delete payload.createdAt;
+
         res.status(200);
-        res.json(event);
+        res.json(payload);
     }
 )
 
@@ -450,8 +455,13 @@ router.post("/:groupId/venues",
             return next(err)
         }
 
+        const payload = venue.toJSON();
+
+        delete payload.updatedAt;
+        delete payload.createdAt;
+
         res.status(200);
-        res.json(venue);
+        res.json(payload);
     }
 );
 
@@ -513,6 +523,7 @@ router.post("/:groupId/images",
         }
 
         const { url, preview } = req.body;
+        let image;
 
         try {
             image = await group.createGroupImage({ url, preview });
@@ -523,6 +534,12 @@ router.post("/:groupId/images",
             err.errors = e.errors;
             return next(err)
         }
+
+        image = image.toJSON();
+
+        delete image.groupId;
+        delete image.updatedAt;
+        delete image.createdAt;
 
         res.status(200);
         res.json(image);
@@ -602,7 +619,7 @@ router.put("/:groupId",
     }
 )
 
-// Get group by id with numMembers, GroupImages, and Organizer
+// Get group by id with numMembers, GroupImages, and Organizer, and Venues
 router.get('/:groupId',
     async (req, res, next) => {
         const { groupId } = req.params;
@@ -632,6 +649,14 @@ router.get('/:groupId',
             }
         })
         if (groupImages) group.GroupImages = groupImages; 
+
+        // Get Venues
+        const venues = await Venue.findAll({
+            where: {
+                groupId: group.id
+            }
+        })
+        if (venues) group.Venues = venues; 
 
         // Get Organizer
         const organizer = await User.scope("defaultScope", "nameAndId").findByPk(group.organizerId);
