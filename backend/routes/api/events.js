@@ -28,8 +28,8 @@ const validateQuery = [
         .optional({nullable: true, checkFalsy: true})
         .exists({ checkFalsy: true })
         .customSanitizer(value => value[0] === '"' ? value.split('"')[1] : value)
-        .isIn(["Online", "In Person"])
-        .withMessage("Type must be 'Online' or 'In Person'"),
+        .isIn(["Online", "In person"])
+        .withMessage("Type must be 'Online' or 'In person'"),
     query('startDate')
         .optional({nullable: true, checkFalsy: true})
         .customSanitizer(value => value[0] === '"' ? value.split('"')[1] : value)
