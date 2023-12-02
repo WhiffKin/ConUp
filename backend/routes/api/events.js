@@ -204,7 +204,7 @@ router.post("/:eventId/attendance",
         member = member[0].toJSON();
 
         member = {
-            eventId,
+            eventId: req.params.eventId,
             userId: member.userId,
             status: member.status,
         }
@@ -268,7 +268,7 @@ router.post("/:eventId/images",
         let members = await group.getMembers({
             through: {
                 where: {
-                    status: ["co-host", "member"]
+                    status: ["co-host"]
                 }
             }
         })

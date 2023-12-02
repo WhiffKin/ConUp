@@ -566,16 +566,16 @@ router.put("/:groupId",
 
         const group = await Group.findByPk(id);
         
+        if (!group) {
+            const err = new Error(`No group found with id: ${groupId}`);
+            err.status = 404;
+            return next(err);
+        }
+        
         // Authorization
         if (req.user.id !== group.organizerId) {
             const err = new Error(`Forbidden`);
             err.status = 403;
-            return next(err);
-        }
-        
-        if (!group) {
-            const err = new Error(`No group found with id: ${groupId}`);
-            err.status = 404;
             return next(err);
         }
                 
@@ -666,7 +666,7 @@ router.get('/',
                     preview: true
                 }
             })
-            group.previewImage = groupPreviewImage ? groupImagePreview.url : "No preview image found"; 
+            group.previewImage = groupImagePreview ? groupImagePreview.url : "No preview image found"; 
 
             groups[i] = group;
         }
