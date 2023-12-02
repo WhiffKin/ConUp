@@ -127,27 +127,6 @@ router.put("/:groupId/membership",
             return next(err);
         }
 
-        let user = await User.findByPk(memberId);
-        if (!user) {
-            const err = new Error(`User couldn't be found`);
-            err.status = 404;
-            return next(err);
-        }
-        user = user.toJSON();
-
-        const member = await Membership.unscoped().findOne({
-            where: {
-                userId: memberId,
-                groupId: group.id,
-            }
-        });
-        if (!member) {
-            const err = new Error(`Membership between the user and the group does not exist`);
-            err.status = 404;
-            return next(err);
-        }
-        const status = member.toJSON().status;
-
         // Authorization: is current user owner or co-host
         const coHosts = await group.getMembers({
             through: {
@@ -168,6 +147,27 @@ router.put("/:groupId/membership",
             err.status = 403;
             return next(err);
         }
+
+        let user = await User.findByPk(memberId);
+        if (!user) {
+            const err = new Error(`User couldn't be found`);
+            err.status = 404;
+            return next(err);
+        }
+        user = user.toJSON();
+
+        const member = await Membership.unscoped().findOne({
+            where: {
+                userId: memberId,
+                groupId: group.id,
+            }
+        });
+        if (!member) {
+            const err = new Error(`Membership between the user and the group does not exist`);
+            err.status = 404;
+            return next(err);
+        }
+        const status = member.toJSON().status;
 
         try {
             await member.setDataValue("status", newStatus);
@@ -537,16 +537,16 @@ router.delete("/:groupId",
         
         const group = await Group.findByPk(id);
 
+        if (!group) {
+            const err = new Error(`No group found with id: ${groupId}`);
+            err.status = 404;
+            return next(err);
+        }
+
         // Authorization
         if (req.user.id !== group.organizerId) {
             const err = new Error(`Forbidden`);
             err.status = 403;
-            return next(err);
-        }
-
-        if (!group) {
-            const err = new Error(`No group found with id: ${groupId}`);
-            err.status = 404;
             return next(err);
         }
 
@@ -567,7 +567,7 @@ router.put("/:groupId",
         const group = await Group.findByPk(id);
         
         if (!group) {
-            const err = new Error(`No group found with id: ${groupId}`);
+            const err = new Error(`No group found with id: ${id}`);
             err.status = 404;
             return next(err);
         }

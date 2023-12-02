@@ -273,8 +273,15 @@ router.post("/:eventId/images",
             }
         })
         members = members.map(member => member.toJSON().id)
+        let attendee = await Attendance.findOne({
+            where: {
+                eventId: req.params.eventId,
+                userId: req.user.id,
+                status: "attending"
+            }
+        })
         
-        if (req.user.id != group.organizerId && !members.includes(req.user.id)) {
+        if (req.user.id != group.organizerId && !members.includes(req.user.id) && !attendee) {
             const err = new Error("Forbidden");
             err.status = 403;
             return next(err);
