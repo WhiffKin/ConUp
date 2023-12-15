@@ -176,7 +176,6 @@ router.put("/:groupId/membership",
         } catch(e) {
             const err = new ValidationError("Bad Request");
             err.status = 400;
-            console.log(e);
             err.errors = e.errors;
             return next(err);
         }
@@ -450,7 +449,6 @@ router.post("/:groupId/venues",
         } catch(e) {
             const err = new ValidationError("Bad Request");
             err.status = 400;
-            console.log(e);
             err.errors = e.errors;
             return next(err)
         }
@@ -530,7 +528,6 @@ router.post("/:groupId/images",
         } catch(e) {
             const err = new ValidationError("Bad Request");
             err.status = 400;
-            console.log(e);
             err.errors = e.errors;
             return next(err)
         }

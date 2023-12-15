@@ -1,0 +1,17 @@
+form {
+    display: flex;
+    flex-direction: column;
+
+    gap: 10px;
+    width: 300px;
+    margin: auto;
+
+    background-color: aliceblue;
+    padding: 20px;
+    border-radius: 10px;
+}
+
+form label {
+    display: flex;
+    justify-content: space-between;
+}
