@@ -14,7 +14,6 @@ router.delete("/:imageId",
             return next(err);
         }
 
-        console.log(image)
         const event = await Event.findByPk(image.eventId);
         const group = await Group.findByPk(event.groupId);
         let members = await group.getMembers({

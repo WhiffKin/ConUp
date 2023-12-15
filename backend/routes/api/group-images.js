@@ -13,7 +13,7 @@ router.delete("/:imageId",
             err.status = 403;
             return next(err);
         }
-        console.log(image)
+        
         const group = await Group.findByPk(image.groupId);
         let members = await group.getMembers({
             through: {
