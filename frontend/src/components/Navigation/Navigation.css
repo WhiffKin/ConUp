@@ -1,3 +1,9 @@
+nav {
+    position: sticky;
+    top: 0px;
+    background-color: white;
+}
+
 nav ul {
     display: flex;
     justify-content: space-between;

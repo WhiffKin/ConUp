@@ -1,7 +1,10 @@
 import { NavLink } from "react-router-dom";
+import { useSelector } from "react-redux";
 import "./LandingPage.css";
 
 function LandingPage() {
+    const sessionUser = useSelector(state => state.session.user);
+
     return (
         <main>
             <div className="section1">
@@ -26,9 +29,9 @@ function LandingPage() {
                     <h5>Find an event</h5>
                     <span>Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.</span>
                 </NavLink>
-                <NavLink to="/groups/create">
+                <NavLink className={sessionUser === null ? "disabled" : ""} to={sessionUser != null ? "/groups/create" : ""}>
                     <img src="FakeImage"/>
-                    <h5>Start a group</h5>
+                    <h5>Start a new group</h5>
                     <span>Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.</span>
                 </NavLink>
             </div>
