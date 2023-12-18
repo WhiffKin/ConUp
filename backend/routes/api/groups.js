@@ -663,7 +663,7 @@ router.get('/',
                     preview: true
                 }
             })
-            group.previewImage = groupPreviewImage ? groupImagePreview.url : "No preview image found"; 
+            group.previewImage = groupImagePreview ? groupImagePreview.url : "No preview image found"; 
 
             groups[i] = group;
         }
