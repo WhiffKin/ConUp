@@ -9,7 +9,7 @@ function GroupCard({ group }) {
                 <h3>{group.name}</h3>
                 <h5>{group.city}, {group.state}</h5>
                 <span>{group.about}</span>
-                <h5>##events • {group.private ? "Private" : "Public"}</h5>
+                <h5>##events {String.fromCharCode(183) /* dot */} {group.private ? "Private" : "Public"}</h5>
             </div>
         </NavLink>
     )

@@ -15,7 +15,7 @@ function GroupsPage() {
 
     return (
         <>
-            <header>
+            <header className="groupsHeader">
                 <div>
                     <NavLink to="/events"><h3>Events</h3></NavLink>
                     <NavLink className="currentLink"><h3>Groups</h3></NavLink>

@@ -1,19 +1,24 @@
-header {
+.groupsHeader {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    
+    height: 80px;
     width: 800px;
     margin: auto;
 }
 
-header div {
+.groupsHeader div {
     display: flex;
     gap: 20px;
 }
 
-header a {
+.groupsHeader a {
     text-decoration: none;
     color: black;
 }
 
-.currentLink {
+.currentLink > h3 {
     color: #00525e;
     text-decoration: underline;
     cursor: default;
