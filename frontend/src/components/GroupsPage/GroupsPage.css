@@ -1,0 +1,25 @@
+header {
+    width: 800px;
+    margin: auto;
+}
+
+header div {
+    display: flex;
+    gap: 20px;
+}
+
+header a {
+    text-decoration: none;
+    color: black;
+}
+
+.currentLink {
+    color: #00525e;
+    text-decoration: underline;
+    cursor: default;
+}
+
+.groupCardContainer {
+    width: 800px;
+    margin: auto;
+}
