@@ -6,7 +6,7 @@ function LandingPage() {
     const sessionUser = useSelector(state => state.session.user);
 
     return (
-        <main>
+        <main className="mainLandingPage">
             <div className="section1">
                 <div>
                     <h1>The people platform- Where interests become friendships</h1>

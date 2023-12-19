@@ -121,7 +121,7 @@ module.exports = (sequelize, DataTypes) => {
     scopes: {
       groupSearch: {
         attributes: {
-          exclude: ["description", "capacity", "price"]
+          exclude: ["capacity", "price"]
         }
       }
     }
