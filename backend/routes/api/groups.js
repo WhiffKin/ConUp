@@ -647,14 +647,6 @@ router.get('/:groupId',
         })
         if (groupImages) group.GroupImages = groupImages; 
 
-        // Get Venues
-        const venues = await Venue.findAll({
-            where: {
-                groupId: group.id
-            }
-        })
-        if (venues) group.Venues = venues; 
-
         // Get Organizer
         const organizer = await User.scope("defaultScope", "nameAndId").findByPk(group.organizerId);
         group.Organizer = organizer;
