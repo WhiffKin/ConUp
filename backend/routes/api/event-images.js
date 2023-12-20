@@ -10,7 +10,7 @@ router.delete("/:imageId",
         const image = await EventImage.unscoped().findByPk(req.params.imageId);
         if (!image) {
             const err = new Error("Event Image couldn't be found");
-            err.status = 403;
+            err.status = 404;
             return next(err);
         }
 
