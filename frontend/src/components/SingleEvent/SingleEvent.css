@@ -1,0 +1,132 @@
+.singleEventHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    width: 1000px;
+    margin: auto;
+    margin-bottom: 25px;
+}
+
+.singleEventHeader span a {
+    text-decoration: underline;
+    color: #00525e;
+}
+
+.singleEventHeader > div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.singleEventHeader > div > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    height: 325px;
+    width: 400px;
+}
+
+.singleEventMain {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    
+    padding-top: 25px;
+    width: 100%;
+    background-color: #eeeeee;
+}
+
+.singleEventMain > div {
+    flex: 1 1 auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+
+    width: 1000px;
+    margin: auto;
+}
+
+.singleEventMain > div > div {
+    display: flex;
+    gap: 10px;
+}
+
+.singleEventMain > div > div > img {
+    height: 325px;
+    width: 575px;
+}
+
+.singleEventMain > div > div > div {
+    display: flex;
+    flex-direction: column;
+    flex-grow: 1;
+    
+    gap: 20px;
+}
+
+#singleEvent__groupCard {
+    display: flex;
+    background-color: white;
+    padding: 20px;
+    border-radius: 20px;
+    gap: 15px;
+
+    height: 70px;
+
+    text-decoration: none;
+    color: black;
+}
+
+#singleEvent__groupCard img {
+    height: 70px;
+    width: 105px;
+}
+
+#singleEvent__groupCard > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    justify-content: center;
+}
+
+#singleEvent__eventCard {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: start;
+
+    background-color: white;
+    padding: 20px;
+    border-radius: 20px;
+    gap: 15px;
+
+    flex-grow: 1;
+    height: 70px;
+}
+
+#singleEvent__eventCard i {
+    display: flex;
+    justify-content: center;
+    
+    width: 20px;
+}
+
+#singleEvent__eventCard > div {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+#singleEvent__eventCard > div > div {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+}
+
+#singleEvent__eventCard > div > div > div {
+    display: flex;
+    flex-direction: column;
+}

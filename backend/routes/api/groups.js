@@ -616,7 +616,7 @@ router.put("/:groupId",
     }
 )
 
-// Get group by id with numMembers, GroupImages, and Organizer, and Venues
+// Get group by id with numMembers, GroupImages, Venue, and Organizer
 router.get('/:groupId',
     async (req, res, next) => {
         const { groupId } = req.params;
@@ -658,6 +658,14 @@ router.get('/:groupId',
         // Get Organizer
         const organizer = await User.scope("defaultScope", "nameAndId").findByPk(group.organizerId);
         group.Organizer = organizer;
+
+        // Get Venues
+        const venues = await Venue.findAll({
+            where: {
+                groupId: group.id
+            }
+        });
+        group.Venues = venues;
 
         res.status(200);
         res.json(group);

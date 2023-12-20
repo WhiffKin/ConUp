@@ -1,10 +1,27 @@
-ul {
-    display: flex;
-    gap: 20px;
-    list-style: none;
+nav {
+    position: sticky;
+    top: 0px;
+    background-color: white;
 }
 
-ul a {
+nav ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+
+    margin: 0;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    border-bottom: 2px #cccccc solid;
+}
+
+nav ul li h1 {
+    margin: 0;
+    color: #ff5a5f;
+}
+
+nav ul a {
     color: inherit;
     text-decoration: none; 
 }
@@ -12,6 +29,7 @@ ul a {
 .profile-dropdown {
     position: absolute;
     top: 40px;
+    right: 8px;
 
     display: flex;
     flex-direction: column;

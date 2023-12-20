@@ -1,1 +1,14 @@
-/* TODO: Add sitewide styles */
+body {
+    margin: 0;
+}
+html, body, #root {
+    height: 100%;
+}
+
+h1, h3, h5 {
+    margin: 0;
+}
+
+.green {
+    color: #00525e;
+}

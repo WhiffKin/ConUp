@@ -1,0 +1,74 @@
+.singleGroupHeader {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+
+    width: 1000px;
+    margin: auto;
+    margin-bottom: 25px;
+}
+
+.singleGroupHeader span a {
+    text-decoration: underline;
+    color: #00525e;
+}
+
+.singleGroupHeader > div {
+    display: flex;
+    justify-content: space-between;
+}
+
+.singleGroupHeader > div > img {
+    height: 325px;
+    width: 575px;
+}
+
+.singleGroupHeader > div > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
+    height: 325px;
+    width: 400px;
+}
+
+.singleGroupHeader button {
+    height: 35px;
+    width: 135px;
+    margin-top: auto;
+    margin-bottom: 2.5px;
+
+    color: white;
+    background-color: #cf2a27;
+
+
+    border-radius: 0px;
+    box-shadow: 2.5px 2.5px black;
+}
+
+.singleGroupMain {
+    display: flex;
+    flex-flow: column;
+    height: 100%;
+    
+    padding-top: 25px;
+    width: 100%;
+    background-color: #eeeeee;
+}
+
+.singleGroupMain > div {
+    flex: 1 1 auto;
+
+    display: flex;
+    flex-direction: column;
+    gap: 25px;
+
+    width: 1000px;
+    margin: auto;
+}
+
+.singleGroupMain > div > div {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+}
