@@ -29,7 +29,6 @@ export const thunkGetEvents = () => async (dispatch) => {
 
     if (response.ok) {
         const data = await response.json();
-        console.log(data);
         dispatch(getEvents(data));
     }
 }

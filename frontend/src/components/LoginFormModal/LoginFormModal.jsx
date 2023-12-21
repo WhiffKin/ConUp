@@ -34,7 +34,6 @@ function LoginFormModal() {
   }
 
   useEffect(() => {
-    console.log("RUNNING")
     if (credential.length < 4)
       setValidation(state => ({...state, cred: "Username must be at least 4 characters long"}))
     else if (validation.cred) {
