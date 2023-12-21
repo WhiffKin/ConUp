@@ -8,6 +8,7 @@ import GroupsPage from './components/GroupsPage/GroupsPage';
 import SingleGroup from './components/SingleGroup';
 import EventsPage from './components/EventsPage';
 import SingleEvent from './components/SingleEvent';
+import CreateEvent from './components/CreateEvent';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -36,12 +37,16 @@ const router = createBrowserRouter([
         element: <LandingPage />
       },
       {
-        path: '/groups',
-        element: <GroupsPage />
+        path: '/groups/:groupId/events/new',
+        element: <CreateEvent />
       },
       {
         path: '/groups/:groupId',
         element: <SingleGroup />
+      },
+      {
+        path: '/groups',
+        element: <GroupsPage />
       },
       {
         path: '/events',

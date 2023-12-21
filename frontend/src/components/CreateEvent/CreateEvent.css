@@ -1,0 +1,44 @@
+#CreateEventForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    width: 600px;
+    margin: auto;
+}
+
+#CreateEventForm > div {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    padding-top: 10px;
+}
+
+#CreateEventForm > div + div {
+    border-top: 2px solid #808080;
+}
+
+#CreateEventForm label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+
+#CreateEventForm input[type="text"] {
+    width: 350px;
+}
+
+#CreateEventForm input[type="datetime-local"] {
+    width: 200px;
+}
+
+#CreateEventForm select {
+    width: 100px;
+}
+
+#CreateEventForm textarea {
+    resize: none;
+    width: 100%;
+}

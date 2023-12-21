@@ -30,7 +30,7 @@ function SingleGroup() {
                         <h5>{group?.city}, {group?.state}</h5>
                         <h5>## events {String.fromCharCode(183) /* dot */} {group?.private ? "Private" : "Public"}</h5>
                         <h5>Organized by {group?.Organizer?.firstName} {group?.Organizer?.lastName}</h5>
-                        {user && (user.id != group.organizerId ? 
+                        {user && group && (user.id != group.organizerId ? 
                             <button onClick={() => window.alert("Feature coming soon")}>Join this group</button> 
                             :
                             <div id="singleGroupHeader_buttonContainer">
