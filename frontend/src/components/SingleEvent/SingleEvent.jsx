@@ -3,22 +3,22 @@ import { NavLink, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { thunkGetEventsById } from "../../store/events";
 import "./SingleEvent.css";
-import { thunkGetGroups } from "../../store/groups";
+import { thunkGetGroupsById } from "../../store/groups";
 
 function SingleEvent() {
     const dispatch = useDispatch();
     const { eventId } = useParams();
     const event = useSelector(state => state.events[eventId]);
-    let group = useSelector(state => state.groups[event?.groupId]);
+    const group = useSelector(state => { if (event) return state.groups[event.groupId]; });
     
     useEffect(() => {
         dispatch(thunkGetEventsById(eventId));
     }, [dispatch, eventId])
     useEffect(() => {
-        dispatch(thunkGetGroups());
+        dispatch(thunkGetGroupsById());
     }, [dispatch])
 
-    console.log(event);
+    console.log(group);
     
     return (
         <>
