@@ -31,6 +31,7 @@ export const thunkGetGroups = () => async (dispatch) => {
 }
 
 export const thunkGetGroupsById = (id) => async (dispatch) => {
+    if (id === undefined) return { message: "A groups id cannot be undefined."};
     const response = await fetch(`/api/groups/${id}`);
 
     const data = await response.json();

@@ -4,6 +4,7 @@ import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
+import { NavLink } from 'react-router-dom';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
@@ -39,38 +40,37 @@ function ProfileButton({ user }) {
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
-  return (
+  return user ? (
     <>
-      <button onClick={toggleMenu}>
+      <NavLink to="/groups/create" className="green">Start a new Group</NavLink>
+      <div className='profile-button' onClick={toggleMenu}>
         <i className="fa-regular fa-user" />
-      </button>
+        <i className={`fa-solid fa-chevron-${showMenu ? "up grey" : "down"}`} />
+      </div>
       <ul className={ulClassName} ref={ulRef}>
-        {user ? (
           <>
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
+          <div>
+            <li>Hello, {user.username}</li>
             <li>{user.email}</li>
+          </div>
             <li>
               <button onClick={logout}>Log Out</button>
             </li>
           </>
-        ) : (
-          <>
-            <OpenModalMenuItem
-              itemText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
-              itemText="Sign Up"
-              onItemClick={closeMenu}
-              modalComponent={<SignupFormModal />}
-            />
-          </>
-        )}
       </ul>
     </>
-  );
+  ) : (
+  <>
+    <OpenModalMenuItem
+      itemText="Log In"
+      modalComponent={<LoginFormModal />}
+    />
+    <OpenModalMenuItem
+      itemText="Sign Up"
+      modalComponent={<SignupFormModal />}
+    />
+  </>
+  ) ;
 }
 
 export default ProfileButton;
