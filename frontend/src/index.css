@@ -5,10 +5,14 @@ html, body, #root {
     height: 100%;
 }
 
-h1, h3, h5 {
+h1, h3, h5, p {
     margin: 0;
 }
 
 .green {
     color: #00525e;
+}
+
+.grey {
+    color: #cccccc;
 }

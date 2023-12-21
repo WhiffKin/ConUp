@@ -4,7 +4,7 @@ nav {
     background-color: white;
 }
 
-nav ul {
+nav > ul {
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -14,6 +14,11 @@ nav ul {
     margin-bottom: 20px;
     padding: 15px 20px;
     border-bottom: 2px #cccccc solid;
+}
+
+nav ul li {
+    display: flex;
+    gap: 35px;
 }
 
 nav ul li h1 {
@@ -26,18 +31,45 @@ nav ul a {
     text-decoration: none; 
 }
 
+.profile-button {
+    display: flex;
+    gap: 5px;
+}
+
 .profile-dropdown {
     position: absolute;
-    top: 40px;
-    right: 8px;
+    top: 50px;
+    right: 20px;
+    width: 180px;
+    padding: 0;
 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    background-color: white;
+    border: 2px solid black;
+}
+
+.profile-dropdown div {
     display: flex;
     flex-direction: column;
     gap: 5px;
 
-    background-color: aliceblue;
-    border-radius: 5px;
-    padding: 10px;
+    padding: 10px 20px;
+    border-bottom: 2px solid black;
+}
+
+.profile-dropdown button {
+    text-align: start;
+    width: 100%;
+    background-color: white;
+    border: none;
+    padding: 5px 20px;
+}
+
+.profile-dropdown button:hover {
+    background-color: #cccccc;
 }
 
 .hidden {
