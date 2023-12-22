@@ -19,6 +19,8 @@ function SingleEvent() {
         dispatch(thunkGetGroupsById(event.groupId));
     }, [dispatch, event])
     
+    console.log(event?.price)
+
     return (
         <>
             <header className="singleEventHeader">
@@ -54,7 +56,7 @@ function SingleEvent() {
                                 </div>
                                 <div>
                                     <i className="fa-solid fa-dollar-sign" />
-                                    <h5>{typeof event?.price === 0 ? "FREE" : event?.price?.toFixed(2)}</h5>
+                                    <h5>{event?.price === 0 ? "FREE" : (+event?.price).toFixed(2)}</h5>
                                 </div>
                                 <div>
                                     <i className="fa-solid fa-map-pin" />
