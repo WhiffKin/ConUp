@@ -19,6 +19,7 @@ function CreateGroup() {
     const [type, setType] = useState("");
     const [visibility, setVisibility] = useState("");
     const [imageURL, setImageURL] = useState("");
+    const [disabled, setDisabled] = useState(false);
 
     useEffect(() => {
         dispatch(thunkGetGroups());
@@ -32,6 +33,7 @@ function CreateGroup() {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        setDisabled(true);
 
         // Validations
         const tempValid = {};
@@ -54,7 +56,10 @@ function CreateGroup() {
         setErrors({});
 
         // Unsuccessful Validation
-        if (Object.values(tempValid).length != 0) return;
+        if (Object.values(tempValid).length != 0) {
+            setDisabled(false);
+            return;
+        }
 
         // Successful Validation
         const payload = {
@@ -75,15 +80,17 @@ function CreateGroup() {
                 message: response.message,
                 errors: {...response.errors}
             });
+            setDisabled(false);
             return;
         }
         else if (response.message) {
             setErrors({message: response.message});
+            setDisabled(false);
             return;
         }
 
         // Successful Submission
-        navigate(`/events/${response.id}`);
+        navigate(`/groups/${response.id}`);
     }
     
     return (
@@ -182,7 +189,7 @@ function CreateGroup() {
                     </>
                 </div>
             }
-            <button type="submit">Create Group</button>
+            <button type="submit" disabled={disabled}>Create Group</button>
         </form>
     </>
     )

@@ -36,6 +36,7 @@ function CreateEvent() {
 
     const onSubmit = async (e) => {
         e.preventDefault();
+        e.setDisabled();
 
         // Validations
         const tempValid = {};
@@ -204,7 +205,7 @@ function CreateEvent() {
                     </>
                 </div>
             }
-            <button type="submit">Create Event</button>
+            <button type="submit" >Create Event</button>
         </form>
     </>
     )

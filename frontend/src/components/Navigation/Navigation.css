@@ -57,7 +57,9 @@ nav ul a {
     gap: 5px;
 
     padding: 10px 20px;
-    border-bottom: 2px solid black;
+}
+.profile-dropdown div + div {
+    border-top: 2px solid black;
 }
 
 .profile-dropdown button {
@@ -65,10 +67,10 @@ nav ul a {
     width: 100%;
     background-color: white;
     border: none;
-    padding: 5px 20px;
+    padding: 0;
 }
 
-.profile-dropdown button:hover {
+.hover:hover {
     background-color: #cccccc;
 }
 
