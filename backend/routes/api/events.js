@@ -481,10 +481,12 @@ router.get("/",
             }
         };
 
-        page = Math.min(Math.max(page ? page : 1, 1), 10);
-        size = Math.min(Math.max(size ? size : 20, 1), 20);
-        options.offset = (page - 1) * size;
-        options.limit = size;
+        if (page) page = Math.min(Math.max(page ? page : 1, 1), 10);
+        else page = 1;
+        if (size > 0) size = Math.min(Math.max(size ? size : 20, 1), 20);
+        else size = -1
+        if (size > 0) options.offset = (page - 1) * size;
+        if (size > 0) options.limit = size;
         if (name) options.where.name = name;
         if (type) options.where.type = type;
         if (startDate) options.where.startDate = startDate;

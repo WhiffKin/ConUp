@@ -33,20 +33,45 @@ const addGroup = (group) => ({
 
 // THUNKS
 export const thunkGetGroups = () => async (dispatch) => {
-    const response = await fetch("/api/groups");
+    const groupResponse = await fetch("/api/groups");
+    const eventResponse = await fetch("/api/events?size=0");
 
-    if (response.ok) {
-        const data = await response.json();
-        dispatch(getGroups(data));
+    if (groupResponse.ok && eventResponse.ok) {
+        const groupData = await groupResponse.json();
+        const eventData = await eventResponse.json();
+
+        console.log(groupData,eventData)
+        
+        const groupMap = {};
+        for (let event of eventData) 
+            if (groupMap[event.groupId]) groupMap[event.groupId]++;
+            else groupMap[event.groupId] = 1;
+
+        for (let group of groupData)
+            if (groupMap[group.id]) group.numEvents = groupMap[group.id];
+            else group.numEvents = 0;
+
+        dispatch(getGroups(groupData));
     }
 }
 
 export const thunkGetGroupsById = (id) => async (dispatch) => {
     if (id === undefined) return { message: "A groups id cannot be undefined."};
     const response = await fetch(`/api/groups/${id}`);
-
+    const eventResponse = await fetch("/api/events?size=0");
+    
     const data = await response.json();
-    if (response.ok) dispatch(getGroupById(data));
+    if (groupResponse.ok && eventResponse.ok) { 
+        const eventData = await eventResponse.json();
+    
+        for (let event of eventData) 
+            if (event.groupId === id) {
+                if (data.numEvents) data.numEvents++;
+                else data.numEvents = 1;
+            }
+    
+        dispatch(getGroupById(data));
+    }
     return data;
 }
 
