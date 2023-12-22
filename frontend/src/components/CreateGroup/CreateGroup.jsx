@@ -43,7 +43,7 @@ function CreateGroup() {
             state = splitLocation[1].trim();
         }
         if ((!city || !state) && !tempValid.location) tempValid.location = "Location must be 'City, STATE'";
-        else if (!tempValid.location && state.toUpperCase() !== state){console.log("HERE"); tempValid.location = "Location must be 'City, STATE'";}
+        else if (!tempValid.location && state.toUpperCase() !== state) tempValid.location = "Location must be 'City, STATE'";
         if (location === "") tempValid.location = "Name is required";
         if (name === "") tempValid.name = "Location is required";
         if (description.length < 30) tempValid.description = "Description must be at least 30 characters long";
