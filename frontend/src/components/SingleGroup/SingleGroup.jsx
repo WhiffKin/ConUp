@@ -3,6 +3,7 @@ import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { thunkGetGroupsById } from "../../store/groups";
 import "./SingleGroup.css";
+import EventCard from "./EventCard";
 
 function SingleGroup() {
     const navigate = useNavigate();
@@ -53,10 +54,12 @@ function SingleGroup() {
                         <span>{group?.about}</span>
                     </div>
                     <div>
-                        <h3>Upcoming Events</h3>
+                        <h3>Upcoming Events ({group?.futureEvents?.length})</h3>
+                        {group?.futureEvents?.length > 0 && group.futureEvents.map((event, id) => <EventCard key={id} event={event} location={({city: group.city, state: group.state})}/>)}
                     </div>
                     <div>
-                        <h3>Past Events</h3>
+                        <h3>Past Events ({group?.pastEvents?.length})</h3>
+                        {group?.pastEvents?.length > 0 && group.pastEvents.map((event, id) => <EventCard key={id} event={event} location={({city: group.city, state: group.state})}/>)}
                     </div>
                 </div>
             </main>

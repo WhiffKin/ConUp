@@ -61,14 +61,22 @@ export const thunkGetGroupsById = (id) => async (dispatch) => {
     const eventResponse = await fetch("/api/events?size=0");
     
     const data = await response.json();
-    if (groupResponse.ok && eventResponse.ok) { 
+    if (response.ok && eventResponse.ok) { 
         const eventData = await eventResponse.json();
-    
-        for (let event of eventData) 
-            if (event.groupId === id) {
-                if (data.numEvents) data.numEvents++;
-                else data.numEvents = 1;
-            }
+        
+        eventData.filter(event => event.groupId === id);
+        const pastEvents = [];
+        const futureEvents = [];
+        eventData.forEach(event => {
+            console.log(event.startDate)
+            if (Date.parse(event.startDate) < Date.now()) pastEvents.push(event);
+            else futureEvents.push(event);
+        })
+        data.numEvents = eventData.length;
+        data.pastEvents = pastEvents
+        .sort((a,b) => Date.parse(a.startDate) < Date.parse(b.startDate) ? -1 : 1);
+        data.futureEvents = futureEvents
+        .sort((a,b) => Date.parse(a.startDate) < Date.parse(b.startDate) ? -1 : 1);
     
         dispatch(getGroupById(data));
     }

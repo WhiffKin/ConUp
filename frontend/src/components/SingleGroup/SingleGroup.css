@@ -63,9 +63,9 @@
 .singleGroupMain {
     display: flex;
     flex-flow: column;
-    height: 100%;
     
     padding-top: 25px;
+    padding-bottom: 200px;
     width: 100%;
     background-color: #eeeeee;
 }
@@ -85,4 +85,28 @@
     display: flex;
     flex-direction: column;
     gap: 10px;
+}
+
+.eventCard {
+    color: inherit;
+    text-decoration: none;
+    
+    width: 500px;
+    background-color: white;
+    border-radius: 15px;
+    padding: 15px;
+}
+
+.eventCard > div {
+    display: flex;
+    gap: 10px;
+}
+
+.eventCard img {
+    height: 120px;
+    width: 180px;
+}
+
+.eventCard {
+    word-wrap: break-word;
 }
