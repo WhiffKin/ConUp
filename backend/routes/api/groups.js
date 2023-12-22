@@ -338,7 +338,7 @@ router.post("/:groupId/events",
                 err.status = 400;
                 err.errors = e.errors;
                 return next(err)
-            } else  {
+            } else {
                 const err = new Error("Venue does not exist");
                 err.status = 404;
                 return next(err)
