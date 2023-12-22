@@ -13,6 +13,7 @@ function CreateEvent() {
 
     const [validation, setValidation] = useState({});
     const [errors, setErrors] = useState({});
+    
     const [name, setName] = useState("");
     const [type, setType] = useState("");
     const [visibility, setVisibility] = useState("");
@@ -22,14 +23,6 @@ function CreateEvent() {
     const [endDate, setEndDate] = useState("");
     const [imageURL, setImageURL] = useState("");
     const [description, setDescription] = useState("");
-
-//     Event.type cannot be null
-
-// Event.capacity cannot be null
-
-// Event.startDate cannot be null
-
-// Event.endDate cannot be null
 
     useEffect(() => {
         dispatch(thunkGetGroups());
@@ -47,13 +40,13 @@ function CreateEvent() {
         // Validations
         const tempValid = {};
         if (name === "") tempValid.name = "Name is required";
-        if (type === "") tempValid.eventType = "Event type is required";
+        if (type === "") tempValid.type = "Event type is required";
         if (visibility === "") tempValid.visibility = "Visibility is required";
         if (price === "") tempValid.price = "Price is required";
         if (capacity === "") tempValid.capacity = "Capacity is required";
-        if (startDate === "") tempValid.eventStart = "Event start is required";
-        if (endDate === "") tempValid.eventEnd = "Event end is required";
-        if (!checkEnds(imageURL)) tempValid.image = "Image URL must end in .png, .jpg, or .jpeg";
+        if (startDate === "") tempValid.startDate = "Event start is required";
+        if (endDate === "") tempValid.endDate = "Event end is required";
+        if (!checkEnds(imageURL)) tempValid.imageURL = "Image URL must end in .png, .jpg, or .jpeg";
         if (description.length < 30) tempValid.description = "Description must be at least 30 characters long";
         setValidation(tempValid);
         setErrors({});
@@ -119,7 +112,7 @@ function CreateEvent() {
                         <option value="Online">Online</option>
                         <option value="In person">In person</option>
                     </select>
-                    {validation.eventType && <p>Event type is required</p>}
+                    {validation.type && <p>Event type is required</p>}
                 </label>
                 <label>
                     Is this event private or public?
@@ -156,7 +149,7 @@ function CreateEvent() {
                         value={capacity}
                         onChange={(e) => setCapacity(e.target.value)}
                         />
-                    {validation.price && <p>Capacity is required</p>}
+                    {validation.capacity && <p>Capacity is required</p>}
                 </label>
             </div>
             <div>
@@ -167,7 +160,7 @@ function CreateEvent() {
                         value={startDate}
                         onChange={(e) => setStartDate(e.target.value)}
                         />
-                    {validation.eventStart && <p>Event start is required</p>}
+                    {validation.startDate && <p>Event start is required</p>}
                 </label>
                 <label>
                     When does your event end? 
@@ -176,7 +169,7 @@ function CreateEvent() {
                         value={endDate}
                         onChange={(e) => setEndDate(e.target.value)}
                         />
-                    {validation.eventEnd && <p>Event end is required</p>}
+                    {validation.endDate && <p>Event end is required</p>}
                 </label>
             </div>
             <div>
@@ -188,7 +181,7 @@ function CreateEvent() {
                         value={imageURL}
                         onChange={(e) => setImageURL(e.target.value)}
                         />
-                    {validation.image && <p>Image URL must end in .png, .jpg, or .jpeg</p>}
+                    {validation.imageURL && <p>Image URL must end in .png, .jpg, or .jpeg</p>}
                 </label>
             </div>
             <div>

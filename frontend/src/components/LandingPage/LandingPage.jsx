@@ -29,7 +29,10 @@ function LandingPage() {
                     <h5>Find an event</h5>
                     <span>Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.</span>
                 </NavLink>
-                <NavLink className={sessionUser === null ? "disabled" : ""} to={sessionUser != null ? "/groups/create" : ""}>
+                <NavLink 
+                    className={sessionUser === null ? "disabled" : ""}
+                    to={sessionUser != null ? "/groups/new" : ""}
+                    >
                     <img src="FakeImage"/>
                     <h5>Start a new group</h5>
                     <span>Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua.</span>
