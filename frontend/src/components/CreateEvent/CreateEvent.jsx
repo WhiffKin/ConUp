@@ -23,6 +23,7 @@ function CreateEvent() {
     const [endDate, setEndDate] = useState("");
     const [imageURL, setImageURL] = useState("");
     const [description, setDescription] = useState("");
+    const [disabled, setDisabled] = useState(false);
 
     useEffect(() => {
         dispatch(thunkGetGroups());
@@ -36,7 +37,7 @@ function CreateEvent() {
 
     const onSubmit = async (e) => {
         e.preventDefault();
-        e.setDisabled();
+        setDisabled(true);
 
         // Validations
         const tempValid = {};
@@ -53,7 +54,10 @@ function CreateEvent() {
         setErrors({});
 
         // Unsuccessful Validation
-        if (Object.values(tempValid).length != 0) return;
+        if (Object.values(tempValid).length != 0) {
+            setDisabled(false);
+            return;
+        }
 
         // Successful Validation
         const payload = {
@@ -75,10 +79,12 @@ function CreateEvent() {
                 message: response.message,
                 errors: {...response.errors}
             });
+            setDisabled(false);
             return;
         }
         else if (response.message) {
             setErrors({message: response.message});
+            setDisabled(false);
             return;
         }
 
@@ -205,7 +211,7 @@ function CreateEvent() {
                     </>
                 </div>
             }
-            <button type="submit" >Create Event</button>
+            <button type="submit" disabled={disabled}>Create Event</button>
         </form>
     </>
     )
