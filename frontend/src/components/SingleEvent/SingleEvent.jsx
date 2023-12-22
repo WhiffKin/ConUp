@@ -18,8 +18,6 @@ function SingleEvent() {
         if (event)
         dispatch(thunkGetGroupsById(event.groupId));
     }, [dispatch, event])
-    
-    console.log(event?.price)
 
     return (
         <>
