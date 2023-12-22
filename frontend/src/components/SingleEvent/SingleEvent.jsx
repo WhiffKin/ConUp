@@ -15,10 +15,9 @@ function SingleEvent() {
         dispatch(thunkGetEventsById(eventId));
     }, [dispatch, eventId])
     useEffect(() => {
-        dispatch(thunkGetGroupsById());
-    }, [dispatch])
-
-    console.log(group);
+        if (event)
+        dispatch(thunkGetGroupsById(event.groupId));
+    }, [dispatch, event])
     
     return (
         <>

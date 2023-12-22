@@ -9,10 +9,6 @@
     border-radius: 10px;
 }
 
-#LoginForm p {
-    color: #ff5a5f;
-}
-
 #LoginForm input {
     width: 97%;
     border-radius: 0%;

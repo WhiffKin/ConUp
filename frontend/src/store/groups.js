@@ -1,10 +1,16 @@
 import { createSelector } from "reselect";
+import { csrfFetch } from "./csrf";
 
 // CUSTOM SELECTORS
 export const selectGroupsArr = createSelector(
     state => state.groups,
     groups => Object.values(groups)
 );
+
+export const selectGroupNamesArr = createSelector(
+    state => state.groups,
+    groups => Object.values(groups).map(group => ({name: group.name, id: group.id}))
+)
 
 // ACTION CREATORS
 const GET_GROUPS = "groups/getGroups";
@@ -16,6 +22,11 @@ const getGroups = (groups) => ({
 });
 
 const getGroupById = (group) => ({
+    type: ADD_GROUP,
+    payload: group,
+})
+
+const addGroup = (group) => ({
     type: ADD_GROUP,
     payload: group,
 })
@@ -36,6 +47,41 @@ export const thunkGetGroupsById = (id) => async (dispatch) => {
 
     const data = await response.json();
     if (response.ok) dispatch(getGroupById(data));
+    return data;
+}
+
+export const thunkAddGroup = (group) => async (dispatch) => {
+    let response;
+    try {
+        response = await csrfFetch(`/api/groups`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(group),
+        });
+    } catch (error) {
+        return await error.json();
+    }
+    const data = await response.json();
+    
+    let image = {
+        url: group.imageURL,
+        preview: true,
+    }
+    try {
+        response = await csrfFetch(`/api/groups/${data.id}/images`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(image),
+        });
+    } catch (error) {
+        return await error.json();
+    }
+
+    dispatch(addGroup(data));
     return data;
 }
 

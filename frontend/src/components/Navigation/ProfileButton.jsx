@@ -42,7 +42,7 @@ function ProfileButton({ user }) {
 
   return user ? (
     <>
-      <NavLink to="/groups/create" className="green">Start a new Group</NavLink>
+      <NavLink to="/groups/new" className="green">Start a new Group</NavLink>
       <div className='profile-button' onClick={toggleMenu}>
         <i className="fa-regular fa-user" />
         <i className={`fa-solid fa-chevron-${showMenu ? "up grey" : "down"}`} />
