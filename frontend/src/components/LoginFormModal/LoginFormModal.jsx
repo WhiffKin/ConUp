@@ -9,7 +9,7 @@ function LoginFormModal() {
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
-  const [validation, setValidation] = useState({});
+  const [validation, setValidation] = useState({cred: "Username must be at least 4 characters long"});
   const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
