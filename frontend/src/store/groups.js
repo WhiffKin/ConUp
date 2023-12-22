@@ -25,6 +25,11 @@ const getGroupById = (group) => ({
     payload: group,
 })
 
+const addGroup = (group) => ({
+    type: ADD_GROUP,
+    payload: group,
+})
+
 // THUNKS
 export const thunkGetGroups = () => async (dispatch) => {
     const response = await fetch("/api/groups");
@@ -41,6 +46,41 @@ export const thunkGetGroupsById = (id) => async (dispatch) => {
 
     const data = await response.json();
     if (response.ok) dispatch(getGroupById(data));
+    return data;
+}
+
+export const thunkAddGroup = (group) => async (dispatch) => {
+    let response;
+    try {
+        response = await csrfFetch(`/api/groups`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(group),
+        });
+    } catch (error) {
+        return await error.json();
+    }
+    const data = await response.json();
+    
+    let image = {
+        url: group.imageURL,
+        preview: true,
+    }
+    try {
+        response = await csrfFetch(`/api/groups/${data.id}/images`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(image),
+        });
+    } catch (error) {
+        return await error.json();
+    }
+
+    dispatch(addGroup(data));
     return data;
 }
 

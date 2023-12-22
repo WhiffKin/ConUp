@@ -9,6 +9,7 @@ import SingleGroup from './components/SingleGroup';
 import EventsPage from './components/EventsPage';
 import SingleEvent from './components/SingleEvent';
 import CreateEvent from './components/CreateEvent';
+import CreateGroup from './components/CreateGroup';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -43,6 +44,10 @@ const router = createBrowserRouter([
       {
         path: '/groups/:groupId',
         element: <SingleGroup />
+      },
+      {
+        path: '/groups/new',
+        element: <CreateGroup />
       },
       {
         path: '/groups',
