@@ -6,6 +6,11 @@ export const selectGroupsArr = createSelector(
     groups => Object.values(groups)
 );
 
+export const selectGroupNamesArr = createSelector(
+    state => state.groups,
+    groups => Object.values(groups).map(group => ({name: group.name, id: group.id}))
+)
+
 // ACTION CREATORS
 const GET_GROUPS = "groups/getGroups";
 const ADD_GROUP = "groups/addGroup";

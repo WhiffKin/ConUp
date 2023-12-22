@@ -2,6 +2,26 @@
 const {
   Model
 } = require('sequelize');
+
+
+const isAfterTime = (start, end) => {
+  const startStr = startDate
+    .split("")
+    .filter(el => +el == el)
+    .join("");
+  const endStr = endDate
+    .split("")
+    .filter(el => +el == el)
+    .join("");
+  
+  const startDate = +startStr.slice(0, 8);
+  const startTime = +startStr.slice(-4);
+  const endDate = +endStr.slice(0, 8);
+  const endTime = +endStr.slice(-4);
+
+  return startDate > endDate && startTime < endTime;
+}
+
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
     /**

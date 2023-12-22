@@ -1,20 +1,24 @@
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { thunkGetGroupsById } from "../../store/groups";
 import "./SingleGroup.css";
 
 function SingleGroup() {
+    const navigate = useNavigate();
     const dispatch = useDispatch();
     const { groupId } = useParams();
     const group = useSelector(state => state.groups[groupId])
+    const user = useSelector(state => state.session.user);
     
     useEffect(() => {
         dispatch(thunkGetGroupsById(groupId));
     }, [dispatch, groupId])
-
-    console.log(group);
     
+    const navigateFunc = (url) => () => {
+        navigate(url);
+    }
+
     return (
         <>
             <header className="singleGroupHeader">
@@ -26,7 +30,15 @@ function SingleGroup() {
                         <h5>{group?.city}, {group?.state}</h5>
                         <h5>## events {String.fromCharCode(183) /* dot */} {group?.private ? "Private" : "Public"}</h5>
                         <h5>Organized by {group?.Organizer?.firstName} {group?.Organizer?.lastName}</h5>
-                        <button>Join this group</button>
+                        {user && group && (user.id != group.organizerId ? 
+                            <button onClick={() => window.alert("Feature coming soon")}>Join this group</button> 
+                            :
+                            <div id="singleGroupHeader_buttonContainer">
+                                <button onClick={navigateFunc(`/groups/${groupId}/events/new`)}>Create event</button>
+                                <button>Update</button>
+                                <button>Delete</button>
+                            </div>)
+                        }
                     </div>
                 </div>
             </header>
