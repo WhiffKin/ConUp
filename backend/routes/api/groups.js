@@ -334,11 +334,13 @@ router.post("/:groupId/events",
             event = await group.createEvent({ venueId, name, type, capacity, price, description, startDate, endDate });
         } catch(e) {
             if (e.errors) {
+                console.log("IM HERE\n\n\n\n")
                 const err = new ValidationError("Bad Request");
                 err.status = 400;
                 err.errors = e.errors;
                 return next(err)
-            } else {
+            } else  {
+                console.log(e)
                 const err = new Error("Venue does not exist");
                 err.status = 404;
                 return next(err)

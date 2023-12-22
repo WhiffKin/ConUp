@@ -1,4 +1,5 @@
 import { createSelector } from "reselect";
+import { csrfFetch } from "./csrf";
 
 // CUSTOM SELECTORS
 export const selectEventsArr = createSelector(
@@ -15,7 +16,12 @@ const getEvents = (events) => ({
     payload: events,
 });
 
-const getEventById = (event) => ({
+const getEvent = (event) => ({
+    type: ADD_EVENT,
+    payload: event,
+})
+
+const addEvent = (event) => ({
     type: ADD_EVENT,
     payload: event,
 })
@@ -24,7 +30,7 @@ const getEventById = (event) => ({
 export const thunkGetEvents = () => async (dispatch) => {
     const response = await fetch("/api/events?" + new URLSearchParams({
         page: 1,
-        size: 5,
+        size: 20,
     }));
 
     if (response.ok) {
@@ -37,7 +43,25 @@ export const thunkGetEventsById = (id) => async (dispatch) => {
     const response = await fetch(`/api/events/${id}`);
 
     const data = await response.json();
-    if (response.ok) dispatch(getEventById(data));
+    if (response.ok) dispatch(getEvent(data));
+    return data;
+}
+
+export const thunkAddEvent = (event, groupId) => async (dispatch) => {
+    let response;
+    try {
+        response = await csrfFetch(`/api/groups/${groupId}/events/`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(event),
+        });
+    } catch(error) {
+        return await error.json();
+    }
+    const data = await response.json();
+    dispatch(addEvent(data));
     return data;
 }
 
