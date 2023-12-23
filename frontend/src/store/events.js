@@ -67,7 +67,7 @@ export const thunkAddEvent = (event, groupId) => async (dispatch) => {
         preview: true,
     }
     try {
-        response = await csrfFetch(`/api/groups/${data.id}/images`, {
+        response = await csrfFetch(`/api/events/${data.id}/images`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"

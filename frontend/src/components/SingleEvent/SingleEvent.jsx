@@ -1,5 +1,5 @@
 import { useDispatch, useSelector } from "react-redux";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { thunkGetEventsById } from "../../store/events";
 import "./SingleEvent.css";
@@ -7,6 +7,7 @@ import { thunkGetGroups } from "../../store/groups";
 
 function SingleEvent() {
     const dispatch = useDispatch();
+    const navigate = useNavigate();
     const { eventId } = useParams();
     const event = useSelector(state => state.events[eventId]);
     const group = useSelector(state => { if (event) return state.groups[event.groupId]; });
@@ -30,7 +31,10 @@ function SingleEvent() {
         if(event) setCurrentImg(newImg % event.EventImages.length);
     }
 
-    console.log(event)
+    const updateEvent = (e) => {
+        navigate(`/events/${eventId}/edit`)
+    }
+
     return (
         <>
             <header className="singleEventHeader">
@@ -74,6 +78,10 @@ function SingleEvent() {
                                 <div>
                                     <i className="fa-solid fa-map-pin" />
                                     <h5>{event?.type}</h5>
+                                </div>
+                                <div id="singleEvent__eventCard-buttonContainer">
+                                    <button onClick={updateEvent}>Update</button>
+                                    <button>Delete</button>
                                 </div>
                             </div>
                         </div>

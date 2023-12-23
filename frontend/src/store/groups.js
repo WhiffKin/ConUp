@@ -39,8 +39,6 @@ export const thunkGetGroups = () => async (dispatch) => {
     if (groupResponse.ok && eventResponse.ok) {
         const groupData = await groupResponse.json();
         const eventData = await eventResponse.json();
-
-        console.log(groupData,eventData)
         
         const groupMap = {};
         for (let event of eventData) 
@@ -68,7 +66,6 @@ export const thunkGetGroupsById = (id) => async (dispatch) => {
         const pastEvents = [];
         const futureEvents = [];
         eventData.forEach(event => {
-            console.log(event.startDate)
             if (Date.parse(event.startDate) < Date.now()) pastEvents.push(event);
             else futureEvents.push(event);
         })
