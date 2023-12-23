@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { thunkGetGroupsById } from "../../store/groups";
 import "./SingleGroup.css";
 import EventCard from "./EventCard";
@@ -11,6 +11,7 @@ function SingleGroup() {
     const { groupId } = useParams();
     const group = useSelector(state => state.groups[groupId])
     const user = useSelector(state => state.session.user);
+    const [currentImg, setCurrentImg] = useState(0);
     
     useEffect(() => {
         dispatch(thunkGetGroupsById(groupId));
@@ -20,12 +21,25 @@ function SingleGroup() {
         navigate(url);
     }
 
+    const changeImg = (e) => {
+        let newImg = e.nativeEvent.clientX - (window.innerWidth - 600) /2;
+        newImg = Math.floor(newImg/300);
+        newImg = Math.sign(newImg);
+        newImg += currentImg;
+        newImg += group?.GroupImages.length;
+
+        if(group) setCurrentImg(newImg % group.GroupImages.length);
+    }
+
     return (
         <>
             <header className="singleGroupHeader">
                 <span>{String.fromCharCode(60) /* < */} <NavLink to="/groups">Groups</NavLink></span>
                 <div>
-                    <img src={group?.previewImage}/>
+                    <img 
+                        src={group?.GroupImages && group.GroupImages[currentImg]?.url}
+                        onMouseDown={changeImg}
+                        />
                     <div>
                         <h3>{group?.name}</h3>
                         <h5>{group?.city}, {group?.state}</h5>

@@ -62,9 +62,9 @@ export const thunkGetGroupsById = (id) => async (dispatch) => {
     
     const data = await response.json();
     if (response.ok && eventResponse.ok) { 
-        const eventData = await eventResponse.json();
+        let eventData = await eventResponse.json();
         
-        eventData.filter(event => event.groupId === id);
+        eventData = eventData.filter(event => event.groupId === +id);
         const pastEvents = [];
         const futureEvents = [];
         eventData.forEach(event => {

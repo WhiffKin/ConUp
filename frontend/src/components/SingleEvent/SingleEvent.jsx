@@ -1,24 +1,36 @@
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { thunkGetEventsById } from "../../store/events";
 import "./SingleEvent.css";
-import { thunkGetGroupsById } from "../../store/groups";
+import { thunkGetGroups } from "../../store/groups";
 
 function SingleEvent() {
     const dispatch = useDispatch();
     const { eventId } = useParams();
     const event = useSelector(state => state.events[eventId]);
     const group = useSelector(state => { if (event) return state.groups[event.groupId]; });
-    
+    const [currentImg, setCurrentImg] = useState(0);
+
     useEffect(() => {
         dispatch(thunkGetEventsById(eventId));
     }, [dispatch, eventId])
     useEffect(() => {
         if (event)
-        dispatch(thunkGetGroupsById(event.groupId));
+            dispatch(thunkGetGroups(event.groupId));
     }, [dispatch, event])
 
+    const changeImg = (e) => {
+        let newImg = e.nativeEvent.clientX - (window.innerWidth - 600) /2;
+        newImg = Math.floor(newImg/300);
+        newImg = Math.sign(newImg);
+        newImg += currentImg;
+        newImg += event?.EventImages.length;
+        
+        if(event) setCurrentImg(newImg % event.EventImages.length);
+    }
+
+    console.log(event)
     return (
         <>
             <header className="singleEventHeader">
@@ -29,7 +41,10 @@ function SingleEvent() {
             <main className="singleEventMain">
                 <div>
                     <div>
-                        <img src={event?.previewImage}/>
+                        <img 
+                            src={event?.EventImages && event.EventImages[currentImg]?.url}
+                            onMouseDown={changeImg}
+                            />
                         <div>
                             <NavLink to={`/groups/${group?.id}`} id="singleEvent__groupCard">
                                 <img src={group?.previewImage} />

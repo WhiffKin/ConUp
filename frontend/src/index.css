@@ -9,6 +9,11 @@ h1, h3, h5, p {
     margin: 0;
 }
 
+img {
+    border-radius: 2px;
+    box-shadow: 2px 2px rgb(0, 0, 0, 1.02);
+}
+
 .green {
     color: #00525e;
 }

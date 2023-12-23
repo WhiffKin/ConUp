@@ -88,9 +88,13 @@
 }
 
 .eventCard {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+
     color: inherit;
     text-decoration: none;
-    
+
     width: 500px;
     background-color: white;
     border-radius: 15px;
@@ -100,6 +104,12 @@
 .eventCard > div {
     display: flex;
     gap: 10px;
+}
+
+.eventCard > div > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
 }
 
 .eventCard img {
