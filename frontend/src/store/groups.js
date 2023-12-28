@@ -75,6 +75,8 @@ export const thunkGetGroupsById = (id) => async (dispatch) => {
         data.futureEvents = futureEvents
         .sort((a,b) => Date.parse(a.startDate) < Date.parse(b.startDate) ? -1 : 1);
     
+        data.previewImage = data.GroupImages.find(img => img.preview);
+
         dispatch(getGroupById(data));
     }
     return data;

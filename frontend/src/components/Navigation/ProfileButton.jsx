@@ -48,6 +48,8 @@ function ProfileButton({ user }) {
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
+  console.log(user)
+
   return user ? (
     <>
       <NavLink to="/groups/new" className="green">Start a new Group</NavLink>
@@ -57,7 +59,7 @@ function ProfileButton({ user }) {
       </div>
       <ul className={ulClassName} ref={ulRef}>
         <div>
-          <li>Hello, {user.username}</li>
+          <li>Hello, {user.firstName}</li>
           <li>{user.email}</li>
         </div>
         <div className='hover' onClick={viewGroups}>

@@ -94,7 +94,7 @@
 #singleEvent__eventCard {
     display: flex;
     flex-direction: column;
-    justify-content: end;
+    justify-content: space-evenly;
     align-items: start;
 
     background-color: white;
@@ -114,10 +114,14 @@
 }
 
 #singleEvent__eventCard > div {
+    width: 100%;
     display: flex;
     gap: 10px;
-    justify-content: center;
     align-items: center;
+}
+
+#singleEvent__eventCard > div > h5 {
+    flex-grow: 1;
 }
 
 #singleEvent__eventCard > div > div {
@@ -131,18 +135,11 @@
     flex-direction: column;
 }
 
-#singleEvent__eventCard-buttonContainer {
-    height: 0;
-    position: relative;
-    bottom: 30px;
-    left: 245px;
-}
 
 #singleEvent__eventCard-buttonContainer button {
     height: auto;
     width: auto;
     margin-top: auto;
-    margin-bottom: 50px;
 
     color: white;    
     background-color: #666666;

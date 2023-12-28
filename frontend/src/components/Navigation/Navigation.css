@@ -58,6 +58,11 @@ nav ul a {
 
     padding: 10px 20px;
 }
+
+.profile-dropdown div li {
+    word-break: break-word;
+}
+
 .profile-dropdown div + div {
     border-top: 2px solid black;
 }

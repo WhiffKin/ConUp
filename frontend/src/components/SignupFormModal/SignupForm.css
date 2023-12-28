@@ -18,6 +18,13 @@
     width: 100%;
 }
 
+#SignUpForm input {
+    width: 97%;
+    border-radius: 0%;
+    margin: 0 3px;
+    background-color: #e8f0fe;
+}
+
 #SignUpForm button {
     height: 40px;
     width: 100%;

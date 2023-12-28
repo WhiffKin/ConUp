@@ -13,7 +13,7 @@ module.exports = {
     await GroupImage.bulkCreate([
       {
         groupId: 1,
-        url: "https://images.igdb.com/igdb/image/upload/t_screenshot_big/ar751.png",
+        url: "https://cdn.discordapp.com/attachments/1163593560734568488/1189790624174575717/ar751.png",
         preview: true
       },
       {

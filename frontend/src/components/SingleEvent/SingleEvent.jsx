@@ -3,12 +3,13 @@ import { NavLink, useNavigate, useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import { thunkGetEventsById } from "../../store/events";
 import "./SingleEvent.css";
-import { thunkGetGroups } from "../../store/groups";
+import { thunkGetGroupsById } from "../../store/groups";
 
 function SingleEvent() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { eventId } = useParams();
+    const sessionUser = useSelector(state => state.session.user);
     const event = useSelector(state => state.events[eventId]);
     const group = useSelector(state => { if (event) return state.groups[event.groupId]; });
     const [currentImg, setCurrentImg] = useState(0);
@@ -18,7 +19,7 @@ function SingleEvent() {
     }, [dispatch, eventId])
     useEffect(() => {
         if (event)
-            dispatch(thunkGetGroups(event.groupId));
+            dispatch(thunkGetGroupsById(event.groupId));
     }, [dispatch, event])
 
     const changeImg = (e) => {
@@ -35,12 +36,13 @@ function SingleEvent() {
         navigate(`/events/${eventId}/edit`)
     }
 
+    console.log(event)
     return (
         <>
             <header className="singleEventHeader">
                 <span>{String.fromCharCode(60) /* < */} <NavLink to="/events">Events</NavLink></span>
                 <h1>{event?.name}</h1>
-                <h5>Hosted by {group?.Organizer?.firstName} {group?.Organizer?.lastName}</h5>
+                <h5>Hosted by: {group?.Organizer?.firstName} {group?.Organizer?.lastName}</h5>
             </header>
             <main className="singleEventMain">
                 <div>
@@ -51,7 +53,7 @@ function SingleEvent() {
                             />
                         <div>
                             <NavLink to={`/groups/${group?.id}`} id="singleEvent__groupCard">
-                                <img src={group?.previewImage} />
+                                <img src={group?.previewImage?.url} />
                                 <div>
                                     <span>{group?.name}</span>
                                     <h5>{group?.private ? "Private" : "Public"}</h5>
@@ -73,16 +75,18 @@ function SingleEvent() {
                                 </div>
                                 <div>
                                     <i className="fa-solid fa-dollar-sign" />
-                                    <h5>{event?.price === 0 ? "FREE" : (+event?.price).toFixed(2)}</h5>
+                                    <h5>{event?.price === 0 ? "FREE" : `${(+event?.price).toFixed(2)}$`}</h5>
                                 </div>
                                 <div>
                                     <i className="fa-solid fa-map-pin" />
                                     <h5>{event?.type}</h5>
+                                    {sessionUser.id === group?.organizerId &&
+                                    <div id="singleEvent__eventCard-buttonContainer">
+                                        <button onClick={updateEvent}>Update</button>
+                                        <button>Delete</button>
+                                    </div>}
                                 </div>
-                                <div id="singleEvent__eventCard-buttonContainer">
-                                    <button onClick={updateEvent}>Update</button>
-                                    <button>Delete</button>
-                                </div>
+                                
                             </div>
                         </div>
                     </div>
