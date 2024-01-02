@@ -53,8 +53,6 @@ function ProfileButton({ user }) {
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
-  console.log(user)
-
   return user ? (
     <>
       <NavLink to="/groups/new" className="green">Start a new Group</NavLink>

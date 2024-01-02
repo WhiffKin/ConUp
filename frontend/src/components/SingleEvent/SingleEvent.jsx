@@ -1,9 +1,9 @@
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { thunkGetEventsById } from "../../store/events";
-import "./SingleEvent.css";
 import { thunkGetGroupsById } from "../../store/groups";
+import "./SingleEvent.css"; 
 
 function SingleEvent() {
     const dispatch = useDispatch();
@@ -13,6 +13,7 @@ function SingleEvent() {
     const event = useSelector(state => state.events[eventId]);
     const group = useSelector(state => { if (event) return state.groups[event.groupId]; });
     const [currentImg, setCurrentImg] = useState(0);
+    const imgContainerRef = useRef();
 
     useEffect(() => {
         dispatch(thunkGetEventsById(eventId));
@@ -23,20 +24,21 @@ function SingleEvent() {
     }, [dispatch, event])
 
     const changeImg = (e) => {
-        let newImg = e.nativeEvent.clientX - (window.innerWidth - 600) /2;
-        newImg = Math.floor(newImg/300);
+        let newImg = e.nativeEvent.clientX 
+                    - imgContainerRef.current.offsetLeft 
+                    - imgContainerRef.current.width / 2;
+        newImg = Math.round(newImg/300);
         newImg = Math.sign(newImg);
         newImg += currentImg;
-        newImg += event?.EventImages.length;
-        
+        newImg += group?.GroupImages.length;
+
         if(event) setCurrentImg(newImg % event.EventImages.length);
     }
 
-    const updateEvent = (e) => {
+    const updateEvent = () => {
         navigate(`/events/${eventId}/edit`)
     }
 
-    console.log(event)
     return (
         <>
             <header className="singleEventHeader">
@@ -50,6 +52,7 @@ function SingleEvent() {
                         <img 
                             src={event?.EventImages && event.EventImages[currentImg]?.url}
                             onMouseDown={changeImg}
+                            ref={imgContainerRef}
                             />
                         <div>
                             <NavLink to={`/groups/${group?.id}`} id="singleEvent__groupCard">

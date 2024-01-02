@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux";
 import { NavLink, useNavigate, useParams } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { thunkGetGroupsById } from "../../store/groups";
 import "./SingleGroup.css";
 import EventCard from "./EventCard";
@@ -12,6 +12,7 @@ function SingleGroup() {
     const group = useSelector(state => state.groups[groupId])
     const user = useSelector(state => state.session.user);
     const [currentImg, setCurrentImg] = useState(0);
+    const imgContainerRef = useRef();
     
     useEffect(() => {
         dispatch(thunkGetGroupsById(groupId));
@@ -22,8 +23,10 @@ function SingleGroup() {
     }
 
     const changeImg = (e) => {
-        let newImg = e.nativeEvent.clientX - (window.innerWidth - 600) /2;
-        newImg = Math.floor(newImg/300);
+        let newImg = e.nativeEvent.clientX 
+                    - imgContainerRef.current.offsetLeft 
+                    - imgContainerRef.current.width / 2;
+        newImg = Math.round(newImg/300);
         newImg = Math.sign(newImg);
         newImg += currentImg;
         newImg += group?.GroupImages.length;
@@ -39,6 +42,7 @@ function SingleGroup() {
                     <img 
                         src={group?.GroupImages && group.GroupImages[currentImg]?.url}
                         onMouseDown={changeImg}
+                        ref={imgContainerRef}
                         />
                     <div>
                         <h3>{group?.name}</h3>
@@ -50,7 +54,7 @@ function SingleGroup() {
                             :
                             <div id="singleGroupHeader_buttonContainer">
                                 <button onClick={navigateFunc(`/groups/${groupId}/events/new`)}>Create event</button>
-                                <button>Update</button>
+                                <button onClick={navigateFunc(`/groups/${groupId}/edit`)}>Update</button>
                                 <button>Delete</button>
                             </div>)
                         }

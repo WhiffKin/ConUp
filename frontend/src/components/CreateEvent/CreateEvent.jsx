@@ -29,6 +29,13 @@ function CreateEvent() {
         dispatch(thunkGetGroups());
     }, [dispatch]);
 
+    // User Validation
+    const sessionUser = useSelector(state => state.session.user);
+    if (+group?.organizerId != +sessionUser?.id) {
+        navigate("/");
+        return;
+    }
+
     const checkEnds = (string) => {
         return string.endsWith(".png") || 
                string.endsWith(".jpg") || 

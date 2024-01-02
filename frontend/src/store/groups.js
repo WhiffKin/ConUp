@@ -117,6 +117,25 @@ export const thunkAddGroup = (group) => async (dispatch) => {
     return data;
 }
 
+export const thunkUpdateGroup = (group, groupId) => async (dispatch) => {
+    let response;
+    try {
+        response = await csrfFetch(`/api/groups/${groupId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(group),
+        });
+    } catch (error) {
+        return await error.json();
+    }
+    const data = await response.json();
+    
+    dispatch(addGroup(data));
+    return data;
+}
+
 // REDUCER
 const initialState = { };
 

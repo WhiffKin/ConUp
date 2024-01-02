@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import "./UpdateEvent.css";
-import { selectEventsArr, thunkAddEvent, thunkGetEvents } from "../../store/events";
+import { selectEventsArr, thunkAddEvent, thunkGetEventsById, thunkUpdateEvent } from "../../store/events";
 import { selectGroupsArr } from "../../store/groups";
 
 function UpdateEvent() {
@@ -15,32 +15,28 @@ function UpdateEvent() {
     const [validation, setValidation] = useState({});
     const [errors, setErrors] = useState({});
     
-    const [name, setName] = useState(event?.name || "");
-    const [type, setType] = useState(event?.type || "");
+    const [name, setName] = useState(event?.name);
+    const [type, setType] = useState(event?.type);
     const [visibility, setVisibility] = useState("");
-    const [price, setPrice] = useState(event?.price || "");
-    const [capacity, setCapacity] = useState(event?.capacity || "");
-    const [startDate, setStartDate] = useState(event?.startDate.slice(0, 19) || "");
-    const [endDate, setEndDate] = useState(event?.endDate.slice(0, 19) || "");
-    const [imageURL, setImageURL] = useState("");
-    const [description, setDescription] = useState(event?.description || "");
+    const [price, setPrice] = useState(event?.price);
+    const [capacity, setCapacity] = useState(event?.capacity);
+    const [startDate, setStartDate] = useState(event?.startDate.slice(0, 19));
+    const [endDate, setEndDate] = useState(event?.endDate.slice(0, 19));
+    const [description, setDescription] = useState(event?.description);
     const [disabled, setDisabled] = useState(false);
 
-    if (event?.previewImage != imageURL) setImageURL(event.previewImage);
     if ((group?.private ? "Private":"Public") != visibility) setVisibility(group?.private ? "Private":"Public");
 
-    console.log(event)
-
     useEffect(() => {
-        dispatch(thunkGetEvents());
+        dispatch(thunkGetEventsById(eventId));
     }, [dispatch]);
 
-    const checkEnds = (string) => {
-        return string.endsWith(".png") || 
-               string.endsWith(".jpg") || 
-               string.endsWith(".jpeg");
-    }  
-
+    // User Validation
+    const sessionUser = useSelector(state => state.session.user);
+    if (+group?.organizerId != +sessionUser?.id) {
+        navigate("/");
+        return;
+    }
     const onSubmit = async (e) => {
         e.preventDefault();
         setDisabled(true);
@@ -54,7 +50,6 @@ function UpdateEvent() {
         if (capacity === "") tempValid.capacity = "Capacity is required";
         if (startDate === "") tempValid.startDate = "Event start is required";
         if (endDate === "") tempValid.endDate = "Event end is required";
-        if (!checkEnds(imageURL)) tempValid.imageURL = "Image URL must end in .png, .jpg, or .jpeg";
         if (description.length < 30) tempValid.description = "Description must be at least 30 characters long";
         setValidation(tempValid);
         setErrors({});
@@ -67,6 +62,7 @@ function UpdateEvent() {
 
         // Successful Validation
         const payload = {
+            venueId: 1, // Venue isn't implemented yet, passing dummy var through
             name, 
             type,
             visibility,
@@ -74,10 +70,9 @@ function UpdateEvent() {
             capacity,
             startDate,
             endDate,
-            imageURL,
             description,
         }
-        const response = await dispatch(thunkAddEvent(payload, event?.groupId));
+        const response = await dispatch(thunkUpdateEvent(payload, event?.groupId));
 
         // Unsuccessful Submission
         if (response.message === "Bad Request") { 
@@ -101,8 +96,17 @@ function UpdateEvent() {
     return (
     <>
         <form id="UpdateEventForm" onSubmit={onSubmit}>
+            
             <div>
                 <h1>{`Update your event`}</h1>
+                {errors.message && 
+                    <div className="errorDiv">
+                        <>
+                            <h3>{errors.message}</h3>
+                            {errors.errors && Object.values(errors.errors).map((error, errorId) => <p key={errorId}>{error}</p>)}
+                        </>
+                    </div>
+                }
                 <label>
                     What is the name of your event?
                     <input 
@@ -187,18 +191,6 @@ function UpdateEvent() {
             </div>
             <div>
                 <label>
-                    Please add in image url for your event below:
-                    <input 
-                        placeholder="Image URL" 
-                        type="text"
-                        value={imageURL}
-                        onChange={(e) => setImageURL(e.target.value)}
-                        />
-                    {validation.imageURL && <p>Image URL must end in .png, .jpg, or .jpeg</p>}
-                </label>
-            </div>
-            <div>
-                <label>
                     Please describe your event:
                     <textarea 
                         placeholder="Please include at least 30 characters" 
@@ -209,14 +201,6 @@ function UpdateEvent() {
                     {validation.description && <p>Description must be at least 30 characters long</p>}
                 </label>
             </div>
-            {errors.message && 
-                <div className="errorDiv">
-                    <>
-                        <h3>{errors.message}</h3>
-                        {errors.errors && Object.values(errors.errors).map((error, errorId) => <p key={errorId}>{error}</p>)}
-                    </>
-                </div>
-            }
             <button type="submit" disabled={disabled}>Update Event</button>
         </form>
     </>

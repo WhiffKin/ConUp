@@ -5,6 +5,11 @@ import { csrfFetch } from "./csrf";
 export const selectEventsArr = createSelector(
     state => state.events,
     events => Object.values(events)
+                    .sort((a,b) => {
+                        if (Date.parse(b.startDate) < Date.now()) return -1;
+                        else if (Date.parse(a.startDate) < Date.parse(b.startDate)) return -1;
+                        return 1;
+                    })
 );
 
 // ACTION CREATORS
@@ -35,9 +40,6 @@ export const thunkGetEvents = () => async (dispatch) => {
 
     if (response.ok) {
         let data = await response.json();
-        console.log("unsorted", data)
-        data = data.sort((a,b) => Date.parse(a.startDate) < Date.parse(b.startDate) ? -1 : 1);
-        console.log("sorted", data)
         dispatch(getEvents(data));
     }
 }
@@ -85,8 +87,23 @@ export const thunkAddEvent = (event, groupId) => async (dispatch) => {
     return data;
 }
 
-export const thunkUpdateEvent = (event, groupId) => {
+export const thunkUpdateEvent = (event, eventId) => async (dispatch) => {
+    let response;
+    try {
+        response = await csrfFetch(`/api/events/${eventId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(event),
+        });
+    } catch(error) {
+        return await error.json();
+    }
     
+    const data = await response.json();
+    dispatch(addEvent(data));
+    return data;    
 }
 
 // REDUCER

@@ -1,34 +1,35 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { thunkAddGroup, thunkGetGroups } from "../../store/groups";
 import { useNavigate, useParams } from "react-router-dom";
-import "./CreateGroup.css";
+import "./UpdateGroup.css";
+import { selectGroupsArr, thunkGetGroups, thunkUpdateGroup } from "../../store/groups";
 
-function CreateGroup() {
+function UpdateGroup() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
-    const { user } = useSelector(state => state.session)
+    const { groupId } = useParams();
+    const group = useSelector(selectGroupsArr).find(group => group.id === +groupId);
 
     const [validation, setValidation] = useState({});
     const [errors, setErrors] = useState({});
-
-    const [location, setLocation] = useState("");
-    const [name, setName] = useState("");
-    const [description, setDescription] = useState("");
-    const [type, setType] = useState("");
-    const [visibility, setVisibility] = useState("");
-    const [imageURL, setImageURL] = useState("");
+    
+    const [location, setLocation] = useState(`${group?.city}, ${group?.state}`);
+    const [name, setName] = useState(group?.name);
+    const [description, setDescription] = useState(group?.about);
+    const [type, setType] = useState(group?.type);
+    const [visibility, setVisibility] = useState(group?.private ? "Private" : "Public");
     const [disabled, setDisabled] = useState(false);
 
     useEffect(() => {
         dispatch(thunkGetGroups());
     }, [dispatch]);
 
-    const checkEnds = (string) => {
-        return string.endsWith(".png") || 
-               string.endsWith(".jpg") || 
-               string.endsWith(".jpeg");
-    }  
+    // User Validation
+    const sessionUser = useSelector(state => state.session.user);
+    if (+group?.organizerId != +sessionUser?.id) {
+        navigate("/");
+        return;
+    }
 
     const onSubmit = async (e) => {
         e.preventDefault();
@@ -49,7 +50,6 @@ function CreateGroup() {
         if (description.length < 30) tempValid.description = "Description must be at least 30 characters long";
         if (type === "") tempValid.type = "Group Type is required";
         if (visibility === "") tempValid.visibility = "Visibility Type is required";
-        if (!checkEnds(imageURL)) tempValid.image = "Image URL must end in .png, .jpg, or .jpeg";
         setValidation(tempValid);
         setErrors({});
 
@@ -61,16 +61,15 @@ function CreateGroup() {
 
         // Successful Validation
         const payload = {
-            organizerId: user.id,
+            organizerId: sessionUser.id,
             city, 
             state, 
             name, 
             about: description,
             type,
             private: visibility === "Private",
-            imageURL,
         }
-        const response = await dispatch(thunkAddGroup(payload));
+        const response = await dispatch(thunkUpdateGroup(payload, groupId));
 
         // Unsuccessful Submission
         if (response.message === "Bad Request") { 
@@ -93,23 +92,16 @@ function CreateGroup() {
     
     return (
     <>
-        <form id="CreateGroupForm" onSubmit={onSubmit}>
+        <form id="UpdateGroupForm" onSubmit={onSubmit}>
             <div>
-                <h5 className="green">Start a New Group</h5>
+                <h5 className="green">Update your Group</h5>
                 <h3>We&apos;ll walk you through a few steps to build your local community</h3>
             </div>
             <div>
-                {errors.message && 
-                    <div className="errorDiv">
-                        <>
-                            <h3>{errors.message}</h3>
-                            {errors.errors && Object.values(errors.errors).map((error, errorId) => <p key={errorId}>{error}</p>)}
-                        </>
-                    </div>
-                }
-                <h3>Set your group&apos;s location.</h3>
+                <h3>First, set your group&apos;s location.</h3>
                 <label>
-                    Meetup groups meet locally, in person and online. We&apos;ll connect you with people in your area.
+                    Meetup groups meet locally, in person and online. We&apos;ll connect you with people
+                    <br/>in your area, and more can join you online.
                     <input 
                         placeholder="City, STATE" 
                         type="text"
@@ -133,7 +125,7 @@ function CreateGroup() {
                 </label>
             </div>
             <div>
-                <h3>Describe the purpose of your group.</h3>
+                <h3>Now describe what your group will be about</h3>
                 <label>
                     People will see this when we promote your group, but you&apos;ll be able to add to it later, too.
                     <br/>
@@ -175,21 +167,19 @@ function CreateGroup() {
                     </select>
                     {validation.visibility && <p>Visibility is required</p>}
                 </label>
-                <label>
-                    Please add in image url for your group below:
-                    <input 
-                        placeholder="Image URL" 
-                        type="text"
-                        value={imageURL}
-                        onChange={(e) => setImageURL(e.target.value)}
-                        />
-                    {validation.image && <p>Image URL must end in .png, .jpg, or .jpeg</p>}
-                </label>
             </div>
+            {errors.message && 
+                <div className="errorDiv">
+                    <>
+                        <h3>{errors.message}</h3>
+                        {errors.errors && Object.values(errors.errors).map((error, errorId) => <p key={errorId}>{error}</p>)}
+                    </>
+                </div>
+            }
             <button type="submit" disabled={disabled}>Create Group</button>
         </form>
     </>
     )
 }
 
-export default CreateGroup;
+export default UpdateGroup;
