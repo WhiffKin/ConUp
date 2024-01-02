@@ -80,7 +80,7 @@ function SingleEvent() {
                                 </div>
                                 <div>
                                     <i className="fa-solid fa-dollar-sign" />
-                                    <h5>{event?.price === 0 ? "FREE" : `${(+event?.price).toFixed(2)}$`}</h5>
+                                    <h5>{+event?.price === 0 ? "FREE" : `${(+event?.price).toFixed(2)}$`}</h5>
                                 </div>
                                 <div>
                                     <i className="fa-solid fa-map-pin" />
