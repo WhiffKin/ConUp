@@ -45,7 +45,6 @@ function CreateGroup() {
             state = splitLocation[1].trim();
         }
         if ((!city || !state) && !tempValid.location) tempValid.location = "Location must be 'City, STATE'";
-        else if (!tempValid.location && state.toUpperCase() !== state) tempValid.location = "Location must be 'City, STATE'";
         if (location === "") tempValid.location = "Name is required";
         if (name === "") tempValid.name = "Location is required";
         if (description.length < 30) tempValid.description = "Description must be at least 30 characters long";
@@ -97,14 +96,21 @@ function CreateGroup() {
     <>
         <form id="CreateGroupForm" onSubmit={onSubmit}>
             <div>
-                <h5 className="green">BECOME AN ORGANIZER</h5>
+                <h5 className="green">Start a New Group</h5>
                 <h3>We&apos;ll walk you through a few steps to build your local community</h3>
             </div>
             <div>
-                <h3>First, set your group&apos;s location.</h3>
+                {errors.message && 
+                    <div className="errorDiv">
+                        <>
+                            <h3>{errors.message}</h3>
+                            {errors.errors && Object.values(errors.errors).map((error, errorId) => <p key={errorId}>{error}</p>)}
+                        </>
+                    </div>
+                }
+                <h3>Set your group&apos;s location.</h3>
                 <label>
-                    Meetup groups meet locally, in person and online. We&apos;ll connect you with people
-                    <br/>in your area, and more can join you online.
+                    Meetup groups meet locally, in person and online. We&apos;ll connect you with people in your area.
                     <input 
                         placeholder="City, STATE" 
                         type="text"
@@ -128,7 +134,7 @@ function CreateGroup() {
                 </label>
             </div>
             <div>
-                <h3>Now describe what your group will be about</h3>
+                <h3>Describe the purpose of your group.</h3>
                 <label>
                     People will see this when we promote your group, but you&apos;ll be able to add to it later, too.
                     <br/>
@@ -181,14 +187,6 @@ function CreateGroup() {
                     {validation.image && <p>Image URL must end in .png, .jpg, or .jpeg</p>}
                 </label>
             </div>
-            {errors.message && 
-                <div className="errorDiv">
-                    <>
-                        <h3>{errors.message}</h3>
-                        {errors.errors && Object.values(errors.errors).map((error, errorId) => <p key={errorId}>{error}</p>)}
-                    </>
-                </div>
-            }
             <button type="submit" disabled={disabled}>Create Group</button>
         </form>
     </>

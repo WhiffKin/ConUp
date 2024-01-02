@@ -96,7 +96,15 @@ function CreateEvent() {
     <>
         <form id="CreateEventForm" onSubmit={onSubmit}>
             <div>
-                <h1>{`Create an event for ${group?.name}`}</h1>
+                <h1>{`Create a new event for ${group?.name}`}</h1>
+                {errors.message && 
+                    <div className="errorDiv">
+                        <>
+                            <h3>{errors.message}</h3>
+                            {errors.errors && Object.values(errors.errors).map((error, errorId) => <p key={errorId}>{error}</p>)}
+                        </>
+                    </div>
+                }
                 <label>
                     What is the name of your event?
                     <input 
@@ -203,14 +211,6 @@ function CreateEvent() {
                     {validation.description && <p>Description must be at least 30 characters long</p>}
                 </label>
             </div>
-            {errors.message && 
-                <div className="errorDiv">
-                    <>
-                        <h3>{errors.message}</h3>
-                        {errors.errors && Object.values(errors.errors).map((error, errorId) => <p key={errorId}>{error}</p>)}
-                    </>
-                </div>
-            }
             <button type="submit" disabled={disabled}>Create Event</button>
         </form>
     </>

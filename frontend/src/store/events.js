@@ -34,7 +34,10 @@ export const thunkGetEvents = () => async (dispatch) => {
     }));
 
     if (response.ok) {
-        const data = await response.json();
+        let data = await response.json();
+        console.log("unsorted", data)
+        data = data.sort((a,b) => Date.parse(a.startDate) < Date.parse(b.startDate) ? -1 : 1);
+        console.log("sorted", data)
         dispatch(getEvents(data));
     }
 }
@@ -80,6 +83,10 @@ export const thunkAddEvent = (event, groupId) => async (dispatch) => {
 
     dispatch(addEvent(data));
     return data;
+}
+
+export const thunkUpdateEvent = (event, groupId) => {
+    
 }
 
 // REDUCER

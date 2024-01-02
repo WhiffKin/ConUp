@@ -3,26 +3,33 @@ import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import "./UpdateEvent.css";
 import { selectEventsArr, thunkAddEvent, thunkGetEvents } from "../../store/events";
+import { selectGroupsArr } from "../../store/groups";
 
 function UpdateEvent() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { eventId } = useParams();
     const event = useSelector(selectEventsArr).find(event => event.id === +eventId);
+    const group = useSelector(selectGroupsArr).find(group => group.id === event.groupId);
 
     const [validation, setValidation] = useState({});
     const [errors, setErrors] = useState({});
     
     const [name, setName] = useState(event?.name || "");
     const [type, setType] = useState(event?.type || "");
-    const [visibility, setVisibility] = useState(event?.visibility || "");
+    const [visibility, setVisibility] = useState("");
     const [price, setPrice] = useState(event?.price || "");
     const [capacity, setCapacity] = useState(event?.capacity || "");
     const [startDate, setStartDate] = useState(event?.startDate.slice(0, 19) || "");
     const [endDate, setEndDate] = useState(event?.endDate.slice(0, 19) || "");
-    const [imageURL, setImageURL] = useState(event?.previewImage || "");
+    const [imageURL, setImageURL] = useState("");
     const [description, setDescription] = useState(event?.description || "");
     const [disabled, setDisabled] = useState(false);
+
+    if (event?.previewImage != imageURL) setImageURL(event.previewImage);
+    if ((group?.private ? "Private":"Public") != visibility) setVisibility(group?.private ? "Private":"Public");
+
+    console.log(event)
 
     useEffect(() => {
         dispatch(thunkGetEvents());
