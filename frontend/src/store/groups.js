@@ -162,10 +162,11 @@ const initialState = { };
 
 const groupReducer = (state = initialState, action) => {
     switch(action.type) {
-        case DELETE_GROUP:
+        case DELETE_GROUP: {
             let newState = {...state};
             delete newState[action.payload];
             return newState;
+        }
         case ADD_GROUP:
             return {...state, [action.payload.id]: action.payload};
         case GET_GROUPS: 

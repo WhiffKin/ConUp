@@ -2,7 +2,7 @@ import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import { useNavigate, useParams } from "react-router-dom";
 import "./UpdateEvent.css";
-import { selectEventsArr, thunkAddEvent, thunkGetEventsById, thunkUpdateEvent } from "../../store/events";
+import { selectEventsArr, thunkGetEventsById, thunkUpdateEvent } from "../../store/events";
 import { selectGroupsArr } from "../../store/groups";
 
 function UpdateEvent() {

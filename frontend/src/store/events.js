@@ -132,10 +132,11 @@ const initialState = { };
 
 const eventReducer = (state = initialState, action) => {
     switch(action.type) {
-        case DELETE_EVENT:
-            let newState = {...state};
+        case DELETE_EVENT: {
+            const newState = {...state};
             delete newState[action.payload];
             return newState;
+        } 
         case ADD_EVENT:
             return {...state, [action.payload.id]: action.payload};
         case GET_EVENTS: 
