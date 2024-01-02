@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { thunkGetGroupsById } from "../../store/groups";
 import "./SingleGroup.css";
 import EventCard from "./EventCard";
+import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
+import DeleteGroupModal from "../DeleteGroupModal";
 
 function SingleGroup() {
     const navigate = useNavigate();
@@ -55,7 +57,12 @@ function SingleGroup() {
                             <div id="singleGroupHeader_buttonContainer">
                                 <button onClick={navigateFunc(`/groups/${groupId}/events/new`)}>Create event</button>
                                 <button onClick={navigateFunc(`/groups/${groupId}/edit`)}>Update</button>
-                                <button>Delete</button>
+                                <button>
+                                    <OpenModalMenuItem
+                                        itemText="Delete"
+                                        modalComponent={<DeleteGroupModal groupId={groupId} navigate={navigate}/>}
+                                        />
+                                </button>
                             </div>)
                         }
                     </div>

@@ -15,6 +15,7 @@ export const selectEventsArr = createSelector(
 // ACTION CREATORS
 const GET_EVENTS = "events/getEvents";
 const ADD_EVENT = "events/addEvent";
+const DELETE_EVENT = "events/deleteEvent";
 
 const getEvents = (events) => ({
     type: GET_EVENTS,
@@ -29,6 +30,11 @@ const getEvent = (event) => ({
 const addEvent = (event) => ({
     type: ADD_EVENT,
     payload: event,
+})
+
+const deleteEvent = (eventId) => ({
+    type: DELETE_EVENT,
+    payload: eventId,
 })
 
 // THUNKS
@@ -106,11 +112,30 @@ export const thunkUpdateEvent = (event, eventId) => async (dispatch) => {
     return data;    
 }
 
+export const thunkDeleteEvent = (eventId) => async (dispatch) => {
+    let response;
+    try {
+        response = await csrfFetch(`/api/events/${eventId}`, {
+            method: "DELETE"
+        });
+    } catch(error) {
+        return await error.json();
+    }
+    
+    const data = await response.json();
+    dispatch(deleteEvent(eventId));
+    return data;    
+}
+
 // REDUCER
 const initialState = { };
 
 const eventReducer = (state = initialState, action) => {
     switch(action.type) {
+        case DELETE_EVENT:
+            let newState = {...state};
+            delete newState[action.payload];
+            return newState;
         case ADD_EVENT:
             return {...state, [action.payload.id]: action.payload};
         case GET_EVENTS: 

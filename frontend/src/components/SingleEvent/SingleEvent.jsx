@@ -4,6 +4,8 @@ import { useEffect, useRef, useState } from "react";
 import { thunkGetEventsById } from "../../store/events";
 import { thunkGetGroupsById } from "../../store/groups";
 import "./SingleEvent.css"; 
+import OpenModalMenuItem from "../Navigation/OpenModalMenuItem";
+import DeleteEventModal from "../DeleteEventModal";
 
 function SingleEvent() {
     const dispatch = useDispatch();
@@ -86,7 +88,12 @@ function SingleEvent() {
                                     {sessionUser.id === group?.organizerId &&
                                     <div id="singleEvent__eventCard-buttonContainer">
                                         <button onClick={updateEvent}>Update</button>
-                                        <button>Delete</button>
+                                        <button>
+                                            <OpenModalMenuItem
+                                                itemText="Delete"
+                                                modalComponent={<DeleteEventModal eventId={eventId} groupId={event.groupId} navigate={navigate}/>}
+                                                />
+                                        </button>
                                     </div>}
                                 </div>
                                 

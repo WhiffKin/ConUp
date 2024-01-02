@@ -15,6 +15,7 @@ export const selectGroupNamesArr = createSelector(
 // ACTION CREATORS
 const GET_GROUPS = "groups/getGroups";
 const ADD_GROUP = "groups/addGroup";
+const DELETE_GROUP = "groups/deleteGroup";
 
 const getGroups = (groups) => ({
     type: GET_GROUPS,
@@ -29,6 +30,11 @@ const getGroupById = (group) => ({
 const addGroup = (group) => ({
     type: ADD_GROUP,
     payload: group,
+})
+
+const deleteGroup = (groupId) => ({
+    type: DELETE_GROUP, 
+    payload: groupId,
 })
 
 // THUNKS
@@ -131,8 +137,23 @@ export const thunkUpdateGroup = (group, groupId) => async (dispatch) => {
         return await error.json();
     }
     const data = await response.json();
-    
+
     dispatch(addGroup(data));
+    return data;
+}
+
+export const thunkDeleteGroup = (groupId) => async (dispatch) => {
+    let response;
+    try {
+        response = await csrfFetch(`/api/groups/${groupId}`, {
+            method: "DELETE"
+        });
+    } catch (error) {
+        return await error.json();
+    }
+    const data = await response.json();
+
+    dispatch(deleteGroup(groupId));
     return data;
 }
 
@@ -141,10 +162,14 @@ const initialState = { };
 
 const groupReducer = (state = initialState, action) => {
     switch(action.type) {
+        case DELETE_GROUP:
+            let newState = {...state};
+            delete newState[action.payload];
+            return newState;
         case ADD_GROUP:
             return {...state, [action.payload.id]: action.payload};
         case GET_GROUPS: 
-            return {...state, ...action.payload.reduce((groups, group) =>{
+            return {...action.payload.reduce((groups, group) =>{
                 groups[group.id] = group;
                 return groups;
             }, {})};
