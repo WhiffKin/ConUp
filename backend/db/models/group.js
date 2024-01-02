@@ -55,8 +55,8 @@ module.exports = (sequelize, DataTypes) => {
       type: DataTypes.TEXT,
       validate: {
         isMoreThan50(value) {
-          if (value.length < 50) 
-            throw new Error("About must be 50 characters or more");
+          if (value.length < 30) 
+            throw new Error("About must be 30 characters or more");
         }
       }
     },

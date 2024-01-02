@@ -13,17 +13,17 @@ module.exports = {
     await EventImage.bulkCreate([
       {
         eventId: 1,
-        url: "testUrl.com/Image1",
+        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
         preview: true
       },
       {
         eventId: 2,
-        url: "testUrl.com/Image2",
+        url: "https://images.pexels.com/photos/1181534/pexels-photo-1181534.jpeg",
         preview: true
       },
       {
         eventId: 3,
-        url: "testUrl.com/Image3",
+        url: "https://images.pexels.com/photos/5732441/pexels-photo-5732441.jpeg",
         preview: true
       },
     ])
@@ -33,7 +33,7 @@ module.exports = {
     options.tableName = 'EventImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      url: { [Op.in]: ['testUrl.com/Image1', 'testUrl.com/Image2', 'testUrl.com/Image3'] }
+      preview: { [Op.in]: [true, false] }
     }, {});
   }
 };

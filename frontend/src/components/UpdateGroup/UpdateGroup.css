@@ -1,0 +1,79 @@
+#UpdateGroupForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    width: 600px;
+    margin: auto;
+}
+
+#UpdateGroupForm > div {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    padding-top: 10px;
+}
+
+#UpdateGroupForm > div + div {
+    border-top: 2px solid #808080;
+}
+
+#UpdateGroupForm label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+
+#UpdateGroupForm input[type="text"] {
+    width: 350px;
+}
+
+#UpdateGroupForm input[type="number"] {
+    width: 100px;
+}
+
+#UpdateGroupForm input[type="datetime-local"] {
+    width: 200px;
+}
+
+#UpdateGroupForm select {
+    width: 100px;
+}
+
+#UpdateGroupForm textarea {
+    resize: none;
+    width: 100%;
+}
+
+#UpdateGroupForm button {
+    height: 40px;
+    width: 105px;
+    margin-top: auto;
+    margin-bottom: 25px;
+
+    color: white;
+    background-color: #cf2a27;
+
+    border-radius: 0px;
+    box-shadow: 2.5px 2.5px black;
+}
+
+#UpdateGroupForm .errorDiv {
+    margin: 10px 0;
+
+    background-color: #eeeeee;
+    border-bottom: 2px solid #808080;
+
+    padding: 15px;
+    border-radius: 15px;
+}
+
+#UpdateGroupForm .errorDiv > h3 + p {
+    padding-top: 5px;
+    border-top: 2px solid black;
+}
+#UpdateGroupForm .errorDiv p {
+    width: 100%;
+}
