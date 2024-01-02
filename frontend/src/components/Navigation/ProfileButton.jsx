@@ -40,6 +40,17 @@ function ProfileButton({ user }) {
     navigate('/');
   };
 
+  const viewGroups = (e) => {
+    e.preventDefault();
+    closeMenu();
+    navigate("/groups")
+  }
+  const viewEvents = (e) => {
+    e.preventDefault();
+    closeMenu();
+    navigate("/events")
+  }
+
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
   return user ? (
@@ -50,15 +61,25 @@ function ProfileButton({ user }) {
         <i className={`fa-solid fa-chevron-${showMenu ? "up grey" : "down"}`} />
       </div>
       <ul className={ulClassName} ref={ulRef}>
-          <>
+        <span>
           <div>
-            <li>Hello, {user.username}</li>
+            <li>Hello, {user.firstName}</li> 
             <li>{user.email}</li>
           </div>
-            <li>
-              <button onClick={logout}>Log Out</button>
-            </li>
-          </>
+        </span>
+        <span>
+          <div className='hover' onClick={viewGroups}>
+            <li>View Groups</li>
+          </div>
+          <div className='hover' onClick={viewEvents}>
+            <li>View Events</li>
+          </div>
+        </span>
+        <span className='hover' onClick={logout}>
+          <div>
+            <li>Log Out</li>
+          </div>
+        </span>
       </ul>
     </>
   ) : (

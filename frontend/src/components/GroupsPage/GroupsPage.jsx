@@ -7,7 +7,7 @@ import { NavLink } from "react-router-dom";
 
 function GroupsPage() {
     const dispatch = useDispatch();
-    const groups = useSelector(selectGroupsArr)
+    const groups = useSelector(selectGroupsArr);
 
     useEffect(() => {
         dispatch(thunkGetGroups());

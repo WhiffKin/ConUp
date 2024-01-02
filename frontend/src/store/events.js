@@ -5,11 +5,17 @@ import { csrfFetch } from "./csrf";
 export const selectEventsArr = createSelector(
     state => state.events,
     events => Object.values(events)
+                    .sort((a,b) => {
+                        if (Date.parse(b.startDate) < Date.now()) return -1;
+                        else if (Date.parse(a.startDate) < Date.parse(b.startDate)) return -1;
+                        return 1;
+                    })
 );
 
 // ACTION CREATORS
 const GET_EVENTS = "events/getEvents";
 const ADD_EVENT = "events/addEvent";
+const DELETE_EVENT = "events/deleteEvent";
 
 const getEvents = (events) => ({
     type: GET_EVENTS,
@@ -26,6 +32,11 @@ const addEvent = (event) => ({
     payload: event,
 })
 
+const deleteEvent = (eventId) => ({
+    type: DELETE_EVENT,
+    payload: eventId,
+})
+
 // THUNKS
 export const thunkGetEvents = () => async (dispatch) => {
     const response = await fetch("/api/events?" + new URLSearchParams({
@@ -34,7 +45,7 @@ export const thunkGetEvents = () => async (dispatch) => {
     }));
 
     if (response.ok) {
-        const data = await response.json();
+        let data = await response.json();
         dispatch(getEvents(data));
     }
 }
@@ -67,7 +78,7 @@ export const thunkAddEvent = (event, groupId) => async (dispatch) => {
         preview: true,
     }
     try {
-        response = await csrfFetch(`/api/groups/${data.id}/images`, {
+        response = await csrfFetch(`/api/events/${data.id}/images`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json"
@@ -82,11 +93,49 @@ export const thunkAddEvent = (event, groupId) => async (dispatch) => {
     return data;
 }
 
+export const thunkUpdateEvent = (event, eventId) => async (dispatch) => {
+    let response;
+    try {
+        response = await csrfFetch(`/api/events/${eventId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json"
+            },
+            body: JSON.stringify(event),
+        });
+    } catch(error) {
+        return await error.json();
+    }
+    
+    const data = await response.json();
+    dispatch(addEvent(data));
+    return data;    
+}
+
+export const thunkDeleteEvent = (eventId) => async (dispatch) => {
+    let response;
+    try {
+        response = await csrfFetch(`/api/events/${eventId}`, {
+            method: "DELETE"
+        });
+    } catch(error) {
+        return await error.json();
+    }
+    
+    const data = await response.json();
+    dispatch(deleteEvent(eventId));
+    return data;    
+}
+
 // REDUCER
 const initialState = { };
 
 const eventReducer = (state = initialState, action) => {
     switch(action.type) {
+        case DELETE_EVENT:
+            let newState = {...state};
+            delete newState[action.payload];
+            return newState;
         case ADD_EVENT:
             return {...state, [action.payload.id]: action.payload};
         case GET_EVENTS: 

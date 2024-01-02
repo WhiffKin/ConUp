@@ -13,22 +13,22 @@ module.exports = {
     await GroupImage.bulkCreate([
       {
         groupId: 1,
-        url: "fakeUrl.com/images/Wreckfest1",
+        url: "https://cdn.discordapp.com/attachments/1163593560734568488/1189790624174575717/ar751.png",
         preview: true
       },
       {
         groupId: 1,
-        url: "fakeUrl.com/images/Wreckfest2",
+        url: "https://images.igdb.com/igdb/image/upload/t_screenshot_big/hisl1yzkpxjdgtgcyncy.png",
         preview: false
       },
       {
         groupId: 2,
-        url: "fakeUrl.com/images/TestImage",
+        url: "https://cdn.britannica.com/61/93061-050-99147DCE/Statue-of-Liberty-Island-New-York-Bay.jpg",
         preview: true
       },
       {
         groupId: 3,
-        url: "fakeUrl.com/images/FreeMoney$$$",
+        url: "https://business-consultancy.com/wp-content/uploads/2015/12/e297f5cd-d2fe-4ab2-836a-7275e65a5cd6.png",
         preview: true
       },
     ])
