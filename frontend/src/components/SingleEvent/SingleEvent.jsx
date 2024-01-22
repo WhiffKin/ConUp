@@ -20,6 +20,7 @@ function SingleEvent() {
     useEffect(() => {
         dispatch(thunkGetEventsById(eventId));
     }, [dispatch, eventId])
+    
     useEffect(() => {
         if (event)
             dispatch(thunkGetGroupsById(event.groupId));
@@ -91,7 +92,7 @@ function SingleEvent() {
                                         <button>
                                             <OpenModalMenuItem
                                                 itemText="Delete"
-                                                modalComponent={<DeleteEventModal eventId={eventId} groupId={event.groupId} navigate={navigate}/>}
+                                                modalComponent={<DeleteEventModal eventId={eventId} groupId={event?.groupId} navigate={navigate}/>}
                                                 />
                                         </button>
                                     </div>}
