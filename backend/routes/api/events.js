@@ -38,6 +38,70 @@ const validateQuery = [
     handleValidationErrors
 ];
 
+// Get current users events
+router.get("/current",
+    requireAuth,
+    async (req, res, next) => {
+        const userId = req.user.id;
+        const options = {
+            include: [
+                {
+                    model: Group.scope("limited")
+                },
+                {
+                    model: Venue.scope("defaultScope", "limited")
+                },
+                {
+                    model: User,
+                    through: {
+                        model: Attendance,
+                        attributes: [],
+                    },
+                    attributes: ["id"]
+                }
+            ],
+            where: {
+                "$Users.id$": 3,
+            },
+        };
+
+        const events = await Event.scope("defaultScope", "groupSearch").findAll(options);
+
+        for (let i = 0; i < events.length; i++) {
+            let event = events[i];
+
+            // Count numAttending
+            const attending = await event.getUsers({
+                through: {
+                    where: {
+                        status: "attending"
+                    }
+                }
+            })
+            event = event.toJSON();
+            event.numAttending = attending ? attending.length : 0;
+            
+            // Get first previewImage
+            const eventImagePreview = await EventImage.findOne({
+                where: {
+                    eventId: event.id,
+                    preview: true
+                }
+            })
+            event.previewImage = eventImagePreview ? eventImagePreview.url : "No preview image found"; 
+
+            // Delete current users Id
+            delete event.Users;
+
+            events[i] = event;
+        }
+        
+        res.status(200);
+        res.json(events);
+    }
+)
+
+// Delete attendance to event
 router.delete("/:eventId/attendance",
     requireAuth,
     async (req, res, next) => {
@@ -77,6 +141,7 @@ router.delete("/:eventId/attendance",
     }
 )
 
+// Update attendance to event
 router.put("/:eventId/attendance", 
     requireAuth,
     async (req, res, next) => {
@@ -151,6 +216,7 @@ router.put("/:eventId/attendance",
     }
 )
 
+// Create attendance to event
 router.post("/:eventId/attendance",
     requireAuth,
     async (req, res, next) => {
@@ -221,6 +287,7 @@ router.post("/:eventId/attendance",
     }
 )
 
+// Get attendess to an event
 router.get("/:eventId/attendees",
     async (req, res, next) => {
         let event = await Event.findByPk(req.params.eventId)
@@ -260,6 +327,7 @@ router.get("/:eventId/attendees",
     }
 )
 
+// Add an image to an event
 router.post("/:eventId/images",
     requireAuth,
     async (req, res, next) => {
@@ -317,6 +385,7 @@ router.post("/:eventId/images",
     }
 )
 
+// Delete an event
 router.delete("/:eventId",
     requireAuth,
     async (req, res, next) => {
@@ -353,6 +422,7 @@ router.delete("/:eventId",
     }
 )
 
+// Update an event
 router.put("/:eventId",
     requireAuth,
     async (req, res, next) => {
@@ -424,6 +494,7 @@ router.put("/:eventId",
     }
 )
 
+// Get an event
 router.get("/:eventId", 
     async (req, res, next) => {
         let event = await Event.findByPk(req.params.eventId, {
@@ -462,6 +533,7 @@ router.get("/:eventId",
     }
 )
 
+// Get all events
 router.get("/",
     validateQuery,
     async (req, res, next) => {
@@ -476,9 +548,7 @@ router.get("/",
                     model: Venue.scope("defaultScope", "limited")
                 }
             ],
-            where: {
-
-            }
+            where: {} // Filled in later
         };
 
         if (page) page = Math.min(Math.max(page ? page : 1, 1), 10);
