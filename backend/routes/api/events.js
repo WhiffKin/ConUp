@@ -42,7 +42,6 @@ const validateQuery = [
 router.get("/current",
     requireAuth,
     async (req, res, next) => {
-        const userId = req.user.id;
         const options = {
             include: [
                 {
@@ -61,7 +60,7 @@ router.get("/current",
                 }
             ],
             where: {
-                "$Users.id$": 3,
+                "$Users.id$": req.user.id,
             },
         };
 
