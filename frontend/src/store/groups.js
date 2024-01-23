@@ -1,5 +1,6 @@
 import { createSelector } from "reselect";
 import { csrfFetch } from "./csrf";
+import { deleteEventsByGroup } from "./events";
 
 // CUSTOM SELECTORS
 export const selectGroupsArr = createSelector(
@@ -154,6 +155,7 @@ export const thunkDeleteGroup = (groupId) => async (dispatch) => {
     const data = await response.json();
 
     dispatch(deleteGroup(groupId));
+    dispatch(deleteEventsByGroup(groupId));
     return data;
 }
 
