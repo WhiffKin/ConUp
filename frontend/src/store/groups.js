@@ -73,14 +73,15 @@ export const thunkGetGroupsById = (id) => async (dispatch) => {
         const pastEvents = [];
         const futureEvents = [];
         eventData.forEach(event => {
-            if (Date.parse(event.startDate) < Date.now()) pastEvents.push(event);
+            const start = new Date(event.startDate.split(".")[0].split("T").join(" "));
+            if (start < Date.now()) pastEvents.push(event);
             else futureEvents.push(event);
         })
         data.numEvents = eventData.length;
         data.pastEvents = pastEvents
-        .sort((a,b) => Date.parse(a.startDate) < Date.parse(b.startDate) ? -1 : 1);
+        .sort((a,b) => new Date(a.startDate.split(".")[0].split("T").join(" ")) < new Date(b.startDate.split(".")[0].split("T").join(" ")) ? -1 : 1);
         data.futureEvents = futureEvents
-        .sort((a,b) => Date.parse(a.startDate) < Date.parse(b.startDate) ? -1 : 1);
+        .sort((a,b) => new Date(a.startDate.split(".")[0].split("T").join(" ")) < new Date(b.startDate.split(".")[0].split("T").join(" ")) ? -1 : 1);
     
         data.previewImage = data.GroupImages.find(img => img.preview);
 

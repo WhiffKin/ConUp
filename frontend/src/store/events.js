@@ -6,9 +6,13 @@ export const selectEventsArr = createSelector(
     state => state.events,
     events => Object.values(events.allEvents)
                     .sort((a,b) => {
-                        if (Date.parse(b.startDate) < Date.now()) return -1;
-                        else if (Date.parse(a.startDate) < Date.parse(b.startDate)) return -1;
-                        return 1;
+                        const first = new Date(a.startDate.split(".")[0].split("T").join(" "));
+                        const second = new Date(b.startDate.split(".")[0].split("T").join(" "));
+
+                        if (first < Date.now() && second < Date.now()) return second - first;
+                        if (first < Date.now()) return 1;
+                        if (second < Date.now()) return -1;
+                        return first - second;
                     })
 );
 
