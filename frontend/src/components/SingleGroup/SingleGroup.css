@@ -67,9 +67,10 @@
 .singleGroupMain {
     display: flex;
     flex-flow: column;
+    flex: 1 1 auto;
     
     padding-top: 25px;
-    padding-bottom: 200px;
+    padding-bottom: 100px;
     width: 100%;
     background-color: #eeeeee;
 }
