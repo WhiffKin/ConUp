@@ -7,21 +7,6 @@ application is meant to allow hosts of Conventions to create groups that users
 can join to see when different Events are being hosted. Hosts can post pictures,
 create/update events, declare pricing, and set dates the event will be hosted.
 
-## Backend Technology
-
-* Express
-* Express-Validator
-* Sequelize
-* JWT 
-
-## Frontend technologies
-
-* React
-* React Router
-* Redux
-* CSS
-* Font Awesome
-
 ## To Launch
 
 *  In the backend directory, create a .env file
@@ -39,6 +24,20 @@ create/update events, declare pricing, and set dates the event will be hosted.
 * Run "npm run dev" in the frontend directory to start the server
 * Navigate to localhost:5173 to open the rendered webpage from the frontend
 
+## Backend Technology
+
+* Express
+* Express-Validator
+* Sequelize
+* JWT 
+
+## Frontend technologies
+
+* React
+* React Router
+* Redux
+* CSS
+* Font Awesome
 
 ## Database Schema Design
 
