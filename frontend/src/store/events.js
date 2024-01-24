@@ -4,7 +4,7 @@ import { csrfFetch } from "./csrf";
 // CUSTOM SELECTORS
 export const selectEventsArr = createSelector(
     state => state.events,
-    events => Object.values(events)
+    events => Object.values(events.allEvents)
                     .sort((a,b) => {
                         if (Date.parse(b.startDate) < Date.now()) return -1;
                         else if (Date.parse(a.startDate) < Date.parse(b.startDate)) return -1;
@@ -18,9 +18,11 @@ const ADD_EVENT = "events/addEvent";
 const DELETE_EVENT = "events/deleteEvent";
 const DELETE_EVENTS_BY_GROUP = "events/deleteEventsByGroup";
 
-const getEvents = (events) => ({
+const getEvents = (allEvents, userEvents) => ({
     type: GET_EVENTS,
-    payload: events,
+    payload: {
+        allEvents, userEvents
+    },
 });
 
 const getEvent = (event) => ({
@@ -45,15 +47,27 @@ export const deleteEventsByGroup = (groupId) => ({
 
 // THUNKS
 export const thunkGetEvents = () => async (dispatch) => {
-    const response = await fetch("/api/events?" + new URLSearchParams({
+    const responseAllEvents = await fetch("/api/events?" + new URLSearchParams({
         page: 1,
         size: 20,
     }));
+    let responseUserEvents;
+    try {
+        responseUserEvents = await csrfFetch(`/api/events/current`);
+    } catch (e) {} // Left empty for not logged in user functionality
 
-    if (response.ok) {
-        let data = await response.json();
-        dispatch(getEvents(data));
+    const dataAllEvents = await responseAllEvents.json();
+    let dataUserEvents;
+    if (responseUserEvents) dataUserEvents = await responseUserEvents.json();
+
+    const payload = {
+        allEvents: [],
+        userEvents: [],
     }
+    if (responseAllEvents.ok) payload.allEvents = dataAllEvents;
+    if (responseUserEvents?.ok) payload.userEvents = dataUserEvents;
+
+    dispatch(getEvents(payload.allEvents, payload.userEvents))
 }
 
 export const thunkGetEventsById = (id) => async (dispatch) => {
@@ -134,31 +148,59 @@ export const thunkDeleteEvent = (eventId) => async (dispatch) => {
 }
 
 // REDUCER
-const initialState = { };
+const initialState = {
+    allEvents: {},
+    userEvents: {},
+ };
 
 const eventReducer = (state = initialState, action) => {
     switch(action.type) {
         case DELETE_EVENT: {
-            const newState = {...state};
-            delete newState[action.payload];
+            const newState = {
+                allEvents: {...state.allEvents}, 
+                userEvents: {...state.userEvents}
+            };
+
+            const id = action.payload;
+            if (newState.allEvents[id]) delete newState.allEvents[id];
+            if (newState.userEvents[id]) delete newState.userEvents[id];
+
             return newState;
         } 
         case DELETE_EVENTS_BY_GROUP: {
-            const newState = {...state};
-            Object.keys(newState).forEach(id => {
-                console.log(id, action.payload)
-                if (newState[id].groupId == action.payload)
-                    delete newState[id];
+            const newState = {
+                allEvents: {...state.allEvents}, 
+                userEvents: {...state.userEvents}
+            };
+
+            Object.keys(newState.allEvents).forEach(id => {
+                if (newState.allEvents[id].groupId == action.payload)
+                    delete newState.allEvents[id];
             });
+            Object.keys(newState.userEvents).forEach(id => {
+                if (newState.userEvents[id].groupId == action.payload)
+                    delete newState.userEvents[id];
+            });
+
             return newState;
         }
         case ADD_EVENT:
-            return {...state, [action.payload.id]: action.payload};
+            return {
+                allEvents: {...state.allEvents, [action.payload.id]: action.payload}, 
+                userEvents: {...state.userEvents}
+            };
         case GET_EVENTS: 
-            return {...state, ...action.payload.reduce((events, event) =>{
-                events[event.id] = event;
-                return events;
-            }, {})};
+            return {
+                ...state, 
+                allEvents: {...action.payload.allEvents.reduce((events, event) => {
+                    events[event.id] = event;
+                    return events;
+                }, {})},
+                userEvents: {...action.payload.userEvents.reduce((events, event) => {
+                    events[event.id] = event;
+                    return events;
+                }, {})}
+            };
         default: 
             return state;
     }

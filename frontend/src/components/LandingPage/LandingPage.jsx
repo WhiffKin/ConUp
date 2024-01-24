@@ -12,7 +12,7 @@ function LandingPage() {
                     <h1>The people platform- Where interests become friendships</h1>
                     <span>Lorem ipsum dolor sit amet, consectetur adipisci elit, sed eiusmod tempor incidunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrum exercitationem ullam corporis suscipit laboriosam, nisi ut aliquid ex ea commodi consequatur. Quis aute iure reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint obcaecat cupiditat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</span>
                 </div>
-                <img src="https://cdn.discordapp.com/attachments/1163593560734568488/1187923468717670471/banner-with-kids-working-on-computer-in-class.png"/>
+                <img src="https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/neom-nMzbnMzMjYU-unsplash.jpg"/>
             </div>
             <div className="section2">
                 <h3>How Meetup works</h3>

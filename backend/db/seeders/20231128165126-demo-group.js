@@ -37,7 +37,7 @@ module.exports = {
         private: true,
         city: "Ashburn",
         state: "Virginia",
-      }
+      },
     ])
   },
 
@@ -45,7 +45,7 @@ module.exports = {
     options.tableName = 'Groups';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      name: { [Op.in]: ['Wreckfest', 'DefaultName', 'Fake Event'] }
+      organizerId: { [Op.in]: [1, 2, 3] }
     }, {});
   }
 };

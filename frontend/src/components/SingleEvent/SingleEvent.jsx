@@ -12,7 +12,7 @@ function SingleEvent() {
     const navigate = useNavigate();
     const { eventId } = useParams();
     const sessionUser = useSelector(state => state.session.user);
-    const event = useSelector(state => state.events[eventId]);
+    const event = useSelector(state => state.events.allEvents[eventId]);
     const group = useSelector(state => { if (event) return state.groups[event.groupId]; });
     const [currentImg, setCurrentImg] = useState(0);
     const imgContainerRef = useRef();
