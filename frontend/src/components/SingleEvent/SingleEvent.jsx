@@ -13,7 +13,7 @@ function SingleEvent() {
     const { eventId } = useParams();
     const sessionUser = useSelector(state => state.session.user);
     const event = useSelector(state => state.events.allEvents[eventId]);
-    const group = useSelector(state => { if (event) return state.groups[event.groupId]; });
+    const group = useSelector(state => { if (event) return state.groups.allGroups[event.groupId]; });
     const [currentImg, setCurrentImg] = useState(0);
     const imgContainerRef = useRef();
 
@@ -22,8 +22,7 @@ function SingleEvent() {
     }, [dispatch, eventId])
 
     useEffect(() => {
-        if (event)
-            dispatch(thunkGetGroupsById(event.groupId));
+        if (event) dispatch(thunkGetGroupsById(event.groupId));
     }, [dispatch, event])
 
     const changeImg = (e) => {
@@ -35,7 +34,7 @@ function SingleEvent() {
         newImg += currentImg;
         newImg += group?.GroupImages.length;
 
-        if(event) setCurrentImg(newImg % event.EventImages.length);
+        if(event && event.EventImages.length != 1) setCurrentImg(newImg % event.EventImages.length);
     }
 
     const updateEvent = () => {

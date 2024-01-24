@@ -40,6 +40,16 @@ function ProfileButton({ user }) {
     navigate('/');
   };
 
+  const viewMyGroups = (e) => {
+    e.preventDefault();
+    closeMenu();
+    navigate("/my-groups")
+  }
+  const viewMyEvents = (e) => {
+    e.preventDefault();
+    closeMenu();
+    navigate("/my-events")
+  }
   const viewGroups = (e) => {
     e.preventDefault();
     closeMenu();
@@ -65,6 +75,14 @@ function ProfileButton({ user }) {
           <div>
             <li>Hello, {user.firstName}</li> 
             <li>{user.email}</li>
+          </div>
+        </span>
+        <span>
+          <div className='hover' onClick={viewMyGroups}>
+            <li>My Groups</li>
+          </div>
+          <div className='hover' onClick={viewMyEvents}>
+            <li>My Events</li>
           </div>
         </span>
         <span>

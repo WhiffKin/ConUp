@@ -11,7 +11,7 @@ function SingleGroup() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { groupId } = useParams();
-    const group = useSelector(state => state.groups[groupId])
+    const group = useSelector(state => state.groups.allGroups[groupId])
     const user = useSelector(state => state.session.user);
     const [currentImg, setCurrentImg] = useState(0);
     const imgContainerRef = useRef();
@@ -33,7 +33,7 @@ function SingleGroup() {
         newImg += currentImg;
         newImg += group?.GroupImages.length;
 
-        if(group) setCurrentImg(newImg % group.GroupImages.length);
+        if(group && group.GroupImages.length != 1) setCurrentImg(newImg % group.GroupImages.length);
     }
 
     return (

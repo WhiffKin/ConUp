@@ -1,7 +1,7 @@
 import { NavLink } from "react-router-dom";
 import "./EventCard.css";
 
-function GroupCard({ event }) {
+function EventCard({ event }) {
     return (
         <NavLink className="EventCard" to={`/events/${event.id}`}>
             <div>
@@ -17,4 +17,4 @@ function GroupCard({ event }) {
     )
 }
 
-export default GroupCard;
+export default EventCard;

@@ -23,7 +23,7 @@ function EventsPage() {
                 <h5>Events in Meetup</h5>
             </header>
             <div className="eventCardContainer">
-                {events && events.map(event => <EventCard event={event} key={event.id}/>)}
+                {events && events.map(event => <EventCard event={event} isMyEvent={false} key={event.id}/>)}
             </div>
         </>
     );

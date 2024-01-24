@@ -5,16 +5,23 @@ import { csrfFetch } from "./csrf";
 export const selectEventsArr = createSelector(
     state => state.events,
     events => Object.values(events.allEvents)
-                    .sort((a,b) => {
-                        const first = new Date(a.startDate.split(".")[0].split("T").join(" "));
-                        const second = new Date(b.startDate.split(".")[0].split("T").join(" "));
-
-                        if (first < Date.now() && second < Date.now()) return second - first;
-                        if (first < Date.now()) return 1;
-                        if (second < Date.now()) return -1;
-                        return first - second;
-                    })
+                    .sort(sortDates)
 );
+export const selectMyEventsArr = createSelector(
+    state => state.events,
+    events => Object.values(events.userEvents)
+                    .sort(sortDates)
+);
+
+const sortDates = (a,b) => {
+    const first = new Date(a.startDate.split(".")[0].split("T").join(" "));
+    const second = new Date(b.startDate.split(".")[0].split("T").join(" "));
+
+    if (first < Date.now() && second < Date.now()) return second - first;
+    if (first < Date.now()) return 1;
+    if (second < Date.now()) return -1;
+    return first - second;
+};
 
 // ACTION CREATORS
 const GET_EVENTS = "events/getEvents";
