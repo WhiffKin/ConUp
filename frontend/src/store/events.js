@@ -16,6 +16,7 @@ export const selectEventsArr = createSelector(
 const GET_EVENTS = "events/getEvents";
 const ADD_EVENT = "events/addEvent";
 const DELETE_EVENT = "events/deleteEvent";
+const DELETE_EVENTS_BY_GROUP = "events/deleteEventsByGroup";
 
 const getEvents = (events) => ({
     type: GET_EVENTS,
@@ -35,6 +36,11 @@ const addEvent = (event) => ({
 const deleteEvent = (eventId) => ({
     type: DELETE_EVENT,
     payload: eventId,
+})
+
+export const deleteEventsByGroup = (groupId) => ({
+    type: DELETE_EVENTS_BY_GROUP,
+    payload: groupId,
 })
 
 // THUNKS
@@ -137,6 +143,15 @@ const eventReducer = (state = initialState, action) => {
             delete newState[action.payload];
             return newState;
         } 
+        case DELETE_EVENTS_BY_GROUP: {
+            const newState = {...state};
+            Object.keys(newState).forEach(id => {
+                console.log(id, action.payload)
+                if (newState[id].groupId == action.payload)
+                    delete newState[id];
+            });
+            return newState;
+        }
         case ADD_EVENT:
             return {...state, [action.payload.id]: action.payload};
         case GET_EVENTS: 
