@@ -20,7 +20,6 @@ function SingleEvent() {
     useEffect(() => {
         dispatch(thunkGetEventsById(eventId));
     }, [dispatch, eventId])
-
     useEffect(() => {
         if (event)
             dispatch(thunkGetGroupsById(event.groupId));
@@ -86,17 +85,16 @@ function SingleEvent() {
                                 <div>
                                     <i className="fa-solid fa-map-pin" />
                                     <h5>{event?.type}</h5>
-                                    {sessionUser?.id === group?.organizerId &&
-                                        <div id="singleEvent__eventCard-buttonContainer">
-                                            <button onClick={updateEvent}>Update</button>
-                                            <button>
-                                                <OpenModalMenuItem
-                                                    itemText="Delete"
-                                                    modalComponent={<DeleteEventModal eventId={eventId} groupId={event?.groupId} navigate={navigate}/>}
-                                                    />
-                                            </button>
-                                        </div>
-                                    }
+                                    {sessionUser.id === group?.organizerId &&
+                                    <div id="singleEvent__eventCard-buttonContainer">
+                                        <button onClick={updateEvent}>Update</button>
+                                        <button>
+                                            <OpenModalMenuItem
+                                                itemText="Delete"
+                                                modalComponent={<DeleteEventModal eventId={eventId} groupId={event.groupId} navigate={navigate}/>}
+                                                />
+                                        </button>
+                                    </div>}
                                 </div>
                                 
                             </div>
