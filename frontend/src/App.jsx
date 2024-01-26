@@ -7,11 +7,13 @@ import * as sessionActions from './store/session';
 import GroupsPage from './components/GroupsPage/GroupsPage';
 import SingleGroup from './components/SingleGroup';
 import EventsPage from './components/EventsPage';
+import MyEventsPage from './components/MyEventsPage';
 import SingleEvent from './components/SingleEvent';
 import CreateEvent from './components/CreateEvent';
 import CreateGroup from './components/CreateGroup';
 import UpdateEvent from './components/UpdateEvent';
 import UpdateGroup from './components/UpdateGroup/UpdateGroup';
+import MyGroupsPage from './components/MyGroupsPage';
 
 function Layout() {
   const dispatch = useDispatch();
@@ -56,6 +58,10 @@ const router = createBrowserRouter([
         element: <CreateGroup />
       },
       {
+        path: '/my-groups',
+        element: <MyGroupsPage />
+      },
+      {
         path: '/groups',
         element: <GroupsPage />
       },
@@ -66,6 +72,10 @@ const router = createBrowserRouter([
       {
         path: '/events/:eventId',
         element: <SingleEvent />
+      },
+      {
+        path: '/my-events',
+        element: <MyEventsPage />
       },
       {
         path: '/events',

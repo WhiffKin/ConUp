@@ -1,5 +1,60 @@
 # Meetup Clone
 
+## Introduction
+
+This project is a fullstack application with CRUD and user capabilities. The 
+application is meant to allow hosts of Conventions to create groups that users
+can join to see when different Events are being hosted. Hosts can post pictures,
+create/update events, declare pricing, and set dates the event will be hosted.
+
+## Table of Contents
+
+*[To Launch](https://github.com/WhiffKin/Meetup-Clone#To-Launch)
+*[Backend Technology](https://github.com/WhiffKin/Meetup-Clone#Backend-Technology)
+*[Frontend Technologies](https://github.com/WhiffKin/Meetup-Clone#Frontend-Technologies)
+*[Database Scheme Design](https://github.com/WhiffKin/Meetup-Clone#Database-Schema-Design)
+*[API Documentation](https://github.com/WhiffKin/Meetup-Clone#API-Documentation)
+  <details>
+  *[USER AUTHENTICATION/AUTHORIZATION](https://github.com/WhiffKin/Meetup-Clone#user-authenticationauthorization) 
+  *[Get the Current User](https://github.com/WhiffKin/Meetup-Clone#get-the-current-user) 
+  *[Log In a User](https://github.com/WhiffKin/Meetup-Clone#log-in-a-user) 
+  *[Sign Up a User](https://github.com/WhiffKin/Meetup-Clone#) 
+  *[](https://github.com/WhiffKin/Meetup-Clone#) 
+  *[](https://github.com/WhiffKin/Meetup-Clone#) 
+  </details>
+
+## To Launch
+
+*  In the backend directory, create a .env file
+*  In the .env file initialize the following variables:
+
+    * PORT=8000
+    * DB_FILE=db/dev.db
+    * JWT_SECRET=<'Enter your secret here'>
+    * JWT_EXPIRES_IN=604800
+
+* Run "npm install" in both the frontend and backend directories
+* Run "npm run dbreset" in the backend directory to create a database and seed it
+* Run "npm start:production" in the backend directory to start the server in a production environment
+    * Run "npm start:development" if the server is meant to be a development environment
+* Run "npm run dev" in the frontend directory to start the server
+* Navigate to localhost:5173 to open the rendered webpage from the frontend
+
+## Backend Technology
+
+* Express
+* Express-Validator
+* Sequelize
+* JWT 
+
+## Frontend Technologies
+
+* React
+* React Router
+* Redux
+* CSS
+* Font Awesome
+
 ## Database Schema Design
 
 ![db-schema]
@@ -306,7 +361,7 @@ Returns all the groups.
 
 ### Get all Groups joined or organized by the Current User
 
-Returns all the groups.
+Returns all the groups joined or organized by the Current User.
 
 * Require Authentication: true
 * Request
@@ -957,6 +1012,76 @@ Returns all the events.
       ]
     }
     ```
+
+### Get all Events the user is affiliated with 
+
+Returns all the events for groups that the user has joined
+
+* Require Authentication: true
+* Request
+  <!--!!START SILENT -->
+  * Method: GET
+  * URL: /api/groups/current
+  <!--!!END -->
+  <!--!!ADD -->
+  <!-- * Method: ? -->
+  <!-- * URL: ? -->
+  <!--!!END_ADD -->
+  * Body: none
+
+* Successful Response
+  * Status Code: 200
+  * Headers:
+    * Content-Type: application/json
+  * Body:
+
+    ```json
+    {
+      "Events": [
+        {
+          "id": 1,
+          "groupId": 1,
+          "venueId": null,
+          "name": "Tennis Group First Meet and Greet",
+          "type": "Online",
+          "startDate": "2021-11-19 20:00:00",
+          "endDate": "2021-11-19 22:00:00",
+          "numAttending": 8,
+          "previewImage": "image url",
+          "Group": {
+            "id": 1,
+            "name": "Evening Tennis on the Water",
+            "city": "New York",
+            "state": "NY"
+          },
+          "Venue": null,
+        },
+        {
+          "id": 1,
+          "groupId": 1,
+          "venueId": 1,
+          "name": "Tennis Singles",
+          "type": "In Person",
+          "startDate": "2021-11-20 20:00:00",
+          "endDate": "2021-11-19 22:00:00",
+          "numAttending": 4,
+          "previewImage": "image url",
+          "Group": {
+            "id": 1,
+            "name": "Evening Tennis on the Water",
+            "city": "New York",
+            "state": "NY"
+          },
+          "Venue": {
+            "id": 1,
+            "city": "New York",
+            "state": "NY",
+          },
+        },
+      ]
+    }
+    ```
+
 
 ### Get all Events of a Group specified by its id
 

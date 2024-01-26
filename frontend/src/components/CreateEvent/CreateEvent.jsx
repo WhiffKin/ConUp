@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
-import { selectGroupNamesArr, thunkGetGroups } from "../../store/groups";
+import { selectGroupName, thunkGetGroups } from "../../store/groups";
 import { useNavigate, useParams } from "react-router-dom";
 import "./CreateEvent.css";
 import { thunkAddEvent } from "../../store/events";
@@ -9,7 +9,7 @@ function CreateEvent() {
     const dispatch = useDispatch();
     const navigate = useNavigate();
     const { groupId } = useParams();
-    const group = useSelector(selectGroupNamesArr).find(group => group.id === +groupId);
+    const group = useSelector(selectGroupName(groupId));
 
     const [validation, setValidation] = useState({});
     const [errors, setErrors] = useState({});
