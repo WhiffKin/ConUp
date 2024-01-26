@@ -14,14 +14,14 @@ create/update events, declare pricing, and set dates the event will be hosted.
 * [Frontend Technologies](https://github.com/WhiffKin/Meetup-Clone#Frontend-Technologies)
 * [Database Scheme Design](https://github.com/WhiffKin/Meetup-Clone#Database-Schema-Design)
 * [API Documentation](https://github.com/WhiffKin/Meetup-Clone#API-Documentation)
-  <details>
-  * [USER AUTHENTICATION/AUTHORIZATION](https://github.com/WhiffKin/Meetup-Clone#user-authenticationauthorization) 
-  * [Get the Current User](https://github.com/WhiffKin/Meetup-Clone#get-the-current-user) 
-  * [Log In a User](https://github.com/WhiffKin/Meetup-Clone#log-in-a-user) 
-  * [Sign Up a User](https://github.com/WhiffKin/Meetup-Clone#) 
-  * [](https://github.com/WhiffKin/Meetup-Clone#) 
-  * [](https://github.com/WhiffKin/Meetup-Clone#) 
-  </details>
+  <End-Points>
+    * [USER AUTHENTICATION/AUTHORIZATION](https://github.com/WhiffKin/Meetup-Clone#user-authenticationauthorization) 
+    * [Get the Current User](https://github.com/WhiffKin/Meetup-Clone#get-the-current-user) 
+    * [Log In a User](https://github.com/WhiffKin/Meetup-Clone#log-in-a-user) 
+    * [Sign Up a User](https://github.com/WhiffKin/Meetup-Clone#) 
+    * [](https://github.com/WhiffKin/Meetup-Clone#) 
+    * [](https://github.com/WhiffKin/Meetup-Clone#) 
+  </End-Points>
 
 ## To Launch
 
