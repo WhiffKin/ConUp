@@ -20,6 +20,7 @@ create/update events, declare pricing, and set dates the event will be hosted.
   *[Log In a User](https://github.com/WhiffKin/Meetup-Clone#log-in-a-user) 
   *[Sign Up a User](https://github.com/WhiffKin/Meetup-Clone#) 
   *[](https://github.com/WhiffKin/Meetup-Clone#) 
+  *[](https://github.com/WhiffKin/Meetup-Clone#) 
   </details>
 
 ## To Launch
