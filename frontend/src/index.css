@@ -1,10 +1,5 @@
-* {
-    color: white;
-}
-
 body {
     margin: 0;
-    background-color: #054674;
 }
 html, body, #root {
     height: 100%;
@@ -15,13 +10,16 @@ h1, h3, h5, p {
 }
 
 img {
-    border-radius: 3px;
-    background-color: rgb(31, 92, 130);
-    /* border: solid 2px #FFD700; */
+    border-radius: 2px;
+    background-color: white;
 }
 
-.accent-color {
-    color: #FFD700;
+.green {
+    color: #00525e;
+}
+
+.grey {
+    color: #cccccc;
 }
 
 input[type="number"]::-webkit-outer-spin-button,
@@ -31,29 +29,5 @@ input[type="number"]::-webkit-inner-spin-button {
 }
 
 form p {
-    color: #F0028D;
-}
-
-#root {
-    height: 100%;
-}
-
-/* width */
-::-webkit-scrollbar {
-    width: 10px;
-}
-
-/* Track */
-::-webkit-scrollbar-track {
-    background: #86722d;
-}
-
-/* Handle */
-::-webkit-scrollbar-thumb {
-    background: #FFD700;
-}
-
-/* Handle on hover */
-::-webkit-scrollbar-thumb:hover {
-    background: #d4af37;
+    color: #ff5a5f;
 }

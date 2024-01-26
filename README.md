@@ -376,7 +376,7 @@ Returns all the groups.
 
 ### Get all Groups joined or organized by the Current User
 
-Returns all the groups joined or organized by the Current User.
+Returns all the groups.
 
 * Require Authentication: true
 * Request
@@ -1027,76 +1027,6 @@ Returns all the events.
       ]
     }
     ```
-
-### Get all Events the user is affiliated with 
-
-Returns all the events for groups that the user has joined
-
-* Require Authentication: true
-* Request
-  <!--!!START SILENT -->
-  * Method: GET
-  * URL: /api/groups/current
-  <!--!!END -->
-  <!--!!ADD -->
-  <!-- * Method: ? -->
-  <!-- * URL: ? -->
-  <!--!!END_ADD -->
-  * Body: none
-
-* Successful Response
-  * Status Code: 200
-  * Headers:
-    * Content-Type: application/json
-  * Body:
-
-    ```json
-    {
-      "Events": [
-        {
-          "id": 1,
-          "groupId": 1,
-          "venueId": null,
-          "name": "Tennis Group First Meet and Greet",
-          "type": "Online",
-          "startDate": "2021-11-19 20:00:00",
-          "endDate": "2021-11-19 22:00:00",
-          "numAttending": 8,
-          "previewImage": "image url",
-          "Group": {
-            "id": 1,
-            "name": "Evening Tennis on the Water",
-            "city": "New York",
-            "state": "NY"
-          },
-          "Venue": null,
-        },
-        {
-          "id": 1,
-          "groupId": 1,
-          "venueId": 1,
-          "name": "Tennis Singles",
-          "type": "In Person",
-          "startDate": "2021-11-20 20:00:00",
-          "endDate": "2021-11-19 22:00:00",
-          "numAttending": 4,
-          "previewImage": "image url",
-          "Group": {
-            "id": 1,
-            "name": "Evening Tennis on the Water",
-            "city": "New York",
-            "state": "NY"
-          },
-          "Venue": {
-            "id": 1,
-            "city": "New York",
-            "state": "NY",
-          },
-        },
-      ]
-    }
-    ```
-
 
 ### Get all Events of a Group specified by its id
 

@@ -72,7 +72,7 @@ function UpdateEvent() {
             endDate,
             description,
         }
-        const response = await dispatch(thunkUpdateEvent(payload, event.id));
+        const response = await dispatch(thunkUpdateEvent(payload, event?.groupId));
 
         // Unsuccessful Submission
         if (response.message === "Bad Request") { 
