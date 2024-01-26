@@ -55,7 +55,7 @@ export const thunkGetGroups = () => async (dispatch) => {
     let myGroupsResponse;
     try {
         myGroupsResponse = await csrfFetch("/api/groups/current")
-    } catch (e) {} // Left blank for non logged in user
+    } catch (e) { myGroupsResponse = null; } // Left blank for non logged in user
 
     if (groupResponse.ok && eventResponse.ok) {
         const allData = {

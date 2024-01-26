@@ -65,7 +65,7 @@ export const thunkGetEvents = () => async (dispatch) => {
     let responseUserEvents;
     try {
         responseUserEvents = await csrfFetch(`/api/events/current`);
-    } catch (e) {} // Left empty for not logged in user functionality
+    } catch (e) { responseUserEvents = null; } // Left empty for not logged in user functionality
 
     const dataAllEvents = await responseAllEvents.json();
     let dataUserEvents;
