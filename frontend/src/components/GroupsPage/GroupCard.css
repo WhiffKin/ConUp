@@ -4,15 +4,28 @@
     align-items: center;
     gap: 20px;
     
-    color: inherit;
     text-decoration: none;
-    width: 800px;
-    padding: 20px 0;
+    width: 780px;
+    padding: 20px 10px;
+    border-radius: 3px;
 }
 
 .GroupCard img {
     height: 140px;
     width: 200px;
+}
+
+.GroupCard span + h5 {
+    color: #12CAB5;
+}
+
+.GroupCard span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
 }
 
 .GroupCard > div {
@@ -25,5 +38,5 @@
 }
 
 .GroupCard {
-    border-top: 2px solid #cccccc;
+    border-top: 2px solid #FFD700;
 }

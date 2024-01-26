@@ -44,7 +44,7 @@ function SingleEvent() {
     return (
         <>
             <header className="singleEventHeader">
-                <span>{String.fromCharCode(60) /* < */} <NavLink to="/events">Events</NavLink></span>
+                <span className="accent-color">{String.fromCharCode(60) /* < */} <NavLink to="/events" className="accent-color">Events</NavLink></span>
                 <h1>{event?.name}</h1>
                 <h5>Hosted by: {group?.Organizer?.firstName} {group?.Organizer?.lastName}</h5>
             </header>

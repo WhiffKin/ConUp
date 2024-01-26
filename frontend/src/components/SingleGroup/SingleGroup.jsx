@@ -39,7 +39,7 @@ function SingleGroup() {
     return (
         <>
             <header className="singleGroupHeader">
-                <span>{String.fromCharCode(60) /* < */} <NavLink to="/groups">Groups</NavLink></span>
+                <span className="accent-color">{String.fromCharCode(60) /* < */} <NavLink to="/groups" className="accent-color">Groups</NavLink></span>
                 <div>
                     <img 
                         src={group?.GroupImages && group.GroupImages[currentImg]?.url}

@@ -21,7 +21,7 @@ function MyEventsPage() {
         <>
             <header className="eventsHeader">
                 <div>
-                    <NavLink className="currentLink"><h3>My Events</h3></NavLink>
+                    <NavLink className="currentLink"><h3 className="accent-color">My Events</h3></NavLink>
                     <NavLink to="/my-groups"><h3>My Groups</h3></NavLink>
                 </div>
                 <h5>My Events in Meetup</h5>

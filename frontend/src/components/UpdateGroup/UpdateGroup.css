@@ -26,6 +26,12 @@
     width: 100%;
 }
 
+#UpdateGroupForm input, #UpdateGroupForm textarea, #UpdateGroupForm select  {
+    border-radius: 0%;
+    background-color: #002858;
+}
+
+
 #UpdateGroupForm input[type="text"] {
     width: 350px;
 }

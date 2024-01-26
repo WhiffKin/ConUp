@@ -23,6 +23,13 @@
     width: 100%;
 }
 
+
+#CreateGroupForm input, #CreateGroupForm textarea, #CreateGroupForm select  {
+    border-radius: 0%;
+    background-color: #002858;
+}
+
+
 #CreateGroupForm input[type="text"] {
     width: 350px;
 }

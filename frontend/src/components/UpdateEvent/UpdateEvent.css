@@ -26,6 +26,11 @@
     width: 100%;
 }
 
+#UpdateEventForm input, #UpdateEventForm textarea, #UpdateEventForm select  {
+    border-radius: 0%;
+    background-color: #002858;
+}
+
 #UpdateEventForm input[type="text"] {
     width: 350px;
 }
