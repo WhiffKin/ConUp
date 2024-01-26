@@ -12,16 +12,20 @@ create/update events, declare pricing, and set dates the event will be hosted.
 * [To Launch](https://github.com/WhiffKin/Meetup-Clone#To-Launch)
 * [Backend Technology](https://github.com/WhiffKin/Meetup-Clone#Backend-Technology)
 * [Frontend Technologies](https://github.com/WhiffKin/Meetup-Clone#Frontend-Technologies)
+* [Future Goals](https://github.com/WhiffKin/Meetup-Clone#future-goals)
+* [Conclusion](https://github.com/WhiffKin/Meetup-Clone#conclusion)
 * [Database Scheme Design](https://github.com/WhiffKin/Meetup-Clone#Database-Schema-Design)
-* [API Documentation](https://github.com/WhiffKin/Meetup-Clone#API-Documentation)
-  <End-Points>
-    * [USER AUTHENTICATION/AUTHORIZATION](https://github.com/WhiffKin/Meetup-Clone#user-authenticationauthorization) 
-    * [Get the Current User](https://github.com/WhiffKin/Meetup-Clone#get-the-current-user) 
-    * [Log In a User](https://github.com/WhiffKin/Meetup-Clone#log-in-a-user) 
-    * [Sign Up a User](https://github.com/WhiffKin/Meetup-Clone#) 
-    * [](https://github.com/WhiffKin/Meetup-Clone#) 
-    * [](https://github.com/WhiffKin/Meetup-Clone#) 
-  </End-Points>
+<details> <summary>End Points</summary>
+  
+   * [USER AUTHENTICATION/AUTHORIZATION](https://github.com/WhiffKin/Meetup-Clone#user-authenticationauthorization) 
+   * [GROUPS](https://github.com/WhiffKin/Meetup-Clone#groups)
+   * [VENUES](https://github.com/WhiffKin/Meetup-Clone#venues)
+   * [EVENTS](https://github.com/WhiffKin/Meetup-Clone#events)
+   * [MEMBERSHIPS](https://github.com/WhiffKin/Meetup-Clone#memberships)
+   * [ATTENDEES](https://github.com/WhiffKin/Meetup-Clone#attendees)
+   * [IMAGES](https://github.com/WhiffKin/Meetup-Clone#images)
+
+</details>
 
 ## To Launch
 
@@ -54,6 +58,17 @@ create/update events, declare pricing, and set dates the event will be hosted.
 * Redux
 * CSS
 * Font Awesome
+
+## Future Goals
+
+* Frontend Venue managment
+* Joining Groups
+* Member managment for Groups
+* User pages and icons
+
+## Conclusion
+
+As my first Full Stack web application, this was a great experience! Express makes for an intuitive easy to use backend for routing purposes. Sequelize came with a steep learning curve but after the first table is setup every other table is similar. React was very easy to implement, and redux interfaced easily with the react code I wrote. I would happily work in any of these frameworks again, and feel very proud with the end result!
 
 ## Database Schema Design
 
