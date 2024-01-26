@@ -176,7 +176,7 @@ function UpdateGroup() {
                     </>
                 </div>
             }
-            <button type="submit" disabled={disabled}>Update Group</button>
+            <button type="submit" disabled={disabled}>Create Group</button>
         </form>
     </>
     )

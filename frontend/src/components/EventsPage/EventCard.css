@@ -8,9 +8,8 @@
     display: flex;
     justify-content: start;
     align-items: center;
-    
-    border-top: 2px solid #FFD700;
-    border-radius: 3px;
+
+    border-top: 2px solid #cccccc;
     gap: 20px;
     padding: 20px 0;
 }
@@ -20,15 +19,8 @@
     width: 200px;
 }
 
-.EventCard span {
+.EventCard > h5 {
     margin-bottom: 20px;
-
-    overflow: hidden;
-    text-overflow: ellipsis;
-    
-    display: -webkit-box;
-    -webkit-line-clamp: 4;
-    -webkit-box-orient: vertical;
 }
 
 .EventCard > div > div {
@@ -39,4 +31,8 @@
     
     height: 140px;
     width: 580px;
+}
+
+.EventCard > div > div > h3 {
+    color: #00525e;
 }
