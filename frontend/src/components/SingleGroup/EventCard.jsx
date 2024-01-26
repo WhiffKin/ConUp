@@ -11,7 +11,7 @@ function EventCard({ event, location }) {
                     <h5>{event.type === "Online" ? "Online" : `${location.city}, ${location.state}`}</h5>
                 </div>
             </div>
-            <p>{event.description}</p>
+            <span>{event.description}</span>
         </NavLink>
     )
 }

@@ -104,6 +104,8 @@
     background-color: #054674;
     border-radius: 15px;
     padding: 15px;
+    
+    word-wrap: break-word;
 }
 
 .eventCard > div {
@@ -122,6 +124,12 @@
     width: 180px;
 }
 
-.eventCard {
-    word-wrap: break-word;
+
+.eventCard span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
 }

@@ -1,12 +1,19 @@
 #LoginForm {
     display: flex;
-    align-items: center;
     flex-direction: column;
 
     gap: 10px;
     width: 300px;
     margin: auto;
-    border-radius: 10px;
+}
+
+#LoginForm h1, #LoginForm h3, #LoginForm p {
+    align-self: center;
+}
+
+#LoginForm label input {
+    box-sizing: border-box;
+    width: 100%;
 }
 
 #LoginForm input {

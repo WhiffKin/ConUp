@@ -9,7 +9,7 @@
     margin: auto;
 }
 
-#SignUpForm h1 {
+#SignUpForm h1, #SignUpForm p {
     align-self: center;
 }
 
