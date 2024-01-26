@@ -23,13 +23,43 @@ module.exports = {
       },
       {
         groupId: 2,
-        url: "https://cdn.britannica.com/61/93061-050-99147DCE/Statue-of-Liberty-Island-New-York-Bay.jpg",
+        url: "https://cdn.discordapp.com/attachments/1163593560734568488/1189790624174575717/ar751.png",
+        preview: true
+      },
+      {
+        groupId: 2,
+        url: "https://images.igdb.com/igdb/image/upload/t_screenshot_big/hisl1yzkpxjdgtgcyncy.png",
+        preview: false
+      },
+      {
+        groupId: 3,
+        url: "https://cdn.discordapp.com/attachments/1163593560734568488/1189790624174575717/ar751.png",
         preview: true
       },
       {
         groupId: 3,
-        url: "https://business-consultancy.com/wp-content/uploads/2015/12/e297f5cd-d2fe-4ab2-836a-7275e65a5cd6.png",
+        url: "https://images.igdb.com/igdb/image/upload/t_screenshot_big/hisl1yzkpxjdgtgcyncy.png",
+        preview: false
+      },
+      {
+        groupId: 4,
+        url: "https://cdn.discordapp.com/attachments/1163593560734568488/1189790624174575717/ar751.png",
         preview: true
+      },
+      {
+        groupId: 4,
+        url: "https://images.igdb.com/igdb/image/upload/t_screenshot_big/hisl1yzkpxjdgtgcyncy.png",
+        preview: false
+      },
+      {
+        groupId: 5,
+        url: "https://cdn.discordapp.com/attachments/1163593560734568488/1189790624174575717/ar751.png",
+        preview: true
+      },
+      {
+        groupId: 5,
+        url: "https://images.igdb.com/igdb/image/upload/t_screenshot_big/hisl1yzkpxjdgtgcyncy.png",
+        preview: false
       },
     ])
   },
@@ -38,7 +68,7 @@ module.exports = {
     options.tableName = 'GroupImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      groupId: { [Op.in]: [1, 2, 3] }
+      groupId: { [Op.in]: [1, 2, 3, 4, 5] }
     }, {});
   }
 };

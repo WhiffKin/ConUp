@@ -11,7 +11,7 @@ function SingleGroup() {
     const navigate = useNavigate();
     const dispatch = useDispatch();
     const { groupId } = useParams();
-    const group = useSelector(state => state.groups[groupId])
+    const group = useSelector(state => state.groups.allGroups[groupId])
     const user = useSelector(state => state.session.user);
     const [currentImg, setCurrentImg] = useState(0);
     const imgContainerRef = useRef();
@@ -33,13 +33,13 @@ function SingleGroup() {
         newImg += currentImg;
         newImg += group?.GroupImages.length;
 
-        if(group) setCurrentImg(newImg % group.GroupImages.length);
+        if(group && group.GroupImages.length != 1) setCurrentImg(newImg % group.GroupImages.length);
     }
 
     return (
         <>
             <header className="singleGroupHeader">
-                <span>{String.fromCharCode(60) /* < */} <NavLink to="/groups">Groups</NavLink></span>
+                <span className="accent-color">{String.fromCharCode(60) /* < */} <NavLink to="/groups" className="accent-color">Groups</NavLink></span>
                 <div>
                     <img 
                         src={group?.GroupImages && group.GroupImages[currentImg]?.url}
@@ -48,8 +48,8 @@ function SingleGroup() {
                         />
                     <div>
                         <h3>{group?.name}</h3>
-                        <h5>{group?.city}, {group?.state}</h5>
-                        <h5>{group?.numEvents} event{group?.numEvents !== 1 ? "s":""} {String.fromCharCode(183) /* dot */} {group?.private ? "Private" : "Public"}</h5>
+                        <h5 className="accent-color">{group?.city}, {group?.state}</h5>
+                        <h5 className="accent-color">{group?.numEvents} event{group?.numEvents !== 1 ? "s":""} {String.fromCharCode(183) /* dot */} {group?.private ? "Private" : "Public"}</h5>
                         <h5>Organized by {group?.Organizer?.firstName} {group?.Organizer?.lastName}</h5>
                         {user && group && (user.id != group.organizerId ? 
                             <button onClick={() => window.alert("Feature coming soon")}>Join this group</button> 

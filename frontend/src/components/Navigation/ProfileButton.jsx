@@ -40,6 +40,16 @@ function ProfileButton({ user }) {
     navigate('/');
   };
 
+  const viewMyGroups = (e) => {
+    e.preventDefault();
+    closeMenu();
+    navigate("/my-groups")
+  }
+  const viewMyEvents = (e) => {
+    e.preventDefault();
+    closeMenu();
+    navigate("/my-events")
+  }
   const viewGroups = (e) => {
     e.preventDefault();
     closeMenu();
@@ -55,16 +65,24 @@ function ProfileButton({ user }) {
 
   return user ? (
     <>
-      <NavLink to="/groups/new" className="green">Start a new Group</NavLink>
+      <NavLink to="/groups/new" className="accent-color">Start a new Group</NavLink>
       <div className='profile-button' onClick={toggleMenu}>
         <i className="fa-regular fa-user" />
-        <i className={`fa-solid fa-chevron-${showMenu ? "up grey" : "down"}`} />
+        <i className={`fa-solid fa-chevron-${showMenu ? "up" : "down"}`} />
       </div>
       <ul className={ulClassName} ref={ulRef}>
         <span>
           <div>
             <li>Hello, {user.firstName}</li> 
             <li>{user.email}</li>
+          </div>
+        </span>
+        <span>
+          <div className='hover' onClick={viewMyGroups}>
+            <li>My Groups</li>
+          </div>
+          <div className='hover' onClick={viewMyEvents}>
+            <li>My Events</li>
           </div>
         </span>
         <span>

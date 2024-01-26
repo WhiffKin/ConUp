@@ -17,13 +17,13 @@ function EventsPage() {
         <>
             <header className="eventsHeader">
                 <div>
-                    <NavLink className="currentLink"><h3>Events</h3></NavLink>
+                    <NavLink className="currentLink"><h3 className="accent-color">Events</h3></NavLink>
                     <NavLink to="/groups"><h3>Groups</h3></NavLink>
                 </div>
                 <h5>Events in Meetup</h5>
             </header>
             <div className="eventCardContainer">
-                {events && events.map(event => <EventCard event={event} key={event.id}/>)}
+                {events && events.map(event => <EventCard event={event} isMyEvent={false} key={event.id}/>)}
             </div>
         </>
     );

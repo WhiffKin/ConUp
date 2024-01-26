@@ -12,17 +12,17 @@ function SingleEvent() {
     const navigate = useNavigate();
     const { eventId } = useParams();
     const sessionUser = useSelector(state => state.session.user);
-    const event = useSelector(state => state.events[eventId]);
-    const group = useSelector(state => { if (event) return state.groups[event.groupId]; });
+    const event = useSelector(state => state.events.allEvents[eventId]);
+    const group = useSelector(state => { if (event) return state.groups.allGroups[event.groupId]; });
     const [currentImg, setCurrentImg] = useState(0);
     const imgContainerRef = useRef();
 
     useEffect(() => {
         dispatch(thunkGetEventsById(eventId));
     }, [dispatch, eventId])
+
     useEffect(() => {
-        if (event)
-            dispatch(thunkGetGroupsById(event.groupId));
+        if (event) dispatch(thunkGetGroupsById(event.groupId));
     }, [dispatch, event])
 
     const changeImg = (e) => {
@@ -34,7 +34,7 @@ function SingleEvent() {
         newImg += currentImg;
         newImg += group?.GroupImages.length;
 
-        if(event) setCurrentImg(newImg % event.EventImages.length);
+        if(event && event.EventImages.length != 1) setCurrentImg(newImg % event.EventImages.length);
     }
 
     const updateEvent = () => {
@@ -44,7 +44,7 @@ function SingleEvent() {
     return (
         <>
             <header className="singleEventHeader">
-                <span>{String.fromCharCode(60) /* < */} <NavLink to="/events">Events</NavLink></span>
+                <span className="accent-color">{String.fromCharCode(60) /* < */} <NavLink to="/events" className="accent-color">Events</NavLink></span>
                 <h1>{event?.name}</h1>
                 <h5>Hosted by: {group?.Organizer?.firstName} {group?.Organizer?.lastName}</h5>
             </header>
@@ -85,16 +85,17 @@ function SingleEvent() {
                                 <div>
                                     <i className="fa-solid fa-map-pin" />
                                     <h5>{event?.type}</h5>
-                                    {sessionUser.id === group?.organizerId &&
-                                    <div id="singleEvent__eventCard-buttonContainer">
-                                        <button onClick={updateEvent}>Update</button>
-                                        <button>
-                                            <OpenModalMenuItem
-                                                itemText="Delete"
-                                                modalComponent={<DeleteEventModal eventId={eventId} groupId={event.groupId} navigate={navigate}/>}
-                                                />
-                                        </button>
-                                    </div>}
+                                    {sessionUser?.id === group?.organizerId &&
+                                        <div id="singleEvent__eventCard-buttonContainer">
+                                            <button onClick={updateEvent}>Update</button>
+                                            <button>
+                                                <OpenModalMenuItem
+                                                    itemText="Delete"
+                                                    modalComponent={<DeleteEventModal eventId={eventId} groupId={event?.groupId} navigate={navigate}/>}
+                                                    />
+                                            </button>
+                                        </div>
+                                    }
                                 </div>
                                 
                             </div>

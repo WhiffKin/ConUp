@@ -18,7 +18,7 @@ function GroupsPage() {
             <header className="groupsHeader">
                 <div>
                     <NavLink to="/events"><h3>Events</h3></NavLink>
-                    <NavLink className="currentLink"><h3>Groups</h3></NavLink>
+                    <NavLink className="currentLink"><h3 className="accent-color">Groups</h3></NavLink>
                 </div>
                 <h5>Groups in Meetup</h5>
             </header>

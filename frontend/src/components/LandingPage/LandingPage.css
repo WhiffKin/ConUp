@@ -48,7 +48,6 @@
 .section3 a {
     width: 150px;
     text-decoration: none; 
-    color: #00525e;
 }
 
 .section3 a:hover:not([class~=disabled]) h5 {
@@ -61,7 +60,6 @@
 }
 
 .section3 span {
-    color: black;
     text-decoration: none; 
 }
 
@@ -76,11 +74,24 @@
 .section4 {
     margin-bottom: 50px;
 }
-.section4 button {
+
+.section4 li {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+
     height: 35px;
     width: 140px;
 
-    color: white;
-    background-color: #00525e;
-    box-shadow: 3px 3px black;
+    background-color: #F0028D;
+    box-shadow: 3px 3px #002858;
+    
+    border-width: 2px;
+    border-style: outset;
+    border-color: buttonborder;
+    border-image: initial;
+}
+
+.section4 li:active {
+    border-style: inset;
 }

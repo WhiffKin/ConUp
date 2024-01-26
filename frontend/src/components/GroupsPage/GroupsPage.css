@@ -15,11 +15,9 @@
 
 .groupsHeader a {
     text-decoration: none;
-    color: black;
 }
 
 .currentLink > h3 {
-    color: #00525e;
     text-decoration: underline;
     cursor: default;
 }
@@ -27,4 +25,5 @@
 .groupCardContainer {
     width: 800px;
     margin: auto;
+    padding-bottom: 100px;
 }

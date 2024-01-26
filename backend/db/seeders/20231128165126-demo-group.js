@@ -13,31 +13,49 @@ module.exports = {
     await Group.bulkCreate([
       {
         organizerId: 1,
-        name: "Wreckfest",
-        about: "We love a good old fashioned derby, watching cars slam into other cars and parts go flying!",
+        name: "Deadly Precise Shots",
+        about: "We host events for: CS2, Valorant, Overwatch, CoD, and Halo. Come join us and see your team win on the big stage!",
         type: "In person",
         private: false,
-        city: "Bonebreaker Valley",
-        state: "New Mexico",
+        city: "Dallas",
+        state: "Texas",
       },
       {
         organizerId: 2,
-        name: "DefaultName",
-        about: "Insert text here.",
+        name: "Anything For Kills",
+        about: "Everything goes in our events! Could you get onto the skybox? We hope your aim is good! Did you get stuck under the map? Make sure to bring a gun that can shoot through the floor! Did you enable god mode and start flying around the map at max speed? If you're not invincible, then we don't care! Anything for kills!",
         type: "In person",
         private: false,
-        city: "New York",
-        state: "New York",
+        city: "Santa Monica",
+        state: "California",
       },
       {
         organizerId: 3,
-        name: "Fake Event",
-        about: "Free 100000 dollar for join",
-        type: "Online",
+        name: "No Picking Cheese",
+        about: "Ever found yourself breaking a controller because someone stunlocked you by spamming a button? Join our group, where events undergo a strict vetting process so that only the fun characters and abilities are allowed. No more cheese!",
+        type: "In person",
+        private: false,
+        city: "Providence",
+        state: "Rhode Island",
+      },
+      {
+        organizerId: 4,
+        name: "Competitve Players Union",
+        about: "Only the best gamers can be found on stage at our events. Our players undergo a strict training regiment, sleeping schedule, and diet. These specimens are pushed to their absolute limits to show whats possible in the world of eSports!",
+        type: "In person",
         private: true,
-        city: "Ashburn",
-        state: "Virginia",
-      }
+        city: "Sandy",
+        state: "Utah",
+      },
+      {
+        organizerId: 5,
+        name: "Friendly Fighters",
+        about: "This group of Rag-Tag gamers can be found anywhere in the continental US. We meet online to share our love of gaming with anyone who has an internet connection!",
+        type: "Online",
+        private: false,
+        city: "Rexburg",
+        state: "Idaho",
+      },
     ])
   },
 
@@ -45,7 +63,7 @@ module.exports = {
     options.tableName = 'Groups';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      name: { [Op.in]: ['Wreckfest', 'DefaultName', 'Fake Event'] }
+      organizerId: { [Op.in]: [1, 2, 3] }
     }, {});
   }
 };

@@ -1,15 +1,24 @@
 import { createSelector } from "reselect";
 import { csrfFetch } from "./csrf";
+import { deleteEventsByGroup } from "./events";
 
 // CUSTOM SELECTORS
 export const selectGroupsArr = createSelector(
     state => state.groups,
-    groups => Object.values(groups)
+    groups => Object.values(groups.allGroups)
 );
 
-export const selectGroupNamesArr = createSelector(
+export const selectMyGroupsArr = createSelector(
     state => state.groups,
-    groups => Object.values(groups).map(group => ({name: group.name, id: group.id}))
+    groups => Object.values(groups.userGroups)
+);
+
+export const selectGroupName = (id) => createSelector(
+    state => state.groups,
+    groups => {
+        const group = groups.allGroups[id];
+        return {name: group.name, id: group.id}
+    }
 )
 
 // ACTION CREATORS
@@ -17,9 +26,11 @@ const GET_GROUPS = "groups/getGroups";
 const ADD_GROUP = "groups/addGroup";
 const DELETE_GROUP = "groups/deleteGroup";
 
-const getGroups = (groups) => ({
+const getGroups = (allGroups, userGroups) => ({
     type: GET_GROUPS,
-    payload: groups,
+    payload: {
+        allGroups, userGroups
+    }
 });
 
 const getGroupById = (group) => ({
@@ -41,11 +52,20 @@ const deleteGroup = (groupId) => ({
 export const thunkGetGroups = () => async (dispatch) => {
     const groupResponse = await fetch("/api/groups");
     const eventResponse = await fetch("/api/events?size=0");
+    let myGroupsResponse;
+    try {
+        myGroupsResponse = await csrfFetch("/api/groups/current")
+    } catch (e) {} // Left blank for non logged in user
 
     if (groupResponse.ok && eventResponse.ok) {
+        const allData = {
+            allGroups: [],
+            userGroups: [],
+        }
+
         const groupData = await groupResponse.json();
         const eventData = await eventResponse.json();
-        
+
         const groupMap = {};
         for (let event of eventData) 
             if (groupMap[event.groupId]) groupMap[event.groupId]++;
@@ -54,8 +74,20 @@ export const thunkGetGroups = () => async (dispatch) => {
         for (let group of groupData)
             if (groupMap[group.id]) group.numEvents = groupMap[group.id];
             else group.numEvents = 0;
+        
+        allData.allGroups = [...groupData];
 
-        dispatch(getGroups(groupData));
+        if (myGroupsResponse) {
+            const userGroupData = await myGroupsResponse.json();
+
+            for (let group of userGroupData)
+                if (groupMap[group.id]) group.numEvents = groupMap[group.id];
+                else group.numEvents = 0;
+
+            allData.userGroups = [...userGroupData];
+        }
+
+        dispatch(getGroups(allData.allGroups, allData.userGroups));
     }
 }
 
@@ -72,14 +104,15 @@ export const thunkGetGroupsById = (id) => async (dispatch) => {
         const pastEvents = [];
         const futureEvents = [];
         eventData.forEach(event => {
-            if (Date.parse(event.startDate) < Date.now()) pastEvents.push(event);
+            const start = new Date(event.startDate.split(".")[0].split("T").join(" "));
+            if (start < Date.now()) pastEvents.push(event);
             else futureEvents.push(event);
         })
         data.numEvents = eventData.length;
         data.pastEvents = pastEvents
-        .sort((a,b) => Date.parse(a.startDate) < Date.parse(b.startDate) ? -1 : 1);
+        .sort((a,b) => new Date(a.startDate.split(".")[0].split("T").join(" ")) < new Date(b.startDate.split(".")[0].split("T").join(" ")) ? -1 : 1);
         data.futureEvents = futureEvents
-        .sort((a,b) => Date.parse(a.startDate) < Date.parse(b.startDate) ? -1 : 1);
+        .sort((a,b) => new Date(a.startDate.split(".")[0].split("T").join(" ")) < new Date(b.startDate.split(".")[0].split("T").join(" ")) ? -1 : 1);
     
         data.previewImage = data.GroupImages.find(img => img.preview);
 
@@ -154,26 +187,50 @@ export const thunkDeleteGroup = (groupId) => async (dispatch) => {
     const data = await response.json();
 
     dispatch(deleteGroup(groupId));
+    dispatch(deleteEventsByGroup(groupId));
     return data;
 }
 
 // REDUCER
-const initialState = { };
+const initialState = {
+    allGroups: {},
+    userGroups: {},
+ };
 
 const groupReducer = (state = initialState, action) => {
     switch(action.type) {
         case DELETE_GROUP: {
-            let newState = {...state};
-            delete newState[action.payload];
+            let newState = {
+                allGroups: {...state.allGroups},
+                userGroups: {...state.userGroups},
+            };
+
+            const id = action.payload;
+            if (newState.allGroups[id]) delete newState.allGroups[id];
+            if (newState.userGroups[id]) delete newState.userGroups[id];
+
             return newState;
         }
         case ADD_GROUP:
-            return {...state, [action.payload.id]: action.payload};
+            return {
+                allGroups: {...state.allGroups, [action.payload.id]: action.payload},
+                userGroups: {...statusbar.userGroups},
+            };
         case GET_GROUPS: 
-            return {...action.payload.reduce((groups, group) =>{
-                groups[group.id] = group;
-                return groups;
-            }, {})};
+            return {
+                allGroups: {
+                    ...action.payload.allGroups.reduce((groups, group) =>{
+                        groups[group.id] = group;
+                        return groups;
+                    }, {})
+                },
+                userGroups: {
+                    ...action.payload.userGroups.reduce((groups, group) =>{
+                        groups[group.id] = group;
+                        return groups;
+                    }, {})
+                },
+            };
         default: 
             return state;
     }
