@@ -15,10 +15,6 @@
     width: 200px;
 }
 
-.GroupCard span + h5 {
-    color: #12CAB5;
-}
-
 .GroupCard span {
     overflow: hidden;
     text-overflow: ellipsis;

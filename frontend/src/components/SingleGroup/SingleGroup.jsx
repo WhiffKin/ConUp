@@ -48,8 +48,8 @@ function SingleGroup() {
                         />
                     <div>
                         <h3>{group?.name}</h3>
-                        <h5>{group?.city}, {group?.state}</h5>
-                        <h5>{group?.numEvents} event{group?.numEvents !== 1 ? "s":""} {String.fromCharCode(183) /* dot */} {group?.private ? "Private" : "Public"}</h5>
+                        <h5 className="accent-color">{group?.city}, {group?.state}</h5>
+                        <h5 className="accent-color">{group?.numEvents} event{group?.numEvents !== 1 ? "s":""} {String.fromCharCode(183) /* dot */} {group?.private ? "Private" : "Public"}</h5>
                         <h5>Organized by {group?.Organizer?.firstName} {group?.Organizer?.lastName}</h5>
                         {user && group && (user.id != group.organizerId ? 
                             <button onClick={() => window.alert("Feature coming soon")}>Join this group</button> 
