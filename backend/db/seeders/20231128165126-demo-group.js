@@ -41,7 +41,7 @@ module.exports = {
       {
         organizerId: 4,
         name: "Competitve Players Union",
-        about: "Only the best gamers can be found on stage at our events. Our players undergo a strict training regiment, sleeping schedule, and diet. These specimens are pushed to their absolute limits to show whats possible in the world of eSports!",
+        about: "Only the best gamers can be found on stage at our events. Our players undergo a very strict training regiment, sleeping schedule, and diet. These specimens are pushed to their absolute limits to show whats possible in the world of eSports!",
         type: "In person",
         private: true,
         city: "Sandy",
