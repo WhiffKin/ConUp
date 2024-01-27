@@ -43,6 +43,11 @@ export const thunkGetEvents = () => async (dispatch) => {
         page: 1,
         size: 20,
     }));
+  
+    let responseUserEvents;
+    try {
+        responseUserEvents = await csrfFetch(`/api/events/current`);
+    } catch (e) { responseUserEvents = null; } 
 
     if (response.ok) {
         let data = await response.json();
