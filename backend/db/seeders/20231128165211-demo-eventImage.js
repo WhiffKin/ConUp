@@ -18,42 +18,12 @@ module.exports = {
       },
       {
         eventId: 2,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        url: "https://images.pexels.com/photos/1181534/pexels-photo-1181534.jpeg",
         preview: true
       },
       {
         eventId: 3,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
-        preview: true
-      },
-      {
-        eventId: 4,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
-        preview: true
-      },
-      {
-        eventId: 5,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
-        preview: true
-      },
-      {
-        eventId: 6,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
-        preview: true
-      },
-      {
-        eventId: 7,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
-        preview: true
-      },
-      {
-        eventId: 8,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
-        preview: true
-      },
-      {
-        eventId: 9,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        url: "https://images.pexels.com/photos/5732441/pexels-photo-5732441.jpeg",
         preview: true
       },
     ])
@@ -63,7 +33,7 @@ module.exports = {
     options.tableName = 'EventImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      eventId: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+      preview: { [Op.in]: [true, false] }
     }, {});
   }
 };
