@@ -52,11 +52,12 @@ const deleteGroup = (groupId) => ({
 export const thunkGetGroups = () => async (dispatch) => {
     const groupResponse = await fetch("/api/groups");
     const eventResponse = await fetch("/api/events?size=0");
+
     let myGroupsResponse;
     try {
         myGroupsResponse = await csrfFetch("/api/groups/current")
-    } catch (e) {} // Left blank for non logged in user
-
+    } catch (e) { myGroupsResponse = null; }
+    
     if (groupResponse.ok && eventResponse.ok) {
         const allData = {
             allGroups: [],

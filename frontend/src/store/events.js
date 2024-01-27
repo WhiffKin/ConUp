@@ -62,10 +62,11 @@ export const thunkGetEvents = () => async (dispatch) => {
         page: 1,
         size: 20,
     }));
+    
     let responseUserEvents;
     try {
         responseUserEvents = await csrfFetch(`/api/events/current`);
-    } catch (e) {} // Left empty for not logged in user functionality
+    } catch (e) { responseUserEvents = null; } 
 
     const dataAllEvents = await responseAllEvents.json();
     let dataUserEvents;
