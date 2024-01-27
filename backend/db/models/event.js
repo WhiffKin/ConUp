@@ -2,6 +2,26 @@
 const {
   Model
 } = require('sequelize');
+
+
+const isAfterTime = (start, end) => {
+  const startStr = startDate
+    .split("")
+    .filter(el => +el == el)
+    .join("");
+  const endStr = endDate
+    .split("")
+    .filter(el => +el == el)
+    .join("");
+  
+  const startDate = +startStr.slice(0, 8);
+  const startTime = +startStr.slice(-4);
+  const endDate = +endStr.slice(0, 8);
+  const endTime = +endStr.slice(-4);
+
+  return startDate > endDate && startTime < endTime;
+}
+
 module.exports = (sequelize, DataTypes) => {
   class Event extends Model {
     /**
@@ -66,8 +86,8 @@ module.exports = (sequelize, DataTypes) => {
       allowNull: false,
       validate: {
         isExpected(value) {
-          if (value != "In Person" && value != "Online")
-            throw new Error("Type must be 'Online' or 'In Person'");
+          if (value != "In person" && value != "Online")
+            throw new Error("Type must be 'Online' or 'In person'");
         }
       }
     },
@@ -91,7 +111,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     startDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
         isAfter: {
@@ -101,7 +121,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     endDate: {
-      type: DataTypes.DATE,
+      type: DataTypes.TEXT,
       allowNull: false,
       validate: {
         isAfter: {
@@ -121,7 +141,7 @@ module.exports = (sequelize, DataTypes) => {
     scopes: {
       groupSearch: {
         attributes: {
-          exclude: ["description", "capacity", "price"]
+          exclude: ["capacity", "price"]
         }
       }
     }

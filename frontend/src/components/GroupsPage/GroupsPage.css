@@ -1,0 +1,29 @@
+.groupsHeader {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    
+    height: 80px;
+    width: 800px;
+    margin: auto;
+}
+
+.groupsHeader div {
+    display: flex;
+    gap: 20px;
+}
+
+.groupsHeader a {
+    text-decoration: none;
+}
+
+.currentLink > h3 {
+    text-decoration: underline;
+    cursor: default;
+}
+
+.groupCardContainer {
+    width: 800px;
+    margin: auto;
+    padding-bottom: 100px;
+}

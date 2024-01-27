@@ -1,0 +1,38 @@
+.GroupCard {
+    display: flex;
+    justify-content: start;
+    align-items: center;
+    gap: 20px;
+    
+    text-decoration: none;
+    width: 780px;
+    padding: 20px 10px;
+    border-radius: 3px;
+}
+
+.GroupCard img {
+    height: 140px;
+    width: 200px;
+}
+
+.GroupCard span {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    
+    display: -webkit-box;
+    -webkit-line-clamp: 4;
+    -webkit-box-orient: vertical;
+}
+
+.GroupCard > div {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    
+    height: 140px;
+    width: 580px;
+}
+
+.GroupCard {
+    border-top: 2px solid #FFD700;
+}

@@ -1,0 +1,83 @@
+#CreateEventForm {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+
+    width: 600px;
+    margin: auto;
+}
+
+#CreateEventForm > div {
+    display: flex;
+    flex-direction: column;
+    align-items: start;
+    gap: 10px;
+    padding-top: 10px;
+}
+
+#CreateEventForm > div + div {
+    border-top: 2px solid #808080;
+}
+
+#CreateEventForm label {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+    width: 100%;
+}
+
+#CreateEventForm input, #CreateEventForm textarea, #CreateEventForm select  {
+    border-radius: 0%;
+    background-color: #002858;
+}
+
+#CreateEventForm input[type="text"] {
+    width: 350px;
+}
+
+#CreateEventForm input[type="number"] {
+    width: 100px;
+}
+
+#CreateEventForm input[type="datetime-local"] {
+    width: 200px;
+}
+
+#CreateEventForm select {
+    width: 100px;
+}
+
+#CreateEventForm textarea {
+    resize: none;
+    width: 100%;
+}
+
+#CreateEventForm button {
+    height: 40px;
+    width: 105px;
+    margin-top: auto;
+    margin-bottom: 25px;
+
+    background-color: #F0028D;
+
+    border-radius: 0px;
+    box-shadow: 2.5px 2.5px black;
+}
+
+#CreateEventForm .errorDiv {
+    margin: 10px 0;
+
+    background-color: #eeeeee;
+    border-bottom: 2px solid #808080;
+
+    padding: 15px;
+    border-radius: 15px;
+}
+
+#CreateEventForm .errorDiv > h3 + p {
+    padding-top: 5px;
+    border-top: 2px solid black;
+}
+#CreateEventForm .errorDiv p {
+    width: 100%;
+}

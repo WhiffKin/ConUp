@@ -1,25 +1,91 @@
-ul {
-    display: flex;
-    gap: 20px;
-    list-style: none;
+nav {
+    position: sticky;
+    top: 0px;
+    background-color: #002858;
 }
 
-ul a {
+nav li + li a:hover {
+    text-decoration: underline;
+}
+
+nav > ul {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    list-style: none;
+
+    margin: 0;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    border-bottom: 2px solid #FFD700;
+}
+
+nav ul > li > li{
+    color: #FFD700;
+    cursor: pointer;
+}
+nav ul li{
+    display: flex;
+    gap: 35px;
+}
+
+nav ul li h1 {
+    margin: 0;
+    color: #FFD700;
+}
+
+nav ul a {
     color: inherit;
     text-decoration: none; 
 }
 
+.profile-button {
+    display: flex;
+    gap: 5px;
+}
+
 .profile-dropdown {
     position: absolute;
-    top: 40px;
+    top: 50px;
+    right: 20px;
+    width: 180px;
+    padding: 0;
 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    
+    background-color: #054674;
+    border: 2px solid #002858;
+}
+
+.profile-dropdown  div {
     display: flex;
     flex-direction: column;
     gap: 5px;
 
-    background-color: aliceblue;
-    border-radius: 5px;
-    padding: 10px;
+    padding: 10px 20px;
+}
+
+.profile-dropdown div li {
+    word-break: break-word;
+}
+
+.profile-dropdown span + span {
+    border-top: 2px solid #002858;
+}
+
+.profile-dropdown button {
+    text-align: start;
+    width: 100%;
+    background-color: white;
+    border: none;
+    padding: 0;
+}
+
+.hover:hover {
+    background-color: #0b609d;
+    cursor: pointer;
 }
 
 .hidden {

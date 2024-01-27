@@ -1,7 +1,7 @@
 const express = require("express");
 const router = express.Router();
 
-const { Event, Group, Venue, EventImage, Attendance } = require('../../db/models');
+const { Event, Group, Venue, EventImage, Attendance, User } = require('../../db/models');
 const { ValidationError, where } = require('sequelize');
 const { requireAuth } = require("../../utils/auth");
 const { query } = require('express-validator');
@@ -28,8 +28,8 @@ const validateQuery = [
         .optional({nullable: true, checkFalsy: true})
         .exists({ checkFalsy: true })
         .customSanitizer(value => value[0] === '"' ? value.split('"')[1] : value)
-        .isIn(["Online", "In Person"])
-        .withMessage("Type must be 'Online' or 'In Person'"),
+        .isIn(["Online", "In person"])
+        .withMessage("Type must be 'Online' or 'In person'"),
     query('startDate')
         .optional({nullable: true, checkFalsy: true})
         .customSanitizer(value => value[0] === '"' ? value.split('"')[1] : value)
@@ -38,6 +38,69 @@ const validateQuery = [
     handleValidationErrors
 ];
 
+// Get current users events
+router.get("/current",
+    requireAuth,
+    async (req, res, next) => {
+        const options = {
+            include: [
+                {
+                    model: Group.scope("limited")
+                },
+                {
+                    model: Venue.scope("defaultScope", "limited")
+                },
+                {
+                    model: User,
+                    through: {
+                        model: Attendance,
+                        attributes: [],
+                    },
+                    attributes: ["id"]
+                }
+            ],
+            where: {
+                "$Users.id$": req.user.id,
+            },
+        };
+
+        const events = await Event.scope("defaultScope", "groupSearch").findAll(options);
+
+        for (let i = 0; i < events.length; i++) {
+            let event = events[i];
+
+            // Count numAttending
+            const attending = await event.getUsers({
+                through: {
+                    where: {
+                        status: "attending"
+                    }
+                }
+            })
+            event = event.toJSON();
+            event.numAttending = attending ? attending.length : 0;
+            
+            // Get first previewImage
+            const eventImagePreview = await EventImage.findOne({
+                where: {
+                    eventId: event.id,
+                    preview: true
+                }
+            })
+            event.previewImage = eventImagePreview ? eventImagePreview.url : "No preview image found"; 
+
+            // Delete current users Id
+            delete event.Users;
+
+            events[i] = event;
+        }
+        
+        res.status(200);
+        res.json(events);
+    }
+)
+
+// Delete attendance to event
 router.delete("/:eventId/attendance",
     requireAuth,
     async (req, res, next) => {
@@ -77,6 +140,7 @@ router.delete("/:eventId/attendance",
     }
 )
 
+// Update attendance to event
 router.put("/:eventId/attendance", 
     requireAuth,
     async (req, res, next) => {
@@ -112,6 +176,13 @@ router.put("/:eventId/attendance",
             return next(err);
         }
 
+        const userExists = await User.findByPk(userId);
+        if (!userExists) {
+            const err = new Error("User couldn't be found");
+            err.status = 404;
+            return next(err);
+        }
+
         const user = await Attendance.unscoped().findOne({
             where: {
                 userId
@@ -144,6 +215,7 @@ router.put("/:eventId/attendance",
     }
 )
 
+// Create attendance to event
 router.post("/:eventId/attendance",
     requireAuth,
     async (req, res, next) => {
@@ -204,7 +276,7 @@ router.post("/:eventId/attendance",
         member = member[0].toJSON();
 
         member = {
-            eventId,
+            eventId: req.params.eventId,
             userId: member.userId,
             status: member.status,
         }
@@ -214,6 +286,7 @@ router.post("/:eventId/attendance",
     }
 )
 
+// Get attendess to an event
 router.get("/:eventId/attendees",
     async (req, res, next) => {
         let event = await Event.findByPk(req.params.eventId)
@@ -253,6 +326,7 @@ router.get("/:eventId/attendees",
     }
 )
 
+// Add an image to an event
 router.post("/:eventId/images",
     requireAuth,
     async (req, res, next) => {
@@ -268,13 +342,20 @@ router.post("/:eventId/images",
         let members = await group.getMembers({
             through: {
                 where: {
-                    status: ["co-host", "member"]
+                    status: ["co-host"]
                 }
             }
         })
         members = members.map(member => member.toJSON().id)
+        let attendee = await Attendance.findOne({
+            where: {
+                eventId: req.params.eventId,
+                userId: req.user.id,
+                status: "attending"
+            }
+        })
         
-        if (req.user.id != group.organizerId && !members.includes(req.user.id)) {
+        if (req.user.id != group.organizerId && !members.includes(req.user.id) && !attendee) {
             const err = new Error("Forbidden");
             err.status = 403;
             return next(err);
@@ -303,6 +384,7 @@ router.post("/:eventId/images",
     }
 )
 
+// Delete an event
 router.delete("/:eventId",
     requireAuth,
     async (req, res, next) => {
@@ -339,6 +421,7 @@ router.delete("/:eventId",
     }
 )
 
+// Update an event
 router.put("/:eventId",
     requireAuth,
     async (req, res, next) => {
@@ -401,11 +484,16 @@ router.put("/:eventId",
             }
         }
 
+        const payload = event.toJSON();
+
+        delete payload.updatedAt;
+
         res.status(200);
-        res.json(event)
+        res.json(payload);
     }
 )
 
+// Get an event
 router.get("/:eventId", 
     async (req, res, next) => {
         let event = await Event.findByPk(req.params.eventId, {
@@ -444,6 +532,7 @@ router.get("/:eventId",
     }
 )
 
+// Get all events
 router.get("/",
     validateQuery,
     async (req, res, next) => {
@@ -458,15 +547,15 @@ router.get("/",
                     model: Venue.scope("defaultScope", "limited")
                 }
             ],
-            where: {
-
-            }
+            where: {} // Filled in later
         };
 
-        page = Math.min(Math.max(page ? page : 1, 1), 10);
-        size = Math.min(Math.max(size ? size : 20, 1), 20);
-        options.offset = (page - 1) * size;
-        options.limit = size;
+        if (page) page = Math.min(Math.max(page ? page : 1, 1), 10);
+        else page = 1;
+        if (size > 0) size = Math.min(Math.max(size ? size : 20, 1), 20);
+        else size = -1
+        if (size > 0) options.offset = (page - 1) * size;
+        if (size > 0) options.limit = size;
         if (name) options.where.name = name;
         if (type) options.where.type = type;
         if (startDate) options.where.startDate = startDate;

@@ -127,27 +127,6 @@ router.put("/:groupId/membership",
             return next(err);
         }
 
-        let user = await User.findByPk(memberId);
-        if (!user) {
-            const err = new Error(`User couldn't be found`);
-            err.status = 404;
-            return next(err);
-        }
-        user = user.toJSON();
-
-        const member = await Membership.unscoped().findOne({
-            where: {
-                userId: memberId,
-                groupId: group.id,
-            }
-        });
-        if (!member) {
-            const err = new Error(`Membership between the user and the group does not exist`);
-            err.status = 404;
-            return next(err);
-        }
-        const status = member.toJSON().status;
-
         // Authorization: is current user owner or co-host
         const coHosts = await group.getMembers({
             through: {
@@ -168,6 +147,27 @@ router.put("/:groupId/membership",
             err.status = 403;
             return next(err);
         }
+
+        let user = await User.findByPk(memberId);
+        if (!user) {
+            const err = new Error(`User couldn't be found`);
+            err.status = 404;
+            return next(err);
+        }
+        user = user.toJSON();
+
+        const member = await Membership.unscoped().findOne({
+            where: {
+                userId: memberId,
+                groupId: group.id,
+            }
+        });
+        if (!member) {
+            const err = new Error(`Membership between the user and the group does not exist`);
+            err.status = 404;
+            return next(err);
+        }
+        const status = member.toJSON().status;
 
         try {
             await member.setDataValue("status", newStatus);
@@ -345,8 +345,13 @@ router.post("/:groupId/events",
             }
         }
 
+        const payload = event.toJSON();
+
+        delete payload.updatedAt;
+        delete payload.createdAt;
+
         res.status(200);
-        res.json(event);
+        res.json(payload);
     }
 )
 
@@ -448,8 +453,13 @@ router.post("/:groupId/venues",
             return next(err)
         }
 
+        const payload = venue.toJSON();
+
+        delete payload.updatedAt;
+        delete payload.createdAt;
+
         res.status(200);
-        res.json(venue);
+        res.json(payload);
     }
 );
 
@@ -511,6 +521,7 @@ router.post("/:groupId/images",
         }
 
         const { url, preview } = req.body;
+        let image;
 
         try {
             image = await group.createGroupImage({ url, preview });
@@ -520,6 +531,12 @@ router.post("/:groupId/images",
             err.errors = e.errors;
             return next(err)
         }
+
+        image = image.toJSON();
+
+        delete image.groupId;
+        delete image.updatedAt;
+        delete image.createdAt;
 
         res.status(200);
         res.json(image);
@@ -534,16 +551,16 @@ router.delete("/:groupId",
         
         const group = await Group.findByPk(id);
 
+        if (!group) {
+            const err = new Error(`No group found with id: ${groupId}`);
+            err.status = 404;
+            return next(err);
+        }
+
         // Authorization
         if (req.user.id !== group.organizerId) {
             const err = new Error(`Forbidden`);
             err.status = 403;
-            return next(err);
-        }
-
-        if (!group) {
-            const err = new Error(`No group found with id: ${groupId}`);
-            err.status = 404;
             return next(err);
         }
 
@@ -563,16 +580,16 @@ router.put("/:groupId",
 
         const group = await Group.findByPk(id);
         
+        if (!group) {
+            const err = new Error(`No group found with id: ${id}`);
+            err.status = 404;
+            return next(err);
+        }
+        
         // Authorization
         if (req.user.id !== group.organizerId) {
             const err = new Error(`Forbidden`);
             err.status = 403;
-            return next(err);
-        }
-        
-        if (!group) {
-            const err = new Error(`No group found with id: ${groupId}`);
-            err.status = 404;
             return next(err);
         }
                 
@@ -599,7 +616,7 @@ router.put("/:groupId",
     }
 )
 
-// Get group by id with numMembers, GroupImages, and Organizer
+// Get group by id with numMembers, GroupImages, Venue, and Organizer
 router.get('/:groupId',
     async (req, res, next) => {
         const { groupId } = req.params;
@@ -634,6 +651,14 @@ router.get('/:groupId',
         const organizer = await User.scope("defaultScope", "nameAndId").findByPk(group.organizerId);
         group.Organizer = organizer;
 
+        // Get Venues
+        const venues = await Venue.findAll({
+            where: {
+                groupId: group.id
+            }
+        });
+        group.Venues = venues;
+
         res.status(200);
         res.json(group);
     }
@@ -663,7 +688,7 @@ router.get('/',
                     preview: true
                 }
             })
-            group.previewImage = groupPreviewImage ? groupImagePreview.url : "No preview image found"; 
+            group.previewImage = groupImagePreview ? groupImagePreview.url : "No preview image found"; 
 
             groups[i] = group;
         }

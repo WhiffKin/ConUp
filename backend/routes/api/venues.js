@@ -52,8 +52,12 @@ router.put("/:venueId",
             return next(err)
         }
 
+        const payload = venue.toJSON();
+
+        delete payload.updatedAt;
+
         res.status(200);
-        res.json(venue);
+        res.json(payload);
     }
 )
 

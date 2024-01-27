@@ -1,1 +1,59 @@
-/* TODO: Add sitewide styles */
+* {
+    color: white;
+}
+
+body {
+    margin: 0;
+    background-color: #054674;
+}
+html, body, #root {
+    height: 100%;
+}
+
+h1, h3, h5, p {
+    margin: 0;
+}
+
+img {
+    border-radius: 3px;
+    background-color: rgb(31, 92, 130);
+    /* border: solid 2px #FFD700; */
+}
+
+.accent-color {
+    color: #FFD700;
+}
+
+input[type="number"]::-webkit-outer-spin-button,
+input[type="number"]::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+form p {
+    color: #F0028D;
+}
+
+#root {
+    height: 100%;
+}
+
+/* width */
+::-webkit-scrollbar {
+    width: 10px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #86722d;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #FFD700;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #d4af37;
+}

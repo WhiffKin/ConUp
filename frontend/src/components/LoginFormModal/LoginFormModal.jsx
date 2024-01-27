@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
@@ -9,6 +9,7 @@ function LoginFormModal() {
   const [credential, setCredential] = useState("");
   const [password, setPassword] = useState("");
   const [errors, setErrors] = useState({});
+  const [validation, setValidation] = useState({cred: "Username must be at least 4 characters long"});
   const { closeModal } = useModal();
 
   const handleSubmit = (e) => {
@@ -24,10 +25,40 @@ function LoginFormModal() {
       });
   };
 
+  const submitDemoUser = (e) => {
+    e.preventDefault;
+    return dispatch(sessionActions.login({ 
+      credential:"Demo-lition", 
+      password:"password" 
+    })).then(closeModal);
+  }
+
+  useEffect(() => {
+    if (credential.length < 4)
+      setValidation(state => ({...state, cred: "Username must be at least 4 characters long"}))
+    else if (validation.cred) {
+      const newValid = {...validation};
+      delete newValid.cred;
+      setValidation(newValid);
+    }
+  }, [credential, setValidation]);
+  useEffect(() => {
+    if (password.length < 6)
+      setValidation(state => ({...state, pass: "Password must be at least 6 characters long"}))
+      else if (validation.pass) {
+        const newValid = {...validation};
+        delete newValid.pass;
+        setValidation(newValid);
+      }
+  }, [password, setValidation]);
+
   return (
     <>
-      <h1>Log In</h1>
-      <form onSubmit={handleSubmit}>
+      <form id="LoginForm" onSubmit={handleSubmit}>
+        <h1>Log In</h1>
+        {errors.credential && (
+          <p>{errors.credential}</p>
+        )}
         <label>
           Username or Email
           <input
@@ -46,10 +77,8 @@ function LoginFormModal() {
             required
           />
         </label>
-        {errors.credential && (
-          <p>{errors.credential}</p>
-        )}
-        <button type="submit">Log In</button>
+        <button disabled={Object.values(validation).length != 0} type="submit">Log In</button>
+        <h3 className='accent-color' onClick={submitDemoUser}>Demo User</h3>
       </form>
     </>
   );

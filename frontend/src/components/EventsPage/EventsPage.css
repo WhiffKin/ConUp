@@ -1,0 +1,30 @@
+.eventsHeader {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    
+    height: 80px;
+    width: 800px;
+    margin: auto;
+}
+
+.eventsHeader div {
+    display: flex;
+    gap: 20px;
+}
+
+.eventsHeader a {
+    text-decoration: none;
+    color: black;
+}
+
+.currentLink > h3 {
+    text-decoration: underline;
+    cursor: default;
+}
+
+.eventCardContainer {
+    width: 800px;
+    margin: auto;
+    padding-bottom: 100px;
+}

@@ -4,9 +4,11 @@ import * as sessionActions from '../../store/session';
 import OpenModalMenuItem from './OpenModalMenuItem';
 import LoginFormModal from '../LoginFormModal';
 import SignupFormModal from '../SignupFormModal';
+import { NavLink, useNavigate } from 'react-router-dom';
 
 function ProfileButton({ user }) {
   const dispatch = useDispatch();
+  const navigate = useNavigate();
   const [showMenu, setShowMenu] = useState(false);
   const ulRef = useRef();
 
@@ -35,42 +37,81 @@ function ProfileButton({ user }) {
     e.preventDefault();
     dispatch(sessionActions.logout());
     closeMenu();
+    navigate('/');
   };
+
+  const viewMyGroups = (e) => {
+    e.preventDefault();
+    closeMenu();
+    navigate("/my-groups")
+  }
+  const viewMyEvents = (e) => {
+    e.preventDefault();
+    closeMenu();
+    navigate("/my-events")
+  }
+  const viewGroups = (e) => {
+    e.preventDefault();
+    closeMenu();
+    navigate("/groups")
+  }
+  const viewEvents = (e) => {
+    e.preventDefault();
+    closeMenu();
+    navigate("/events")
+  }
 
   const ulClassName = "profile-dropdown" + (showMenu ? "" : " hidden");
 
-  return (
+  return user ? (
     <>
-      <button onClick={toggleMenu}>
-        <i className="fas fa-user" />
-      </button>
+      <NavLink to="/groups/new" className="accent-color">Start a new Group</NavLink>
+      <div className='profile-button' onClick={toggleMenu}>
+        <i className="fa-regular fa-user" />
+        <i className={`fa-solid fa-chevron-${showMenu ? "up" : "down"}`} />
+      </div>
       <ul className={ulClassName} ref={ulRef}>
-        {user ? (
-          <>
-            <li>{user.username}</li>
-            <li>{user.firstName} {user.lastName}</li>
+        <span>
+          <div>
+            <li>Hello, {user.firstName}</li> 
             <li>{user.email}</li>
-            <li>
-              <button onClick={logout}>Log Out</button>
-            </li>
-          </>
-        ) : (
-          <>
-            <OpenModalMenuItem
-              itemText="Log In"
-              onItemClick={closeMenu}
-              modalComponent={<LoginFormModal />}
-            />
-            <OpenModalMenuItem
-              itemText="Sign Up"
-              onItemClick={closeMenu}
-              modalComponent={<SignupFormModal />}
-            />
-          </>
-        )}
+          </div>
+        </span>
+        <span>
+          <div className='hover' onClick={viewMyGroups}>
+            <li>My Groups</li>
+          </div>
+          <div className='hover' onClick={viewMyEvents}>
+            <li>My Events</li>
+          </div>
+        </span>
+        <span>
+          <div className='hover' onClick={viewGroups}>
+            <li>View Groups</li>
+          </div>
+          <div className='hover' onClick={viewEvents}>
+            <li>View Events</li>
+          </div>
+        </span>
+        <span className='hover' onClick={logout}>
+          <div>
+            <li>Log Out</li>
+          </div>
+        </span>
       </ul>
     </>
-  );
+  ) : (
+  <>
+    <OpenModalMenuItem
+      itemText="Log In"
+      modalComponent={<LoginFormModal />}
+    />
+    <OpenModalMenuItem
+      itemText="Sign Up"
+      modalComponent={<SignupFormModal />}
+    />
+  </>
+  ) ;
 }
 
 export default ProfileButton;

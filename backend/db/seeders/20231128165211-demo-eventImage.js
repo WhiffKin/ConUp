@@ -13,17 +13,47 @@ module.exports = {
     await EventImage.bulkCreate([
       {
         eventId: 1,
-        url: "testUrl.com/Image1",
+        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
         preview: true
       },
       {
         eventId: 2,
-        url: "testUrl.com/Image2",
+        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
         preview: true
       },
       {
         eventId: 3,
-        url: "testUrl.com/Image3",
+        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        preview: true
+      },
+      {
+        eventId: 4,
+        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        preview: true
+      },
+      {
+        eventId: 5,
+        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        preview: true
+      },
+      {
+        eventId: 6,
+        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        preview: true
+      },
+      {
+        eventId: 7,
+        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        preview: true
+      },
+      {
+        eventId: 8,
+        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        preview: true
+      },
+      {
+        eventId: 9,
+        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
         preview: true
       },
     ])
@@ -33,7 +63,7 @@ module.exports = {
     options.tableName = 'EventImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      url: { [Op.in]: ['testUrl.com/Image1', 'testUrl.com/Image2', 'testUrl.com/Image3'] }
+      eventId: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
     }, {});
   }
 };
