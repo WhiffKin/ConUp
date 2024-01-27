@@ -111,7 +111,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     startDate: {
-      type: DataTypes.TEXT,
+      type: DataTypes.DATE,
       allowNull: false,
       validate: {
         isAfter: {
@@ -121,7 +121,7 @@ module.exports = (sequelize, DataTypes) => {
       }
     },
     endDate: {
-      type: DataTypes.TEXT,
+      type: DataTypes.DATE,
       allowNull: false,
       validate: {
         isAfter: {

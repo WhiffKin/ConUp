@@ -1,11 +1,7 @@
 nav {
     position: sticky;
     top: 0px;
-    background-color: #002858;
-}
-
-nav li + li a:hover {
-    text-decoration: underline;
+    background-color: white;
 }
 
 nav > ul {
@@ -17,21 +13,17 @@ nav > ul {
     margin: 0;
     margin-bottom: 20px;
     padding: 15px 20px;
-    border-bottom: 2px solid #FFD700;
+    border-bottom: 2px #cccccc solid;
 }
 
-nav ul > li > li{
-    color: #FFD700;
-    cursor: pointer;
-}
-nav ul li{
+nav ul li {
     display: flex;
     gap: 35px;
 }
 
 nav ul li h1 {
     margin: 0;
-    color: #FFD700;
+    color: #ff5a5f;
 }
 
 nav ul a {
@@ -55,8 +47,8 @@ nav ul a {
     flex-direction: column;
     justify-content: center;
     
-    background-color: #054674;
-    border: 2px solid #002858;
+    background-color: white;
+    border: 2px solid black;
 }
 
 .profile-dropdown  div {
@@ -72,7 +64,7 @@ nav ul a {
 }
 
 .profile-dropdown span + span {
-    border-top: 2px solid #002858;
+    border-top: 2px solid black;
 }
 
 .profile-dropdown button {
@@ -84,8 +76,7 @@ nav ul a {
 }
 
 .hover:hover {
-    background-color: #0b609d;
-    cursor: pointer;
+    background-color: #cccccc;
 }
 
 .hidden {
