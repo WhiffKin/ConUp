@@ -31,7 +31,7 @@ module.exports = {
         capacity: 6400,
         price: 19.99,
         startDate: "03-20-2014T09:00:00.000s",
-        endDate: "03-24-2014T20:00:00.000.000s",
+        endDate: "03-24-2014T20:00:00.000s",
       },
       {
         venueId: 2,
