@@ -4,36 +4,22 @@ import { csrfFetch } from "./csrf";
 // CUSTOM SELECTORS
 export const selectEventsArr = createSelector(
     state => state.events,
-    events => Object.values(events.allEvents)
-                    .sort(sortDates)
+    events => Object.values(events)
+                    .sort((a,b) => {
+                        if (Date.parse(b.startDate) < Date.now()) return -1;
+                        else if (Date.parse(a.startDate) < Date.parse(b.startDate)) return -1;
+                        return 1;
+                    })
 );
-export const selectMyEventsArr = createSelector(
-    state => state.events,
-    events => Object.values(events.userEvents)
-                    .sort(sortDates)
-);
-
-const sortDates = (a,b) => {
-    const first = new Date(a.startDate.split(".")[0].split("T").join(" "));
-    const second = new Date(b.startDate.split(".")[0].split("T").join(" "));
-
-    if (first < Date.now() && second < Date.now()) return second - first;
-    if (first < Date.now()) return 1;
-    if (second < Date.now()) return -1;
-    return first - second;
-};
 
 // ACTION CREATORS
 const GET_EVENTS = "events/getEvents";
 const ADD_EVENT = "events/addEvent";
 const DELETE_EVENT = "events/deleteEvent";
-const DELETE_EVENTS_BY_GROUP = "events/deleteEventsByGroup";
 
-const getEvents = (allEvents, userEvents) => ({
+const getEvents = (events) => ({
     type: GET_EVENTS,
-    payload: {
-        allEvents, userEvents
-    },
+    payload: events,
 });
 
 const getEvent = (event) => ({
@@ -51,34 +37,22 @@ const deleteEvent = (eventId) => ({
     payload: eventId,
 })
 
-export const deleteEventsByGroup = (groupId) => ({
-    type: DELETE_EVENTS_BY_GROUP,
-    payload: groupId,
-})
-
 // THUNKS
 export const thunkGetEvents = () => async (dispatch) => {
-    const responseAllEvents = await fetch("/api/events?" + new URLSearchParams({
+    const response = await fetch("/api/events?" + new URLSearchParams({
         page: 1,
         size: 20,
     }));
+  
     let responseUserEvents;
     try {
         responseUserEvents = await csrfFetch(`/api/events/current`);
-    } catch (e) { responseUserEvents = null; } // Left empty for not logged in user functionality
+    } catch (e) { responseUserEvents = null; } 
 
-    const dataAllEvents = await responseAllEvents.json();
-    let dataUserEvents;
-    if (responseUserEvents) dataUserEvents = await responseUserEvents.json();
-
-    const payload = {
-        allEvents: [],
-        userEvents: [],
+    if (response.ok) {
+        let data = await response.json();
+        dispatch(getEvents(data));
     }
-    if (responseAllEvents.ok) payload.allEvents = dataAllEvents;
-    if (responseUserEvents?.ok) payload.userEvents = dataUserEvents;
-
-    dispatch(getEvents(payload.allEvents, payload.userEvents))
 }
 
 export const thunkGetEventsById = (id) => async (dispatch) => {
@@ -159,59 +133,22 @@ export const thunkDeleteEvent = (eventId) => async (dispatch) => {
 }
 
 // REDUCER
-const initialState = {
-    allEvents: {},
-    userEvents: {},
- };
+const initialState = { };
 
 const eventReducer = (state = initialState, action) => {
     switch(action.type) {
         case DELETE_EVENT: {
-            const newState = {
-                allEvents: {...state.allEvents}, 
-                userEvents: {...state.userEvents}
-            };
-
-            const id = action.payload;
-            if (newState.allEvents[id]) delete newState.allEvents[id];
-            if (newState.userEvents[id]) delete newState.userEvents[id];
-
+            const newState = {...state};
+            delete newState[action.payload];
             return newState;
         } 
-        case DELETE_EVENTS_BY_GROUP: {
-            const newState = {
-                allEvents: {...state.allEvents}, 
-                userEvents: {...state.userEvents}
-            };
-
-            Object.keys(newState.allEvents).forEach(id => {
-                if (newState.allEvents[id].groupId == action.payload)
-                    delete newState.allEvents[id];
-            });
-            Object.keys(newState.userEvents).forEach(id => {
-                if (newState.userEvents[id].groupId == action.payload)
-                    delete newState.userEvents[id];
-            });
-
-            return newState;
-        }
         case ADD_EVENT:
-            return {
-                allEvents: {...state.allEvents, [action.payload.id]: action.payload}, 
-                userEvents: {...state.userEvents}
-            };
+            return {...state, [action.payload.id]: action.payload};
         case GET_EVENTS: 
-            return {
-                ...state, 
-                allEvents: {...action.payload.allEvents.reduce((events, event) => {
-                    events[event.id] = event;
-                    return events;
-                }, {})},
-                userEvents: {...action.payload.userEvents.reduce((events, event) => {
-                    events[event.id] = event;
-                    return events;
-                }, {})}
-            };
+            return {...state, ...action.payload.reduce((events, event) =>{
+                events[event.id] = event;
+                return events;
+            }, {})};
         default: 
             return state;
     }
