@@ -51,11 +51,6 @@ module.exports = {
         url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
         preview: true
       },
-      {
-        eventId: 9,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
-        preview: true
-      },
     ])
   },
 
