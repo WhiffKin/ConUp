@@ -17,6 +17,7 @@ h1, h3, h5, p {
 img {
     border-radius: 3px;
     background-color: rgb(31, 92, 130);
+    box-shadow: 2px 2px 5px rgb(0, 0, 0);
     /* border: solid 2px #FFD700; */
 }
 

@@ -13,52 +13,62 @@ module.exports = {
     await GroupImage.bulkCreate([
       {
         groupId: 1,
-        url: "https://cdn.discordapp.com/attachments/1163593560734568488/1189790624174575717/ar751.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_robot.jpg",
         preview: true
       },
       {
         groupId: 1,
-        url: "https://images.igdb.com/igdb/image/upload/t_screenshot_big/hisl1yzkpxjdgtgcyncy.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_halo.jpg",
+        preview: false
+      },
+      {
+        groupId: 1,
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage.webp",
+        preview: false
+      },
+      {
+        groupId: 1,
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage2.webp",
         preview: false
       },
       {
         groupId: 2,
-        url: "https://cdn.discordapp.com/attachments/1163593560734568488/1189790624174575717/ar751.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage3.webp",
         preview: true
       },
       {
         groupId: 2,
-        url: "https://images.igdb.com/igdb/image/upload/t_screenshot_big/hisl1yzkpxjdgtgcyncy.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_halo.jpg",
         preview: false
       },
       {
         groupId: 3,
-        url: "https://cdn.discordapp.com/attachments/1163593560734568488/1189790624174575717/ar751.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_meet.jpg",
         preview: true
       },
       {
         groupId: 3,
-        url: "https://images.igdb.com/igdb/image/upload/t_screenshot_big/hisl1yzkpxjdgtgcyncy.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_booths.jpeg",
         preview: false
       },
       {
         groupId: 4,
-        url: "https://cdn.discordapp.com/attachments/1163593560734568488/1189790624174575717/ar751.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage4.jpg",
         preview: true
       },
       {
         groupId: 4,
-        url: "https://images.igdb.com/igdb/image/upload/t_screenshot_big/hisl1yzkpxjdgtgcyncy.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_old-comp.jpg",
         preview: false
       },
       {
         groupId: 5,
-        url: "https://cdn.discordapp.com/attachments/1163593560734568488/1189790624174575717/ar751.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage5.avif",
         preview: true
       },
       {
         groupId: 5,
-        url: "https://images.igdb.com/igdb/image/upload/t_screenshot_big/hisl1yzkpxjdgtgcyncy.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_booths2.jpg",
         preview: false
       },
     ])

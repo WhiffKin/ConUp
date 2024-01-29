@@ -32,7 +32,7 @@ function SingleEvent() {
         newImg = Math.round(newImg/300);
         newImg = Math.sign(newImg);
         newImg += currentImg;
-        newImg += group?.GroupImages.length;
+        newImg += event.EventImages.length;
 
         if(event && event.EventImages.length != 1) setCurrentImg(newImg % event.EventImages.length);
     }
