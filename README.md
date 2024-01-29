@@ -62,8 +62,8 @@ create/update events, declare pricing, and set dates the event will be hosted.
 ## Future Goals
 
 * Frontend Venue managment
-* Joining Groups
-* Member managment for Groups
+* Joining groups
+* Member managment for groups
 * User pages and icons
 
 ## Conclusion

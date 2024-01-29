@@ -13,43 +13,78 @@ module.exports = {
     await EventImage.bulkCreate([
       {
         eventId: 1,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage.webp",
         preview: true
       },
       {
+        eventId: 1,
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage3.webp",
+        preview: false
+      },
+      {
         eventId: 2,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage2.webp",
         preview: true
       },
       {
         eventId: 3,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage4.jpg",
         preview: true
       },
       {
         eventId: 4,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_meet.jpg",
         preview: true
       },
       {
         eventId: 5,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_old-comp.jpg",
         preview: true
       },
       {
         eventId: 6,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_overwatch.jpg",
+        preview: true
+      },
+      {
+        eventId: 6,
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage3.webp",
+        preview: false
+      },
+      {
+        eventId: 6,
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage2.webp",
+        preview: false
+      },
+      {
+        eventId: 7,
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage3.webp",
         preview: true
       },
       {
         eventId: 7,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage.webp",
+        preview: false
+      },
+      {
+        eventId: 7,
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage2.webp",
+        preview: false
+      },
+      {
+        eventId: 8,
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage5.avif",
         preview: true
       },
       {
         eventId: 8,
-        url: "https://static.wikia.nocookie.net/wreckfest/images/0/07/Drytown_desert_circuit.png",
-        preview: true
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage3.webp",
+        preview: false
+      },
+      {
+        eventId: 8,
+        url: "https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/event_stage2.webp",
+        preview: false
       },
     ])
   },
@@ -58,7 +93,7 @@ module.exports = {
     options.tableName = 'EventImages';
     const Op = Sequelize.Op;
     return queryInterface.bulkDelete(options, {
-      eventId: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8, 9] }
+      eventId: { [Op.in]: [1, 2, 3, 4, 5, 6, 7, 8] }
     }, {});
   }
 };

@@ -38,6 +38,17 @@
 
 .section2 h3 {
     margin: 0;
+    margin-bottom: 10px;
+    padding-bottom: 5px;
+    border-bottom: 2px solid #ffd700;
+    color: #ffd700;
+}
+.section2 a {
+    text-decoration: none; 
+    background-color: #002858;
+    padding: 10px;
+    border-radius: 10px;
+    border: 1px solid #ffd700;
 }
 
 .section3 {
