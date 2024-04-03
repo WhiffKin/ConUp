@@ -4,7 +4,7 @@
 
 body {
     margin: 0;
-    background-color: #054674;
+    background: linear-gradient(0.25turn, #083558, #054674, #083558);
 }
 html, body, #root {
     height: 100%;
