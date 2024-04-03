@@ -45,14 +45,14 @@ module.exports = {
         allowNull: false,
       },
       startDate: {
-        type: 'TIMESTAMP',
+        type: Sequelize.DATE,
         allowNull: false,
         validate: {
           isBefore: this.endDate,
         }
       },
       endDate: {
-        type: 'TIMESTAMP',
+        type: Sequelize.DATE,
         allowNull: false,
         validate: {
           isAfter: this.startDate,
