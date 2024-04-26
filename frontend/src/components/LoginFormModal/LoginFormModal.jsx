@@ -3,6 +3,8 @@ import * as sessionActions from '../../store/session';
 import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import './LoginForm.css';
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
+import SignupFormModal from '../SignupFormModal';
 
 function LoginFormModal() {
   const dispatch = useDispatch();
@@ -78,6 +80,11 @@ function LoginFormModal() {
           />
         </label>
         <button disabled={Object.values(validation).length != 0} type="submit">Log In</button>
+        
+        <OpenModalMenuItem
+            itemText="Are you a new user? Sign Up!"
+            modalComponent={<SignupFormModal />}
+            />
         <h3 className='accent-color' onClick={submitDemoUser}>Demo User</h3>
       </form>
     </>

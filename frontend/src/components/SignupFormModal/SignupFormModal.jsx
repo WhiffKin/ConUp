@@ -3,6 +3,8 @@ import { useDispatch } from 'react-redux';
 import { useModal } from '../../context/Modal';
 import * as sessionActions from '../../store/session';
 import './SignupForm.css';
+import LoginFormModal from '../LoginFormModal/LoginFormModal';
+import OpenModalMenuItem from '../Navigation/OpenModalMenuItem';
 
 function SignupFormModal() {
   const dispatch = useDispatch();
@@ -144,6 +146,11 @@ function SignupFormModal() {
           >
           Sign Up
         </button>
+        
+        <OpenModalMenuItem
+            itemText="Already have an account? Log In!"
+            modalComponent={<LoginFormModal />}
+            />
       </form>
     </>
   );
