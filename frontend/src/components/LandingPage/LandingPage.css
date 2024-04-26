@@ -23,6 +23,9 @@
     width: 400px;
     height: 260px;
 }
+.section1 div a, .section1 div li {
+    cursor: pointer;
+}
 .section1 div li {
     display: inline;
     text-decoration: underline;
