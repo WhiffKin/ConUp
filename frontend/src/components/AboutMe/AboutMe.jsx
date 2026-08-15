@@ -5,16 +5,14 @@ function AboutMe() {
         <div className="about-container">
             <h1>About Me</h1>
             <div className="about-paragraph">
-                <img src="https://aa-garrettlackey-meetupclone.s3.us-east-2.amazonaws.com/IMG_1448.jpg" alt="Garrett Lackey (right) and his wife Anna (left)"/>
                 <span>
                     Hello, my name is Garrett Lackey and I spend most of my time 
-                    with my wonderful wife Anna, playing guitar, or drawing. 
-                    I&apos;ve been a hobbyist programmer for over a decade and 
-                    in this time I learned 5 programming languages and have made 
-                    complete applications in 3 of them. Some of these applications 
-                    were made in frameworks such as: React, Express, or Unity; 
-                    while others were made from the ground up by me and a close group of friends. 
-                    All of my projects have one particular goal in common, 
+                    playing guitar, or drawing. I&apos;ve been a programmer
+                    for over a decade and in this time I learned 6 programming languages 
+                    and have made complete applications in 4 of them. Some of these 
+                    applications were made in frameworks such as: React, Express, or Unity; 
+                    while others were made from the ground up by me and a close group 
+                    of friends. All of my projects have one particular goal in common, 
                     to learn as much about the process as possible!
                 </span>
             </div>
@@ -36,15 +34,9 @@ function AboutMe() {
                         <li>Java</li>
                         <li>JavaScript</li>
                         <li>Python</li>
+                        <li>AutoCAD Scripting</li>
                     </ul>
                 </div>
-            </div>
-            <div className="about-paragraph">
-                <span className="about-center">
-                    App Academy has been wonderful for me, I&apos;ve met some amazing friends 
-                    and discovered a new passion: Full-Stack Web Development! 
-                    I am currently searching for a job in the Software Engineering field, so if your team could use a dedicated Engineer who loves solving problems I look forward to hearing from you!
-                </span>
             </div>
             <div className="about-contact">
                 <h3>Contact Info</h3>
