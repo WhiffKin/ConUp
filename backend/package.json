@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "db-reset": "npx dotenv sequelize db:seed:undo:all && npx dotenv sequelize db:migrate:undo:all && npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all", 
+    "db-reset": "npx dotenv sequelize db:seed:undo:all && npx dotenv sequelize db:migrate:undo:all && npx dotenv sequelize db:migrate && npx dotenv sequelize db:seed:all",
     "test": "echo \"Error: no test specified\" && exit 1",
     "sequelize": "sequelize",
     "sequelize-cli": "sequelize-cli",
@@ -31,7 +31,8 @@
     "per-env": "^1.0.2",
     "pg": "^8.11.3",
     "sequelize": "^6.35.1",
-    "sequelize-cli": "^6.6.2"
+    "sequelize-cli": "^6.6.2",
+    "start": "^5.1.0"
   },
   "devDependencies": {
     "dotenv-cli": "^7.3.0",
